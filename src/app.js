@@ -6,89 +6,72 @@ const path = require(`path`);
 const bodyParser = require('body-parser');
 require("../src/db/conn");
 const idgen = require("../src/models/register");
-
 const DepositRequest = require('../src/models/user');
 const { v4: uuidv4 } = require('uuid');
-
 //public static path
-const static_path= path.join(__dirname, "../public");
-const template_path= path.join(__dirname, "../tamplates/views") 
+const static_path = path.join(__dirname, "../public");
+const template_path = path.join(__dirname, "../tamplates/views")
 const partials_path = path.join(__dirname, "../templates/partials")
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.static(static_path));
 app.use(bodyParser.json())
-
 app.set(`view engine`, `hbs`);
 app.set(`views`, template_path);
 hbs.registerPartials(partials_path);
-
-
 //routingg
-app.get (``, (req , res)=>{
-res.send("index")
+app.get(``, (req, res) => {
+    res.send("index")
 })
-app.get (`/indexx`, (req , res)=>{
-res.send("indexx")
+app.get(`/indexx`, (req, res) => {
+    res.send("indexx")
 })
-
-app.get (`/login`, (req , res)=>{
-res.sendFile(path.join(static_path, 'login.html'))
+app.get(`/login`, (req, res) => {
+    res.sendFile(path.join(static_path, 'login.html'))
 })
-
 app.get('/vip', (req, res) => {
-  const vipuserId = req.query.vipuserId;
-  if (!vipuserId) {
-    return res.status(400).send('Invalid user ID');
-  }
-  res.sendFile(path.join(static_path, 'vip.html')); // Serve the static VIP page
+    const vipuserId = req.query.vipuserId;
+    if (!vipuserId) {
+        return res.status(400).send('Invalid user ID');
+    }
+    res.sendFile(path.join(static_path, 'vip.html')); // Serve the static VIP page
 });
-
-
-
-
 app.get('/Home', (req, res) => {
-  res.sendFile(path.join(static_path, 'home.html'))
+    res.sendFile(path.join(static_path, 'home.html'))
 })
-
 app.get('/index', (req, res) => {
-  res.send('index');
+    res.send('index');
 });
-
 app.get('/Mine', (req, res) => {
-  res.sendFile(path.join(static_path, 'mine.html'))
+    res.sendFile(path.join(static_path, 'mine.html'))
 })
 app.get('/expe', (req, res) => {
-  res.sendFile(path.join(static_path, 'expe.html'))
+    res.sendFile(path.join(static_path, 'expe.html'))
 });
 app.get('/Income', (req, res) => {
-  res.sendFile(path.join(static_path, 'income.html'))
+    res.sendFile(path.join(static_path, 'income.html'))
 });
-
 app.get('/Connection', (req, res) => {
-  res.sendFile(path.join(static_path, 'connection.html'))
+    res.sendFile(path.join(static_path, 'connection.html'))
 });
-
 app.get('/About', (req, res) => {
-  res.sendFile(path.join(static_path, 'about.html'))
+    res.sendFile(path.join(static_path, 'about.html'))
 });
-
 app.get('/withdraw', (req, res) => {
-  res.sendFile(path.join(static_path, 'withdraw.html'))
+    res.sendFile(path.join(static_path, 'withdraw.html'))
 });
 app.get('/test', (req, res) => {
-  res.sendFile(path.join(static_path, 'test.html'))
+    res.sendFile(path.join(static_path, 'test.html'))
 });
-
 app.get('/deposit', (req, res) => {
-  res.sendFile(path.join(static_path, 'deposit.html'))
+    res.sendFile(path.join(static_path, 'deposit.html'))
 });
 app.get('/team', (req, res) => {
-  res.sendFile(path.join(static_path, 'team.html'))
+    res.sendFile(path.join(static_path, 'team.html'))
 });
 app.get('/usdt', (req, res) => {
-  res.sendFile(path.join(static_path, 'usdt.html'))
+    res.sendFile(path.join(static_path, 'usdt.html'))
 });
 app.get('/api/checkUserId', async (req, res) => {
     const { userId } = req.query;
@@ -98,7 +81,6 @@ app.get('/api/checkUserId', async (req, res) => {
     const user = await idgen.findOne({ userId });
     res.json({ exists: !!user });
 });
-
 app.get('/api/getCommission', async (req, res) => {
     try {
         const userId = req.query.userId;
@@ -119,9 +101,8 @@ app.get('/api/getCommission', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
-
 app.get('*', (req, res) => {
-  res.sendFile(path.join(static_path, '404.html'))
+    res.sendFile(path.join(static_path, '404.html'))
 });
 app.post('/register', async (req, res) => {
     const { username, email, country, phone, password, confirm_password } = req.body;
@@ -145,7 +126,7 @@ app.post('/register', async (req, res) => {
     } catch (error) {
         res.status(500).send('Error registering user');
     }
- });
+});
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -162,11 +143,6 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error logging in' });
     }
 });
-
-
-
-
-
 // deposit-request endpoint
 app.post('/deposit-request', async (req, res) => {
     const { package, userId, details } = req.body;
@@ -192,7 +168,6 @@ app.post('/deposit-request', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while processing your deposit request. Please try again later.' });
     }
 });
-
 // check-deposit endpoint
 app.post('/check-deposit', async (req, res) => {
     const { userId } = req.body;
@@ -209,10 +184,7 @@ app.post('/check-deposit', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while checking your deposit status. Please try again later.' });
     }
 });
-
-
-
-app.post('/api/verify-password', async(req, res) => {
+app.post('/api/verify-password', async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await idgen.findOne({ username });
@@ -236,9 +208,6 @@ function getDailyLimit(cost) {
         default: return 300;
     }
 }
-
-
-
 app.post('/income', async (req, res) => {
     try {
         const { userId, packageCost, income } = req.body;
@@ -300,9 +269,6 @@ app.post('/income', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
-
-
-
 app.post('/api/setReferral', async (req, res) => {
     try {
         const { userId, referredUserId } = req.body;
@@ -369,9 +335,6 @@ app.post('/api/withdraw', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
-
-
-
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
