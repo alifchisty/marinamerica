@@ -10,11 +10,9 @@
   "author": "jeffar_from_spain",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2",
-    "express-session": "^1.18.0",
+    "body-parser": "^1.20.3",
+    "express": "^5.0.0",
     "hbs": "^4.2.0",
-    "jsonwebtoken": "^9.0.2",
     "mongoose": "^5.13.22",
     "node-cron": "^3.0.3",
     "uuidv4": "^6.2.13"

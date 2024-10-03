@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,171 +10,227 @@
     <title>Dray Source</title>
 </head>
 <style>
-*{
-margin: 0;
-padding: 0;
-}
-body{
-height: 100vh;
-display: flex; 
-flex-direction:column;
-background-color: #2b4da5 ;
-color: rgb(255, 254, 254);
-background-color: #2b4da5;
-            background-repeat: r;
-            background-position: center;
-background-size:cover ;
-}
+    * {
+        margin: 0;
+        padding: 0;
+    }
 
- .item {
+    body {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #2b4da5;
+        color: rgb(255, 254, 254);
+        background-color: #2b4da5;
+        background-repeat: r;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .item {
         display: flex;
         justify-content: space-around;
         margin: 1px auto;
-font-size: 1.3rem;
-line-height: 50%;
-box-shadow: 0  0 4px red;
+        font-size: 1.3rem;
+        line-height: 50%;
+        box-shadow: 0 0 4px red;
+        padding: 1.5vh;
 
     }
-img{
 
-border-radius: 100px;
-border: 1px solid #fff;
+    img {
+
+        border-radius: 100px;
+        border: 1px solid #fff;
 
 
 
-}
-.box{
-margin-top: 2vh;
-}
-.items{ 
+    }
+
+    .box {
+        margin-top: 2vh;
+    }
+
+    .items {
         display: flex;
         justify-content: space-around;
 
-        
+
         margin: 1px auto;
-font-size: 1.3rem;
-line-height: 50%;
-box-shadow: 0  0 6px rgb(7, 255, 7);
+        font-size: 1.3rem;
+        line-height: 50%;
+        box-shadow: 0 0 6px rgb(7, 255, 7);
+        padding: 1.5vh;
     }
-.items-top{
+
+    .items-top {
         display: flex;
         justify-content: space-around;
 
-        
+
         margin: 2vh auto;
-font-size: 1.3rem;
-line-height: 50%;
-box-shadow: 0  0 6px gold;
-margin-bottom: 9vh;
+        font-size: 1.3rem;
+        line-height: 50%;
+        box-shadow: 0 0 6px gold;
+        margin-bottom: 9vh;
+        padding: 1.5vh;
 
-}
-.parcent{
-color: rgb(255, 0, 0);
-}
-.parcentes{
-color: rgb(14, 255, 14);
-}
+    }
 
-.parcentes-gold{
-color: gold;
-}
+    .parcent {
+        color: rgb(255, 0, 0);
+    }
 
-.usdt-info{
-color: gold;
-text-align: center;
-text-decoration: underline;
-}
+    .parcentes {
+        color: rgb(14, 255, 14);
+    }
+
+    .parcentes-gold {
+        color: gold;
+    }
+
+    .usdt-info {
+        color: gold;
+        text-align: center;
+        text-decoration: underline;
+    }
 
 
 
 
 
-        /* Container fixed at the bottom */
-        .containers {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            /* Full width */
-            margin-top: 71vh;
-            padding: 0;
-            box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.3);
-            /* Shadow for subtle effect */
-            background-color: #F5F5DC;
-            /* Background color */
-            z-index: 1000;
-            /* Ensure it is above other content */
-            line-height: 99%;
-        }
+    /* Container fixed at the bottom */
+    .containers {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /* Full width */
+        margin-top: 71vh;
+        padding: 0;
+        box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.3);
+        /* Shadow for subtle effect */
+        background-color: #F5F5DC;
+        /* Background color */
+        z-index: 1000;
+        /* Ensure it is above other content */
+        line-height: 99%;
+    }
 
-        /* Layer within the container for alignment */
-        .containers-layer {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 7px 0;
-            background-color: #ffffffb8;
-            /* Ensure background color matches container */
-        }
+    /* Layer within the container for alignment */
+    .containers-layer {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 7px 0;
+        background-color: #ffffffb8;
+        /* Ensure background color matches container */
+    }
 
-        /* Styling for clickable items */
-        .clk {
-            color: black;
-            text-decoration: none;
-            padding: 3px;
-            margin: 0 auto;
-            text-align: center;
-        }
+    /* Styling for clickable items */
+    .clk {
+        color: black;
+        text-decoration: none;
+        padding: 3px;
+        margin: 0 auto;
+        text-align: center;
+    }
 
-        i {
-            font-size: 2rem;
-            margin: 0 auto;
-        }
-
+    i {
+        font-size: 2rem;
+        margin: 0 auto;
+    }
 </style>
+
 <body>
- 
-
-<!-- {{!-- --- <iframe src="" frameborder="0"></iframe> --}} -->
-
-<img src="mirror/conne.jpg" alt="" height="160vh" srcset="">
-
-<h2 class="usdt-info">Funds Transfer Fee</h2>
-<div class="usdt-container">
-<p style="color: red;">1. Red line.</p>
-<div class="item"><p class="dollars">1-5$</p><p>=></p><p class="parcent">15%</p></div>
-
-<div class="item"><p class="dollars">6-10$</p><p>=></p><p class="parcent">12%</p></div>
-
-<div class="item"><p class="dollars">11-40$</p><p>=></p><p class="parcent">10%</p></div>
-
-<div class="item"><p class="dollars">41-50$</p><p>=></p><p class="parcent">8%</p></div>
-
-<div class="item"><p class="dollars">51-60$</p><p>=></p><p class="parcent">6%</p></div>
-
-<div class="item"><p class="dollars">61-80$</p><p>=></p><p class="parcent">5%</p></div>
-
-<div class="item"><p class="dollars">81-100$</p><p>=></p><p class="parcent">2%</p></div>
-<div class="box">
-<p style="color: rgb(10, 255, 10);">2. Green line.</p>
-
-<div class="items"><p class="dollars">101-200$</p><p>=></p><p class="parcentes">Discount-5%</p></div>
-
-<div class="items"><p class="dollars">201-300$</p><p>=></p><p class="parcentes">Discount-8%</p></div>
-
-<div class="items"><p class="dollars">301-400$</p><p>=></p><p class="parcentes">Discount-10%</p></div></div>
-
-<p style="color: gold;">3. Gold line.</p>
-<div class="items-top"><p class="dollars">401-10000$</p><p>=></p><p class="parcentes-gold">Discount 10%-20%</p></div></div>
-
-</div>
 
 
-  <footer class="containers">
+    <!-- {{!-- --- <iframe src="" frameborder="0"></iframe> --}} -->
+
+    <img src="mirror/conne.jpg" alt="" height="160vh" srcset="">
+
+    <h2 class="usdt-info">Funds Transfer Fee</h2>
+    <div class="usdt-container">
+        <p style="color: red;">1. Red line.</p> <br>
+        <div class="item">
+            <p class="dollars">1-5$</p>
+            <p>=></p>
+            <p class="parcent">15%</p>
+        </div>
+
+        <div class="item">
+            <p class="dollars">6-10$</p>
+            <p>=></p>
+            <p class="parcent">12%</p>
+        </div>
+
+        <div class="item">
+            <p class="dollars">11-40$</p>
+            <p>=></p>
+            <p class="parcent">10%</p>
+        </div>
+
+        <div class="item">
+            <p class="dollars">41-50$</p>
+            <p>=></p>
+            <p class="parcent">8%</p>
+        </div>
+
+        <div class="item">
+            <p class="dollars">51-60$</p>
+            <p>=></p>
+            <p class="parcent">6%</p>
+        </div>
+
+        <div class="item">
+            <p class="dollars">61-80$</p>
+            <p>=></p>
+            <p class="parcent">5%</p>
+        </div>
+
+        <div class="item">
+            <p class="dollars">81-200$</p>
+            <p>=></p>
+            <p class="parcent">2%</p>
+        </div>
+        <div class="box">
+            <p style="color: rgb(10, 255, 10);">2. Green line.</p>
+<br>
+            <div class="items">
+                <p class="dollars">201-300$</p>
+                <p>=></p>
+                <p class="parcentes">Discount-5%</p>
+            </div>
+
+            <div class="items">
+                <p class="dollars">301-600$</p>
+                <p>=></p>
+                <p class="parcentes">Discount-8%</p>
+            </div>
+
+            <div class="items">
+                <p class="dollars">601-1200$</p>
+                <p>=></p>
+                <p class="parcentes">Discount-10%</p>
+            </div>
+        </div>
+        <div class="box">
+            <p style="color: gold;">3. Gold line.</p>
+            <div class="items-top">
+                <p class="dollars">1201-10000$</p>
+                <p>=></p>
+                <p class="parcentes-gold">Discount 10%-38%</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <footer class="containers">
         <nav class="containers-layer">
             <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
             <a href="/Connection" class="clk"><i class='bx bx-sitemap'></i></i><br>Network</a>
-      <a href="/vip" class="clk vip-link "><i class='bx bxl-sketch' style='color:#0c0c0c'  ></i> <br> Invest</a>
+            <a href="/vip" class="clk vip-link "><i class='bx bxl-sketch' style='color:#0c0c0c'></i> <br> Invest</a>
 
             <a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br> Owner</a>
             <a href="/About" class="clk"><i class='bx bx-shield' style='color:#0c0b0b'></i><br>About</a>
@@ -182,20 +239,21 @@ text-decoration: underline;
 
         </nav>
     </footer>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('.vip-link').addEventListener('click', (event) => {
-            event.preventDefault();
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.vip-link').addEventListener('click', (event) => {
+                event.preventDefault();
 
-            const vipuserId = localStorage.getItem('userId');
-            if (vipuserId) {
-                window.location.href = `/vip?vipuserId=${vipuserId}`;
-            } else {
-                alert('Invalid user ID');
-            }
+                const vipuserId = localStorage.getItem('userId');
+                if (vipuserId) {
+                    window.location.href = `/vip?vipuserId=${vipuserId}`;
+                } else {
+                    alert('Invalid user ID');
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

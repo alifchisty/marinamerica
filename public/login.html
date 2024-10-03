@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,118 +8,109 @@
     <title>Log-in</title>
 </head>
 <style>
-body{
-height: 70vh;
-background-image: url(mirror/map.jpeg);
-background-image:no-repeat;
-/* object-fit: contain; */
-/* background-attachment:; */
-background-position: center;
-background-size:contain ;
-}
-.login-container{
-  margin: 20vh auto;
-  width: 45vw;
-  padding: 3vh;
-  box-shadow: 0px 1px 7px rgb(4, 255, 208); 
-border-radius: 5px;
-backdrop-filter: blur(0.9px);
+    body {
+        height: 70vh;
+        background-image: url(mirror/map.jpeg);
+        background-image: no-repeat;
+        /* object-fit: contain; */
+        /* background-attachment:; */
+        background-position: center;
+        background-size: contain;
+    }
 
-}
-.login-container h3{
-color: rgb(72, 255, 0);
-text-align: center;
-}
-.signin{
-display: flex;
-flex-direction: column;
-}
-.form-control{
-margin: 0.5vh;
-padding: 0.8vh;
-}
-.login-btn{
-background-color: rgb(11, 219, 11);
-color: #fff;
-border: none;
-border-radius: 2px;
-padding: 5px;
-font-size: 0.9rem;
-}
-label{
-color: #fff;
-}
+    .login-container {
+        margin: 20vh auto;
+        width: 45vw;
+        padding: 3vh;
+        box-shadow: 0px 1px 7px rgb(4, 255, 208);
+        border-radius: 5px;
+        backdrop-filter: blur(0.9px);
+
+    }
+
+    .login-container h3 {
+        color: rgb(72, 255, 0);
+        text-align: center;
+    }
+
+    .signin {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-control {
+        margin: 0.5vh;
+        padding: 0.8vh;
+    }
+
+    .login-btn {
+        background-color: rgb(11, 219, 11);
+        color: #fff;
+        border: none;
+        border-radius: 2px;
+        padding: 5px;
+        font-size: 0.9rem;
+    }
+
+    label {
+        color: #fff;
+    }
 </style>
+
 <body>
-<div class="login-container">   
-<h3>Sub Marine</h3>
- <form id="loginForm" class="signin">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter your email" required name="email">
+    <div class="login-container">
+        <h3>Sub Marine</h3>
+        <form id="loginForm" class="signin">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" required name="email">
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" class="form-control" required name="password" placeholder="password">
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="form-control" required name="password" placeholder="password">
 
-        <button class="login-btn" type="submit">Log in</button>
-    </form>
-</form>
-</div>
+            <button class="login-btn" type="submit">Log in</button>
+        </form>
+    </div>
 <script>
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    });
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (data.success) {
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('userId', data.userId);
-        localStorage.setItem('score', data.score); // Ensure this is correct
-        window.location.href = `vip?vipuserId=${data.userId}`;
-    } else {
-        alert('Invalid email or password');
+        if (data.success) {
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('score', data.score);
+            localStorage.setItem('electronic', data.electronic);
+localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+
+            // Store opened packages in localStorage
+            localStorage.setItem('openPackages', JSON.stringify(data.openPackages));
+
+            window.location.href = `vip?vipuserId=${data.userId}`;
+        } else {
+            alert('Invalid email or password');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
     }
 });
+
+
 </script>
-{{!-- <script>
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('userId', data.userId);
-        localStorage.setItem('score', data.score); // Ensure this is correct
-        window.location.href = 'vip';
-    } else {
-        alert('Invalid email or password');
-    }
-});
-</script>
- --}}
-
+   
 
 </body>
+
 </html>

@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
+ const cron = require('node-cron');
 const hbs = require(`hbs`)
 const port = process.env.PORT || 22000;
 const path = require(`path`);
 const bodyParser = require('body-parser');
 require("../src/db/conn");
 const idgen = require("../src/models/register");
-const User = require("../src/models/usdt");
 
 const DepositRequest = require('../src/models/user');
 const { v4: uuidv4 } = require('uuid');
@@ -66,22 +66,21 @@ app.get('/expe', (req, res) => {
 app.get('/Income', (req, res) => {
   res.sendFile(path.join(static_path, 'income.html'))
 });
-
+app.get('/new', (req, res) => {
+  res.sendFile(path.join(static_path, 'new.html'))
+});
 app.get('/Connection', (req, res) => {
   res.sendFile(path.join(static_path, 'connection.html'))
 });
-
 app.get('/About', (req, res) => {
   res.sendFile(path.join(static_path, 'about.html'))
 });
-
 app.get('/withdraw', (req, res) => {
   res.sendFile(path.join(static_path, 'withdraw.html'))
 });
 app.get('/test', (req, res) => {
   res.sendFile(path.join(static_path, 'test.html'))
 });
-
 app.get('/deposit', (req, res) => {
   res.sendFile(path.join(static_path, 'deposit.html'))
 });
@@ -91,6 +90,12 @@ app.get('/team', (req, res) => {
 app.get('/usdt', (req, res) => {
   res.sendFile(path.join(static_path, 'usdt.html'))
 });
+app.get('/exchange', (req, res) => {
+  res.sendFile(path.join(static_path, 'exchange.html'))
+});
+app.get('/notice', (req, res) => {
+  res.sendFile(path.join(static_path, 'notice.html'))
+});
 app.get('/api/checkUserId', async (req, res) => {
     const { userId } = req.query;
     if (!userId) {
@@ -99,6 +104,41 @@ app.get('/api/checkUserId', async (req, res) => {
     const user = await idgen.findOne({ userId });
     res.json({ exists: !!user });
 });
+app.get('/check-package-status', async (req, res) => {
+    const { userId, packageCost } = req.query;
+
+    try {
+        // Find the user by userId
+        const user = await idgen.findOne({ userId });
+
+        if (user) {
+            // Find the package by packageCost
+            const packageOpened = user.openPackages.find(pkg => pkg.packageCost === parseInt(packageCost));
+
+            if (!packageOpened) {
+                return res.status(404).json({ error: 'Package not found' });
+            }
+
+            // Calculate the days passed since the package was last opened
+            const daysPassed = Math.floor((Date.now() - new Date(packageOpened.lastOpened).getTime()) / (1000 * 60 * 60 * 24));
+
+            // Calculate the remaining days for the 90-day period
+            const daysLeftFor90 = packageOpened.daysLeftFor90 - daysPassed;
+
+            // Return the necessary data in the response
+            res.json({
+                isTodayRiched: packageOpened.isTodayRiched,
+                daysLeftFor90: daysLeftFor90 > 0 ? daysLeftFor90 : 0, // Ensure days don't go negative
+            });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching package status:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 
 app.get('/api/getCommission', async (req, res) => {
     try {
@@ -124,6 +164,7 @@ app.get('/api/getCommission', async (req, res) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(static_path, '404.html'))
 });
+
 app.post('/register', async (req, res) => {
     const { username, email, country, phone, password, confirm_password } = req.body;
 
@@ -147,33 +188,32 @@ app.post('/register', async (req, res) => {
         res.status(500).send('Error registering user');
     }
  });
-// app.post('/login', async (req, res) => {
-//     const { email, password } = req.body;
-
-//     try {
-//         const user = await idgen.findOne({ email, password });
-
-//         if (user) {
-//             const userData = await  idgen.findOne({ userId: user.userId });
-//             const score = userData ? userData.coins : 0; // Retrieve the coins from User schema
-//             res.json({ success: true, username: user.username, userId: user.userId, score });
-//         } else {
-//             res.status(400).json({ success: false, message: 'Invalid email or password' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Error logging in' });
-//     }
-// });
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Find the user by email and password in the 'idgen' collection
         const user = await idgen.findOne({ email, password });
 
         if (user) {
-            const userData = await idgen.findOne({ userId: user.userId });
-            const score = userData ? userData.coins : 0; // Retrieve the coins from User schema
-            res.json({ success: true, username: user.username, userId: user.userId, score });
+            // Fetch the user's score and electronic value directly from the 'idgen' schema
+            const score = user.score || 0;
+            const electronic = user.electronic || 0; // Directly get electronic from user
+
+            // Return the user's opened packages along with login data
+            const openPackages = user.openPackages || [];
+
+            // Send the response with the necessary user details
+            res.json({ 
+                success: true, 
+                username: user.username, 
+                userId: user.userId, 
+                score, 
+                electronic,  // Now getting directly from 'idgen'
+                totalWithdrawn: user.withdrawals.totalAmount, // Return the total withdrawn amount
+                openPackages // Return the user's opened packages
+            });
+
         } else {
             res.status(400).json({ success: false, message: 'Invalid email or password' });
         }
@@ -181,94 +221,164 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error logging in' });
     }
 });
-// deposit-request endpoint
-// app.post('/deposit-request', async (req, res) => {
-//     const { package, userId } = req.body;
+cron.schedule('45 3 * * *', async () => {
+    try {
+        await idgen.updateMany(
+            { "openPackages.isTodayRiched": true },
+            { 
+                $set: { 
+                    "openPackages.$[].isTodayRiched": false,
+                    "openPackages.$[].dailyIncomeCount": 0
+                },
+                $inc: { "openPackages.$[].daysLeftFor90": -1 }
+            }
+        );
+        console.log('Reset isTodayRiched and dailyIncomeCount for all users and decremented daysLeftFor90');
+    } catch (error) {
+        console.error('Error resetting isTodayRiched and dailyIncomeCount:', error);
+    }
+});
 
-//     try {
-//         let depositRequest = await DepositRequest.findOne({ userId });
+app.post('/save-opened-package', async (req, res) => {
+    const { userId, packageCost, referredUserId } = req.body;
 
-//         if (depositRequest) {
-//             // Update existing request
-//             depositRequest.package = package;
-//             depositRequest.requestTime = Date.now(); // Update request time
+    try {
+        const user = await idgen.findOne({ userId });
+        if (user) {
+            const packageOpened = user.openPackages.find(pkg => pkg.packageCost === packageCost);
 
-//             await depositRequest.save();
-//             res.json({ message: 'Deposit request updated successfully' });
-//         } else {
-//             // Create a new deposit request
-//             depositRequest = new DepositRequest({ package, userId });
-//             await depositRequest.save();
-//             res.json({ message: 'Deposit request submitted successfully' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: 'An error occurred while processing your deposit request. Please try again later.' });
-//     }
-// });
+            if (!packageOpened) {
+                user.openPackages.push({ 
+                    packageCost, 
+                    lastOpened: new Date(), 
+                    referredUserId: referredUserId || 'N/A', 
+                    isTodayRiched: false,
+                    openedDate: new Date() // Set the opened date here
+                });
+                await user.save(); 
 
-// // check-deposit endpoint
-// app.post('/check-deposit', async (req, res) => {
-//     const { userId } = req.body;
+                res.json({ success: true, message: 'Package opened and saved successfully' });
+            } else {
+                res.status(400).json({ success: false, message: 'Package already opened' });
+            }
+        } else {
+            res.status(404).json({ success: false, message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error details:', error); 
+        res.status(500).json({ success: false, message: 'Error saving opened package', error: error.message });
+    }
+});
+app.post('/update-today-limit', async (req, res) => {
+    const { userId, packageCost, isTodayRiched } = req.body;
 
-//     try {
-//         const depositRequest = await DepositRequest.findOne({ userId });
+    try {
+        const user = await idgen.findOne({ userId });
+        if (user) {
+            const packageToUpdate = user.openPackages.find(pkg => pkg.packageCost === packageCost);
+            if (packageToUpdate) {
+                packageToUpdate.isTodayRiched = isTodayRiched; // Update the field
+                await user.save(); // Save changes to the database
 
-//         if (depositRequest) {
-//             res.json({ electronic: depositRequest.electronic, score: depositRequest.score });
-//         } else {
-//             res.status(404).json({ error: 'Deposit request not found for this user.' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: 'An error occurred while checking your deposit status. Please try again later.' });
-//     }
-// });
+                res.json({ success: true, message: 'Daily limit updated successfully' });
+            } else {
+                res.status(404).json({ success: false, message: 'Package not found' });
+            }
+        } else {
+            res.status(404).json({ success: false, message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error updating today limit:', error);
+        res.status(500).json({ success: false, message: 'Error updating today limit', error: error.message });
+    }
+});
+
+app.post('/check-user-exists', async (req, res) => {
+    const { referredUserId } = req.body;
+
+    try {
+        // Search for the referred user in the database
+        const user = await idgen.findOne({ userId: referredUserId });
+
+        if (user) {
+            res.json({ exists: true });
+        } else {
+            res.json({ exists: false });
+        }
+    } catch (error) {
+        console.error('Error checking user existence:', error);
+        res.status(500).json({ success: false, message: 'Error checking user existence', error: error.message });
+    }
+});
 
 
 
-// deposit-request endpoint
 app.post('/deposit-request', async (req, res) => {
     const { package, userId, details } = req.body;
 
     try {
-        let depositRequest = await DepositRequest.findOne({ userId });
+        let depositRequest = await idgen.findOne({ userId });
 
         if (depositRequest) {
-            // Update existing request
-            depositRequest.package = package;
-            depositRequest.requestTime = Date.now(); // Update request time
-            depositRequest.details = details; // Update details
+            // Initialize the deposit array if it doesn't exist
+            if (!depositRequest.deposit) {
+                depositRequest.deposit = [];
+            }
+
+            // Push new deposit entry into the deposit array
+            depositRequest.deposit.push({
+                package,
+                details,
+                electronic: depositRequest.electronic + 0, // Example increment; adjust as needed
+                requestTime: Date.now()
+            });
 
             await depositRequest.save();
-            res.json({ message: 'Deposit request updated successfully' });
+            res.json({ message: 'Deposit request updated successfully', deposit: depositRequest.deposit });
         } else {
             // Create a new deposit request
-            depositRequest = new DepositRequest({ package, userId, details });
+            depositRequest = new idgen({
+                userId,
+                deposit: [
+                    {
+                        package,
+                        details,
+                        electronic: 200, // Initialize electronic
+                        requestTime: Date.now()
+                    }
+                ]
+            });
             await depositRequest.save();
-            res.json({ message: 'Deposit request submitted successfully' });
+            res.json({ message: 'Deposit request submitted successfully', deposit: depositRequest.deposit });
         }
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while processing your deposit request. Please try again later.' });
+        console.error(error); // Log the actual error for debugging
+        res.status(500).json({ error: 'deposit request error.' });
     }
 });
+
 
 // check-deposit endpoint
 app.post('/check-deposit', async (req, res) => {
     const { userId } = req.body;
 
     try {
-        const depositRequest = await DepositRequest.findOne({ userId });
+        const depositRequest = await idgen.findOne({ userId });
 
         if (depositRequest) {
-            res.json({ electronic: depositRequest.electronic, score: depositRequest.score });
+            // Return the electronic value, score, and the full deposit array
+            res.json({
+                electronic: depositRequest.electronic,
+                score: depositRequest.score,
+                deposits: depositRequest.deposit // Return all deposits made by the user
+            });
         } else {
-            res.json({ electronic: 0, score: 0 }); // Return default values if no deposit request is found
+            res.json({ electronic: 0, score: 0, deposits: [] }); // Return default values if no deposit request is found
         }
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while checking your deposit status. Please try again later.' });
+        res.status(500).json({ error: 'error chake deposit.' });
     }
 });
-
-
 
 app.post('/api/verify-password', async(req, res) => {
     const { username, password } = req.body;
@@ -285,12 +395,14 @@ app.post('/api/verify-password', async(req, res) => {
     }
 });
 
+    // Updated getDailyLimit function
 function getDailyLimit(cost) {
     switch (cost) {
         case 9000: return 300;
         case 18000: return 300;
-        case 30000: return 300;
-        case 60000: return 300;
+        case 30000: return 200;
+        case 60000: return 200;
+        case 120000: return 400;
         default: return 300;
     }
 }
@@ -299,65 +411,55 @@ app.post('/income', async (req, res) => {
     try {
         const { userId, packageCost, income } = req.body;
 
+        // Validate input data
         if (!userId || isNaN(packageCost) || isNaN(income)) {
             return res.status(400).json({ error: 'Invalid input data' });
         }
 
+        // Find the user by userId
         let user = await idgen.findOne({ userId });
 
+        // If user not found
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Initialize dailyLimit if it is not already
-        if (!user.dailyLimit) {
-            user.dailyLimit = [];
+        // Find the opened package with the specified packageCost
+        const packageOpened = user.openPackages.find(pkg => pkg.packageCost === parseInt(packageCost));
+
+        // If the package doesn't exist or has expired
+        if (!packageOpened || packageOpened.daysLeftFor90 <= 0) {
+            return res.status(400).json({ error: 'Package expired or not found' });
         }
 
-        const today = new Date().toISOString().slice(0, 10);
-
-        let dailyLimitEntry = user.dailyLimit.find(entry => entry.packageCost === packageCost);
-
-        if (!dailyLimitEntry) {
-            dailyLimitEntry = { packageCost, date: today, count: 0 };
-            user.dailyLimit.push(dailyLimitEntry);
-        }
-
-        if (dailyLimitEntry.date !== today) {
-            dailyLimitEntry.date = today;
-            dailyLimitEntry.count = 0;
-        }
-
+        // Get the daily limit for the specific package
         const dailyLimit = getDailyLimit(packageCost);
-        if (dailyLimitEntry.count >= dailyLimit) {
+
+        // Check if the package has reached the daily limit
+        if (packageOpened.isTodayRiched || packageOpened.dailyIncomeCount >= dailyLimit) {
             return res.status(400).json({ error: 'Daily limit reached' });
         }
 
+        // Update user's score and handle the daily limit
         user.score += income;
-        dailyLimitEntry.count += 1;
+        packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + 1;
 
-        // Handle commission
-       if (user.referredUserId) {
-    let referredUser = await idgen.findOne({ userId: user.referredUserId });
-    if (referredUser) {
-        let commission = income * 0.1; // 10% of income
-        referredUser.score += commission;
-        referredUser.principalAmount += commission; // Store commission amount
-        await referredUser.save();
-    }
-}
+        // Mark the package as having reached the daily limit if count exceeds or matches the limit
+        if (packageOpened.dailyIncomeCount >= dailyLimit) {
+            packageOpened.isTodayRiched = true;
+        }
 
-
+        // Save updated user data
         await user.save();
-        res.json({ userId, score: user.score });
+
+        // Respond with success and updated score
+        res.json({ success: true, score: user.score });
+
     } catch (error) {
         console.error('Error occurred:', error.message);
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
-
-
-
 app.post('/api/setReferral', async (req, res) => {
     try {
         const { userId, referredUserId } = req.body;
@@ -381,79 +483,41 @@ app.post('/api/setReferral', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
-
-
-
-// app.post('/income', async (req, res) => {
-//     try {
-//         const { userId, packageCost, income } = req.body;
-
-//         if (!userId || isNaN(packageCost) || isNaN(income)) {
-//             return res.status(400).json({ error: 'Invalid input data' });
-//         }
-
-//         let user = await idgen.findOne({ userId });
-
-//         if (!user) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         // Initialize dailyLimit if it is not already
-//         if (!user.dailyLimit) {
-//             user.dailyLimit = [];
-//         }
-
-//         const today = new Date().toISOString().slice(0, 10);
-
-//         let dailyLimitEntry = user.dailyLimit.find(entry => entry.packageCost === packageCost);
-
-//         if (!dailyLimitEntry) {
-//             dailyLimitEntry = { packageCost, date: today, count: 0 };
-//             user.dailyLimit.push(dailyLimitEntry);
-//         }
-
-//         if (dailyLimitEntry.date !== today) {
-//             dailyLimitEntry.date = today;
-//             dailyLimitEntry.count = 0;
-//         }
-
-//         const dailyLimit = getDailyLimit(packageCost);
-//         if (dailyLimitEntry.count >= dailyLimit) {
-//             return res.status(400).json({ error: 'Daily limit reached' });
-//         }
-
-//         user.score += income;
-//         dailyLimitEntry.count += 1;
-
-//         await user.save();
-//         res.json({ userId, score: user.score });
-//     } catch (error) {
-//         console.error('Error occurred:', error.message);
-//         res.status(500).json({ error: 'Something went wrong' });
-//     }
-// });
 app.post('/api/withdraw', async (req, res) => {
     try {
         const { userId, amount } = req.body;
 
+        // Input validation
         if (!userId || isNaN(amount) || amount <= 0) {
             return res.status(400).json({ error: 'Invalid input data' });
         }
 
+        // Find the user
         let user = await idgen.findOne({ userId });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
+        // Check if the user has sufficient funds
         if (user.score < amount) {
             return res.status(400).json({ error: 'Insufficient funds' });
         }
 
+        // Deduct the amount from user's score
         user.score -= amount;
+
+        // Update total withdrawals and last withdrawal date
         user.withdrawals.totalAmount += amount;
         user.withdrawals.lastWithdrawalDate = new Date();
 
+        // Add new entry to withdrawal history
+        user.withdrawals.history.push({
+            amount: amount,
+            date: new Date() // Current date and time
+        });
+
+        // Save the user record with updated information
         await user.save();
 
         res.json({ message: 'Withdrawal successful', score: user.score });
@@ -462,6 +526,7 @@ app.post('/api/withdraw', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
+
 
 
 app.listen(port, () => {

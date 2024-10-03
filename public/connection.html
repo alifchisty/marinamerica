@@ -44,18 +44,17 @@ background-color: #2b4da5 ;
 
 /* List items with responsive grid layout */
 .list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
     gap: 10px;
     margin: 1.5vh auto;
     font-size: 1.7rem;
     padding: 10px;
+color: gold;
 }
 
 /* Individual items in the list */
 .item {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr; /* Adjust column size as needed */
+grid-template-columns: 22vw 22vw 22vw 22vw;
     gap: 10px;
     align-items: center;
     padding: 10px;
@@ -65,43 +64,21 @@ background-color: #2b4da5 ;
 
 /* Column styling */
 .name, .pakage, .country, .income {
-    text-align: center;
-    font-size: 1rem;
-    white-space: nowrap; /* Prevent text from wrapping */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+text-align: center;
+font-size: 0.8rem;
+white-space: nowrap;}
+.country{
+color:khaki ;
 }
-
+.pakage{
+color:#89f7fe ;
+}
+.income{
+color: greenyellow ;
+}
 /* Adjustments for different screen sizes */
-@media (max-width: 1200px) {
-    .niona {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns on smaller screens */
-    }
 
-    .list {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns for list items */
-    }
-}
 
-@media (max-width: 768px) {
-    .niona {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile screens */
-    }
-
-    .list {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns for list items */
-    }
-}
-
-@media (max-width: 480px) {
-    .niona {
-        grid-template-columns: 1fr; /* 1 column on very small screens */
-    }
-
-    .list {
-        grid-template-columns: 1fr; /* 1 column for list items */
-    }
-}
 
 
 
@@ -184,15 +161,15 @@ background-color: #2b4da5 ;
         color: rgb(64, 240, 11);
 
     } --}} -->
-    <h2 class="list">Top Rank Dray Source<sub style="font-size:0.6rem ; ">(last month)</sub></h2>
+    <h2 class="list">Top Rank Dray Source<sub style="font-size:0.8rem ; ">(last month)</sub></h2>
     <div class="connection-container">
 
 
         <div class=" niona">
-            <p class="nam">Name </p>
-            <p class="incom">Income</p>
-            <p class="pakag">Pakage</p>
-            <p class="countr">Country</p>
+            <p class="nam" >Name </p>
+            <p class="incom" style="color: greenyellow ;">Income</p>
+            <p class="pakag" style="color:#89f7fe ;">Pakage</p>
+            <p class="countr" style="color:khaki ;">Country</p>
         </div>
 
 <div class="item">

@@ -1,0 +1,97 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <div class="item">
+    <span id="score" class="money-color">0</span><br>
+    <span class="details">All</span>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const score = localStorage.getItem('score') || 0;
+    document.getElementById('score').textContent = score;
+
+    // Optionally, you could fetch the score from the backend based on the userId
+});
+</script>
+ 
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .user-info {
+            margin-bottom: 20px;
+        }
+        .user-info p {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>User Dashboard</h1>
+    <div class="user-info">
+        <p><strong>Username:</strong> <span id="displayUsername">Loading...</span></p>
+        <p><strong>User ID:</strong> <span id="displayUserId">Loading...</span></p>
+    </div>
+    
+    <div class="financial-info">
+        <p id="usdt-cent"><strong>USDT-Cent:</strong> Loading...</p>
+        <p id="electronic"><strong>Electronic:</strong> Loading...</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const username = localStorage.getItem('username');
+        const userId = localStorage.getItem('userId');
+
+        if (username && userId) {
+            document.getElementById('displayUsername').textContent = username;
+            document.getElementById('displayUserId').textContent = userId;
+
+            // Retrieve and display usdtCent and electronic values
+            const usdtCent = parseInt(localStorage.getItem('usdtCent')) || 0;
+            document.getElementById('usdt-cent').textContent = `USDT-Cent: ${usdtCent}`;
+
+            const electronicValue = parseInt(localStorage.getItem('electronic')) || 0;
+            document.getElementById('electronic').textContent = `Electronic: ${Math.floor(electronicValue / 100)}.${electronicValue % 100 < 10 ? '0' + (electronicValue % 100) : electronicValue % 100}`;
+            
+        } else {
+            alert('User information not found. Please log in again.');
+            window.location.href = '/login';
+        }
+    });
+</script>
+
+</body>
+</html>

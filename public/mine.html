@@ -13,33 +13,35 @@
             padding: 0;
         }
 
-        body {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-image: linear-gradient(140.99deg, #01d9c8 6.12%, #cd61ff 90.22%);
-            color: #fff;
-background-image: url(mirror/bg-nav.jpg);
+      body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background-image: url('mirror/new-bg-abstarct.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
 
-            background-repeat: repeat;
-            background-position: center;
-background-size:contain ;
-        }
+    /* Pseudo-element to create the repeat effect after 100vh */
+    position: relative;
+}
 
-        @media screen and (min-width: 700px) {
+
+
+        /* @media screen and (min-width: 700px) {
             body {
                 height: 100vh;
                 display: flex;
                 flex-direction: column;
                 background-image: linear-gradient(113.99deg, #2b4da5 6.12%, #1e3a8a 83.22%);
                 color: #fff;
-background-image: url(bg-nav.jpg);
+background-image: url(mirror/new-bg-abstarct.jpg);
 
             background-repeat: repeat;
-            background-position: center;
 background-size:contain ;
             }
-        }
+        } */
 
 .logo-img{
  height: 6vh;
@@ -227,7 +229,6 @@ username: <span id="displayUsername">{{username}}</span>
             </div>
         </nav>
     </header>
-
     <section class="Header">
         <div class="header-container">
             <div class="item"><span id="" class="money-color">0</span><br><span class="details">Team</span></div>
@@ -252,7 +253,15 @@ username: <span id="displayUsername">{{username}}</span>
             <div class="opt">Deposit</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
-        <a href="/team" class="mine-btn">
+       <a href="/exchange" class="mine-btn">
+            <div class="opt">Exchange</div>
+            <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
+        </a>
+        <a href="/notice" class="mine-btn">
+            <div class="opt">Notice</div>
+            <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
+        </a>
+ <a href="/team" class="mine-btn">
             <div class="opt">Team</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
@@ -264,14 +273,10 @@ username: <span id="displayUsername">{{username}}</span>
             <div class="opt">Record</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </button>
-        <button class="mine-btn">
-            <div class="opt">Dray source</div>
+        <!-- <a href="" class="mine-btn">
+            <div class="opt"></div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
-        </button>
-        <a href="" class="mine-btn">
-            <div class="opt">Advice</div>
-            <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
-        </a>
+        </a> -->
         <button class="mine-btn">
             <div class="opt">Help</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
@@ -303,9 +308,6 @@ username: <span id="displayUsername">{{username}}</span>
             });
         });
     </script>
-
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Display username and userId

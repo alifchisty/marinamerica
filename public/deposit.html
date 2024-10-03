@@ -15,21 +15,22 @@
         padding: 0;
     }
 
-    body {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background-color: #fd1d1d;
+   body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background-image: url('mirror/new-bg-abstarct.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
 
-        /* Matches one of the gradient colors */
-        color: rgb(16, 15, 15);
-            background-image: url(bg-nav.jpg);
+    /* Pseudo-element to create the repeat effect after 100vh */
+    position: relative;
+}
 
-            background-repeat: repeat;
-            background-position: center;
-background-size:contain ;
 
-    }
+
 
     .navclass {
         display: flex;
@@ -59,39 +60,55 @@ background-size:contain ;
     }
 
 
-/* Popup styling */
-.unique-popup {
-    visibility: hidden;
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    padding: 5px;
-    position: absolute;
-    top: 50px; /* Adjust if needed */
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 5px;
-    z-index: 1;
-}
+    @media screen and (max-width: 500px) {
+        .deposit-container {
+            display: flex;
+            flex-direction: column;
+            margin: auto 3vw;
+            font-size: 1.2rem;
+        }
 
-.unique-popup.show {
-    visibility: visible;
-}
+    }
 
-/* Error message styling */
-.unique-error-message {
-    color: red;
-    visibility: hidden;
-    margin-top: 5px;
-}
+    /* Popup styling */
+    .unique-popup {
+        visibility: hidden;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 5px;
+        position: absolute;
+        top: 50px;
+        /* Adjust if needed */
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        z-index: 1;
+    }
+
+    .unique-popup.show {
+        visibility: visible;
+    }
+
+    /* Error message styling */
+    .unique-error-message {
+        color: red;
+        visibility: hidden;
+        margin-top: 5px;
+    }
 
 
     #unique-deposit-input {
         padding: 8px;
         border-radius: 5px;
-        border: none;
+        border: 2px solid gold;
         margin: 3px 0;
-        width: 40vh;
+        width: 100%;
+        text-align: center;
+        padding-right: 30px;
+        box-sizing: border-box;
+        color: rgb(64, 64, 202);
+        background-color: cornsilk;
     }
 
     .binance-container {
@@ -101,6 +118,7 @@ background-size:contain ;
     .pakage-chake>input {
         padding: 4px;
         margin: 1px 0;
+        color: #fd1d1d;
     }
 
     #userid {
@@ -110,11 +128,11 @@ background-size:contain ;
     }
 
     .request-for-deposit>button {
-        padding: 7px;
+        padding: 8px 15px;
         border-radius: 4px;
         border: none;
         background-color: rgb(15, 219, 15);
-        color: #fff;
+        color: #fffff9;
         margin: 1vh;
     }
 
@@ -170,692 +188,310 @@ background-size:contain ;
                 <div id="popup" class="popup">Copied!</div>
             </div> --}} -->
 
-            <div class="unique-deposit-container deposit-container">
-                <div class="unique-binance-container binance-container">
-                    <p class="unique-binance binance">1. Send deposit request money in this Binance link</p>
-                    <input type="text" value="TKJbdBFhDM36sPiBAxWPoSg9bBv4brvKUWj" id="unique-deposit-input" readonly
-                        onclick="copyDepositId()">
-                     <div id="unique-popup" class="unique-popup">Copied!</div>
-        <p id="unique-error-message" class="unique-error-message"></p>
-                </div>
+        <div class="unique-deposit-container deposit-container">
+            <div class="unique-binance-container binance-container">
+                <p class="unique-binance binance" style="color: rgb\(146, 146, 202;color: rgb(146, 146, 202);">1. Send
+                    deposit request money in this Binance link</p>
+<input type="text"
+                    value="TKJbdBFhDM36sPiBAxWPoSg9bBv4brvKUWj" id="unique-deposit-input" readonly
+                    onclick="copyDepositId()">
+                <div id="unique-popup" class="unique-popup">Copied!</div>
+                <p id="unique-error-message" class="unique-error-message"></p>
             </div>
-
-            <p class="chake-info">2. Confirmed checked <input type="checkbox" checked> your deposit request</p>
-            <div class="pakage-chake">
-                <input type="checkbox" name="package" id="silver">
-                <input type="text" value="90$" readonly>
-            </div>
-            <div class="pakage-chake">
-                <input type="checkbox" name="package" id="gold">
-                <input type="text" value="180$" readonly>
-            </div>
-            <div class="pakage-chake">
-                <input type="checkbox" name="package" id="dimond">
-                <input type="text" value="300$" readonly>
-            </div>
-            <div class="pakage-chake">
-                <input type="checkbox" name="package" id="Platinum">
-                <input type="text" value="600$" readonly>
-            </div>
-            <div class="request-for-deposit">
-                <input type="text" placeholder="Enter user_id" id="displayUserId">
-                <button type="button" onclick="requestDeposit()">Request Deposit</button>
-            </div>
-            <button type="button" id="check-deposit">
-                <p id="Chake-depositt">Check Deposit</p>
-            </button>
-
         </div>
 
-        <p id="electronic"></p>
+        <p class="chake-info">2. Confirmed checked <input type="checkbox" checked> your deposit request</p>
+        <div class="pakage-chake">
+            <input type="checkbox" name="package" id="silver">
+            <input type="text" value="90$" readonly>
+        </div>
+        <div class="pakage-chake">
+            <input type="checkbox" name="package" id="gold">
+            <input type="text" value="180$" readonly>
+        </div>
+        <div class="pakage-chake">
+            <input type="checkbox" name="package" id="dimond">
+            <input type="text" value="300$" readonly>
+        </div>
+        <div class="pakage-chake">
+            <input type="checkbox" name="package" id="Platinum">
+            <input type="text" value="600$" readonly>
+        </div>
+        <div class="request-for-deposit">
+            <input type="text" placeholder="Enter user_id" id="displayUserId">
+            <button type="button" onclick="requestDeposit()">Deposit</button>
+        </div>
+        <button type="button" id="check-deposit">
+            <p id="Chake-depositt">Check Deposit</p>
+        </button>
 
-        <footer class="container">
-            <nav class="container-layer">
-                <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
-                <a href="/Connection" class="clk"><i class='bx bx-shape-polygon'></i><br>Network</a>
-                <a href="/vip" class="clk vip-link"><i class='bx bxl-meta'></i><br>invest</a>
-                <a href="/Mine" class="clk"><i class='bx bxs-user'></i><br>Owner</a>
-                <a href="/about" class="clk"><i class='bx bx-shield' style='color:#0c0b0b'></i><br>About</a>
-            </nav>
-        </footer>
-        <script>
-const depositInput = document.getElementById('unique-deposit-input');
-const popup = document.getElementById('unique-popup');
-const errorMessage = document.getElementById('unique-error-message');
-const correctDepositId = "TKJbdBFhDM36sPiBAxWPoSg9bBv4brvKUWj";
+    </div>
 
-function copyDepositId() {
-    depositInput.select();
-    depositInput.setSelectionRange(0, 99999); // For mobile devices
-    navigator.clipboard.writeText(depositInput.value);
+    <p id="electronic" style="font-size: 1.2rem;color: blue;"></p>
+    <footer class="container">
+        <nav class="container-layer">
+            <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
+            <a href="/Connection" class="clk"><i class='bx bx-shape-polygon'></i><br>Network</a>
+            <a href="/vip" class="clk vip-link"><i class='bx bxl-meta'></i><br>invest</a>
+            <a href="/Mine" class="clk"><i class='bx bxs-user'></i><br>Owner</a>
+            <a href="/about" class="clk"><i class='bx bx-shield' style='color:#0c0b0b'></i><br>About</a>
+        </nav>
+    </footer>
+    <script>
+        const depositInput = document.getElementById('unique-deposit-input');
+        const popup = document.getElementById('unique-popup');
+        const errorMessage = document.getElementById('unique-error-message');
+        const correctDepositId = "TKJbdBFhDM36sPiBAxWPoSg9bBv4brvKUWj";
 
-    popup.classList.add('show');
-    setTimeout(() => popup.classList.remove('show'), 500);
-}
+        function copyDepositId() {
+            depositInput.select();
+            depositInput.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(depositInput.value);
 
-depositInput.addEventListener('input', () => {
-    if (depositInput.value !== correctDepositId) {
-        errorMessage.textContent = "Your deposit ID is now incorrect";
-        errorMessage.style.visibility = "visible";
-    } else {
-        errorMessage.style.visibility = "hidden";
-    }
-});
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 500);
+        }
 
-        </script>
-        <script>document.addEventListener('DOMContentLoaded', function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const deposituserId = urlParams.get('deposituserId');
-
-                if (deposituserId) {
-                    localStorage.setItem('userId', deposituserId);
-                    document.getElementById('displayUserId').value = deposituserId;
-                    checkUserDeposits(deposituserId); // Function to check and display user deposits
-                } else {
-                    const userId = localStorage.getItem('userId');
-                    if (userId) {
-                        document.getElementById('displayUserId').value = userId;
-                        checkUserDeposits(userId); // Function to check and display user deposits
-                    } else {
-                        alert('User information not found. Please log in again.');
-                        window.location.href = '/login';
-                        return;
-                    }
-                }
-
-                const packages = ["silver", "gold", "dimond", "Platinum"];
-                packages.forEach(pkg => {
-                    document.getElementById(pkg).addEventListener('change', (event) => {
-                        if (event.target.checked) {
-                            packages.forEach(otherPkg => {
-                                if (otherPkg !== pkg) {
-                                    document.getElementById(otherPkg).checked = false;
-                                }
-                            });
-                        }
-                    });
-                });
-
-                document.getElementById('check-deposit').addEventListener('click', requestDeposit);
-
-                document.querySelector('.vip-link').addEventListener('click', (event) => {
-                    event.preventDefault();
-
-                    const vipuserId = localStorage.getItem('userId');
-                    if (vipuserId) {
-                        window.location.href = `/vip?vipuserId=${vipuserId}`;
-                    } else {
-                        alert('Invalid user ID');
-                    }
-                });
-
-                // Display the electronic value in dollars and cents
-                displayElectronicValue();
-            });
-
-            async function requestDeposit() {
-                const packages = ["silver", "gold", "dimond", "Platinum"];
-                let selectedPackage = null;
-
-                for (const pkg of packages) {
-                    if (document.getElementById(pkg).checked) {
-                        selectedPackage = pkg;
-                        break;
-                    }
-                }
-
-                if (!selectedPackage) {
-                    showPopupMessage('Please select at least one package.', false, 1000);
-                    return;
-                }
-
-                const userId = document.getElementById('displayUserId').value;
-
-                if (userId !== localStorage.getItem('userId')) {
-                    alert("User ID does not match.");
-                    return;
-                }
-
-                showPopupMessage('Your Binance ID.', true);
-
-                document.querySelector('.popup-form').addEventListener('submit', async (event) => {
-                    event.preventDefault();
-
-                    const input = document.querySelector('.popup-form input').value.trim();
-                    if (!input) {
-                        showPopupMessage('Your text is null', false, 1000);
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch('/deposit-request', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ package: selectedPackage, userId: userId, details: input }),
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok) {
-                            showPopupMessage('Successful deposit request', false, 1000);
-                            setTimeout(async () => {
-                                try {
-                                    const checkResponse = await fetch('/check-deposit', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({ userId: userId }),
-                                    });
-
-                                    const checkData = await checkResponse.json();
-
-                                    if (checkResponse.ok) {
-                                        const electronicCents = Math.round(checkData.electronic * 100);
-                                        localStorage.setItem('electronic', electronicCents);
-                                        displayElectronicValue();
-                                    } else {
-                                        alert(checkData.error || 'An error occurred while checking your deposit status.');
-                                    }
-                                } catch (error) {
-                                    alert('An error occurred while checking your deposit status. Please try again later.');
-                                }
-                            }, 1000);
-                        } else {
-                            alert(data.error || 'An error occurred');
-                        }
-                    } catch (error) {
-                        alert('An error occurred while processing your request. Please try again later.');
-                    }
-                });
+        depositInput.addEventListener('input', () => {
+            if (depositInput.value !== correctDepositId) {
+                errorMessage.textContent = "Your deposit ID is now incorrect";
+                errorMessage.style.visibility = "visible";
+            } else {
+                errorMessage.style.visibility = "hidden";
             }
+        });
 
-            function showPopupMessage(message, showForm = false, removeAfter = 0) {
-                const existingPopup = document.querySelector('.popup');
-                if (existingPopup) {
-                    existingPopup.remove();
-                }
+    </script>
 
-                const popup = document.createElement('div');
-                popup.classList.add('popup');
+    <script>document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const deposituserId = urlParams.get('deposituserId');
 
-                const popupContent = document.createElement('div');
-                popupContent.classList.add('popup-content');
-
-                const messageElement = document.createElement('p');
-                messageElement.textContent = message;
-
-                popupContent.appendChild(messageElement);
-
-                if (showForm) {
-                    const form = document.createElement('form');
-                    form.classList.add('popup-form');
-
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.placeholder = 'Enter details...';
-                    form.appendChild(input);
-
-                    const submitButton = document.createElement('button');
-                    submitButton.type = 'submit';
-                    submitButton.textContent = 'Submit';
-                    form.appendChild(submitButton);
-
-                    popupContent.appendChild(form);
-                }
-
-                popup.appendChild(popupContent);
-                document.body.appendChild(popup);
-
-                popup.style.position = 'fixed';
-                popup.style.top = '50%';
-                popup.style.left = '50%';
-                popup.style.transform = 'translate(-50%, -50%)';
-                popup.style.backgroundColor = showForm ? 'lightgreen' : 'white';
-                popup.style.color = 'black';
-                popup.style.padding = '20px';
-                popup.style.border = '1px solid black';
-                popup.style.zIndex = '1000';
-                popup.style.maxWidth = '90%';
-                popup.style.boxSizing = 'border-box';
-
-                popupContent.style.display = 'flex';
-                popupContent.style.flexDirection = 'column';
-                popupContent.style.alignItems = 'center';
-
-                if (removeAfter > 0) {
-                    setTimeout(() => {
-                        popup.remove();
-                    }, removeAfter);
-                }
-            }
-
-            async function checkUserDeposits(userId) {
-                try {
-                    const response = await fetch('/check-deposit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ userId: userId }),
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        const electronicCents = Math.round(data.electronic * 100);
-                        localStorage.setItem('electronic', electronicCents);
-                        displayElectronicValue();
-                    } else {
-                        alert(data.error || 'An error occurred while checking your deposit status.');
-                    }
-                } catch (error) {
-                    alert('An error occurred while checking your deposit status. Please try again later.');
-                }
-            }
-
-            function displayElectronicValue() {
-                const electronic = parseInt(localStorage.getItem('electronic')) || 0;
-                let electronicDollars = Math.floor(electronic / 100);
-                let electronicCents = electronic % 100;
-                document.getElementById('electronic').textContent = `electronic: ${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
-            }
-        </script>
-        <!-- {{!--
-        <script>document.addEventListener('DOMContentLoaded', function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const deposituserId = urlParams.get('deposituserId');
-
-                if (deposituserId) {
-                    localStorage.setItem('userId', deposituserId);
-                    document.getElementById('displayUserId').value = deposituserId;
-                    checkUserDeposits(deposituserId); // Function to check and display user deposits
-                } else {
-                    const userId = localStorage.getItem('userId');
-                    if (userId) {
-                        document.getElementById('displayUserId').value = userId;
-                        checkUserDeposits(userId); // Function to check and display user deposits
-                    } else {
-                        alert('User information not found. Please log in again.');
-                        window.location.href = '/login';
-                        return;
-                    }
-                }
-
-                const packages = ["silver", "gold", "dimond", "Platinum"];
-                packages.forEach(pkg => {
-                    document.getElementById(pkg).addEventListener('change', (event) => {
-                        if (event.target.checked) {
-                            packages.forEach(otherPkg => {
-                                if (otherPkg !== pkg) {
-                                    document.getElementById(otherPkg).checked = false;
-                                }
-                            });
-                        }
-                    });
-                });
-
-                document.getElementById('check-deposit').addEventListener('click', requestDeposit);
-
-                document.querySelector('.vip-link').addEventListener('click', (event) => {
-                    event.preventDefault();
-
-                    const vipuserId = localStorage.getItem('userId');
-                    if (vipuserId) {
-                        window.location.href = `/vip?vipuserId=${vipuserId}`;
-                    } else {
-                        alert('Invalid user ID');
-                    }
-                });
-            });
-
-            async function requestDeposit() {
-                const packages = ["silver", "gold", "dimond", "Platinum"];
-                let selectedPackage = null;
-
-                for (const pkg of packages) {
-                    if (document.getElementById(pkg).checked) {
-                        selectedPackage = pkg;
-                        break;
-                    }
-                }
-
-                if (!selectedPackage) {
-                    showPopupMessage('Please select at least one package.', false, 1000);
-                    return;
-                }
-
-                const userId = document.getElementById('displayUserId').value;
-
-                if (userId !== localStorage.getItem('userId')) {
-                    alert("User ID does not match.");
-                    return;
-                }
-
-                showPopupMessage('Your Binance ID.', true);
-
-                document.querySelector('.popup-form').addEventListener('submit', async (event) => {
-                    event.preventDefault();
-
-                    const input = document.querySelector('.popup-form input').value.trim();
-                    if (!input) {
-                        showPopupMessage('Your text is null', false, 1000);
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch('/deposit-request', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ package: selectedPackage, userId: userId, details: input }),
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok) {
-                            showPopupMessage('Successful deposit request', false, 1000);
-                            setTimeout(async () => {
-                                try {
-                                    const checkResponse = await fetch('/check-deposit', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({ userId: userId }),
-                                    });
-
-                                    const checkData = await checkResponse.json();
-
-                                    if (checkResponse.ok) {
-                                        localStorage.setItem('electronic', checkData.electronic);
-                                        document.getElementById('electronic').innerText = `Electronic: ${checkData.electronic}`;
-                                    } else {
-                                        alert(checkData.error || 'An error occurred while checking your deposit status.');
-                                    }
-                                } catch (error) {
-                                    alert('An error occurred while checking your deposit status. Please try again later.');
-                                }
-                            }, 1000);
-                        } else {
-                            alert(data.error || 'An error occurred');
-                        }
-                    } catch (error) {
-                        alert('An error occurred while processing your request. Please try again later.');
-                    }
-                });
-            }
-
-            function showPopupMessage(message, showForm = false, removeAfter = 0) {
-                const existingPopup = document.querySelector('.popup');
-                if (existingPopup) {
-                    existingPopup.remove();
-                }
-
-                const popup = document.createElement('div');
-                popup.classList.add('popup');
-
-                const popupContent = document.createElement('div');
-                popupContent.classList.add('popup-content');
-
-                const messageElement = document.createElement('p');
-                messageElement.textContent = message;
-
-                popupContent.appendChild(messageElement);
-
-                if (showForm) {
-                    const form = document.createElement('form');
-                    form.classList.add('popup-form');
-
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.placeholder = 'Enter details...';
-                    form.appendChild(input);
-
-                    const submitButton = document.createElement('button');
-                    submitButton.type = 'submit';
-                    submitButton.textContent = 'Submit';
-                    form.appendChild(submitButton);
-
-                    popupContent.appendChild(form);
-                }
-
-                popup.appendChild(popupContent);
-                document.body.appendChild(popup);
-
-                popup.style.position = 'fixed';
-                popup.style.top = '50%';
-                popup.style.left = '50%';
-                popup.style.transform = 'translate(-50%, -50%)';
-                popup.style.backgroundColor = showForm ? 'lightgreen' : 'white';
-                popup.style.color = 'black';
-                popup.style.padding = '20px';
-                popup.style.border = '1px solid black';
-                popup.style.zIndex = '1000';
-                popup.style.maxWidth = '90%';
-                popup.style.boxSizing = 'border-box';
-
-                popupContent.style.display = 'flex';
-                popupContent.style.flexDirection = 'column';
-                popupContent.style.alignItems = 'center';
-
-                if (removeAfter > 0) {
-                    setTimeout(() => {
-                        popup.remove();
-                    }, removeAfter);
-                }
-            }
-            async function checkUserDeposits(userId) {
-                try {
-                    const response = await fetch('/check-deposit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ userId: userId }),
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        localStorage.setItem('electronic', data.electronic);
-                        document.getElementById('electronic').innerText = `Electronic: ${data.electronic}`;
-                        // Any additional logic to display user deposits
-                    } else {
-                        alert(data.error || 'An error occurred while checking your deposit status.');
-                    }
-                } catch (error) {
-                    alert('An error occurred while checking your deposit status. Please try again later.');
-                }
-            }
-        </script> --}}
-        {{!--
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            if (deposituserId) {
+                localStorage.setItem('userId', deposituserId);
+                document.getElementById('displayUserId').value = deposituserId;
+                checkUserDeposits(deposituserId); // Function to check and display user deposits
+            } else {
                 const userId = localStorage.getItem('userId');
                 if (userId) {
                     document.getElementById('displayUserId').value = userId;
+                    checkUserDeposits(userId); // Function to check and display user deposits
                 } else {
                     alert('User information not found. Please log in again.');
                     window.location.href = '/login';
                     return;
                 }
+            }
 
-                const packages = ["silver", "gold", "dimond", "Platinum"];
-                packages.forEach(pkg => {
-                    document.getElementById(pkg).addEventListener('change', (event) => {
-                        if (event.target.checked) {
-                            packages.forEach(otherPkg => {
-                                if (otherPkg !== pkg) {
-                                    document.getElementById(otherPkg).checked = false;
-                                }
-                            });
-                        }
-                    });
-                });
-
-                document.getElementById('check-deposit').addEventListener('click', requestDeposit);
-
-                document.querySelector('.vip-link').addEventListener('click', (event) => {
-                    event.preventDefault();
-
-                    const vipuserId = localStorage.getItem('userId');
-                    if (vipuserId) {
-                        window.location.href = `/vip?vipuserId=${vipuserId}`;
-                    } else {
-                        alert('Invalid user ID');
+            const packages = ["silver", "gold", "dimond", "Platinum"];
+            packages.forEach(pkg => {
+                document.getElementById(pkg).addEventListener('change', (event) => {
+                    if (event.target.checked) {
+                        packages.forEach(otherPkg => {
+                            if (otherPkg !== pkg) {
+                                document.getElementById(otherPkg).checked = false;
+                            }
+                        });
                     }
                 });
             });
 
-            async function requestDeposit() {
-                const packages = ["silver", "gold", "dimond", "Platinum"];
-                let selectedPackage = null;
+            document.getElementById('check-deposit').addEventListener('click', requestDeposit);
 
-                for (const pkg of packages) {
-                    if (document.getElementById(pkg).checked) {
-                        selectedPackage = pkg;
-                        break;
-                    }
+            document.querySelector('.vip-link').addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const vipuserId = localStorage.getItem('userId');
+                if (vipuserId) {
+                    window.location.href = `/vip?vipuserId=${vipuserId}`;
+                } else {
+                    alert('Invalid user ID');
                 }
+            });
 
-                if (!selectedPackage) {
-                    showPopupMessage('Please select at least one package.', false, 1000);
-                    return;
-                }
+            // Display the electronic value in dollars and cents
+            displayElectronicValue();
+        });
 
-                const userId = document.getElementById('displayUserId').value;
+        async function requestDeposit() {
+    const packages = ["silver", "gold", "dimond", "Platinum"];
+    let selectedPackage = null;
 
-                if (userId !== localStorage.getItem('userId')) {
-                    alert("User ID does not match.");
-                    return;
-                }
+    for (const pkg of packages) {
+        if (document.getElementById(pkg).checked) {
+            selectedPackage = pkg;
+            break;
+        }
+    }
 
-                showPopupMessage('Your Binance ID.', true);
+    if (!selectedPackage) {
+        showPopupMessage('Please select at least one package.', false, 1000);
+        return;
+    }
 
-                // Add event listener for form submission within popup
-                document.querySelector('.popup-form').addEventListener('submit', async (event) => {
+    const userId = document.getElementById('displayUserId').value;
+
+    if (userId !== localStorage.getItem('userId')) {
+        alert("User ID does not match.");
+        return;
+    }
+
+    showPopupMessage('Your Binance ID.', true);
+
+    document.querySelector('.popup-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const input = document.querySelector('.popup-form input').value.trim();
+        if (!input) {
+            showPopupMessage('Your text is null', false, 1000);
+            return;
+        }
+
+        try {
+            const response = await fetch('/deposit-request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ package: selectedPackage, userId: userId, details: input }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showPopupMessage('Successful deposit request', false, 1000);
+
+                // Update the displayed electronic value
+                const updatedElectronic = data.deposit[data.deposit.length - 1].electronic; // Get updated electronic value from the latest deposit entry
+                localStorage.setItem('electronic', updatedElectronic); // Store it in local storage
+                document.getElementById('electronic').textContent = `electronic: ${updatedElectronic}`; // Update UI
+            } else {
+                alert(data.error || 'An error occurred');
+            }
+        } catch (error) {
+            alert('An error occurred while processing your request. Please try again later.');
+        }
+    });
+}
+
+        function showPopupMessage(message, showForm = false, removeAfter = 0) {
+            const existingPopup = document.querySelector('.popup');
+            if (existingPopup) {
+                existingPopup.remove();
+            }
+
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
+
+            const popupContent = document.createElement('div');
+            popupContent.classList.add('popup-content');
+
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+
+            popupContent.appendChild(messageElement);
+
+            if (showForm) {
+                const form = document.createElement('form');
+                form.classList.add('popup-form');
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Enter details...';
+                form.appendChild(input);
+
+                const submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.textContent = 'Submit';
+                form.appendChild(submitButton);
+
+                // Add event listener for form submission
+                form.addEventListener('submit', (event) => {
                     event.preventDefault();
+                    const inputValue = input.value.trim();
 
-                    const input = document.querySelector('.popup-form input').value.trim();
-                    if (!input) {
-                        showPopupMessage('Your text is null', false, 1000);
+                    // Validation: Check if input is at least 10 digits and contains no spaces
+                    if (inputValue.length < 10 || /\s/.test(inputValue)) {
+                        showPopupMessage('Input must be at least 10 digits long and contain no spaces.', false, 2000);
                         return;
                     }
 
-                    try {
-                        const response = await fetch('/deposit-request', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ package: selectedPackage, userId: userId, details: input }),
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok) {
-                            showPopupMessage('Successful deposit request', false, 1000);
-                            setTimeout(async () => {
-                                try {
-                                    const checkResponse = await fetch('/check-deposit', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({ userId: userId }),
-                                    });
-
-                                    const checkData = await checkResponse.json();
-
-                                    if (checkResponse.ok) {
-                                        const localElectronic = localStorage.getItem('electronic');
-                                        if (checkData.electronic > localElectronic) {
-                                            localStorage.setItem('electronic', checkData.electronic);
-                                            document.getElementById('electronic').innerText = `Electronic: ${checkData.electronic}`;
-                                        } else {
-                                            showPopupMessage('It seems you are not able', false, 1000);
-                                        }
-                                    } else {
-                                        alert(checkData.error || 'An error occurred while checking your deposit status.');
-                                    }
-                                } catch (error) {
-                                    alert('An error occurred while checking your deposit status. Please try again later.');
-                                }
-                            }, 1000); // Delay to allow showing the 'Successful deposit request' message first
-                        } else {
-                            alert(data.error || 'An error occurred');
-                        }
-                    } catch (error) {
-                        alert('An error occurred while processing your request. Please try again later.');
-                    }
+                    // Proceed with submission if validation passes
+                    // (Your existing logic for handling the submission goes here)
                 });
+
+                popupContent.appendChild(form);
             }
 
-            function showPopupMessage(message, showForm = false, removeAfter = 0) {
-                const existingPopup = document.querySelector('.popup');
-                if (existingPopup) {
-                    existingPopup.remove();
-                }
+            // Add back icon to close the popup
+            const backIcon = document.createElement('span');
+            backIcon.textContent = '←'; // You can replace this with an icon if needed
+            backIcon.style.cursor = 'pointer';
+            backIcon.style.fontSize = '20px';
+            backIcon.style.marginBottom = '10px';
+            backIcon.addEventListener('click', () => {
+                popup.remove();
+            });
+            popupContent.prepend(backIcon); // Add back icon at the top of the popup content
 
-                const popup = document.createElement('div');
-                popup.classList.add('popup');
+            popup.appendChild(popupContent);
+            document.body.appendChild(popup);
 
-                const popupContent = document.createElement('div');
-                popupContent.classList.add('popup-content');
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.backgroundColor = showForm ? 'lightgreen' : 'white';
+            popup.style.color = 'black';
+            popup.style.padding = '20px'; 
+            popup.style.border = '1px solid black';
+            popup.style.zIndex = '1000';
+            popup.style.maxWidth = '90%';
+            popup.style.boxSizing = 'border-box';
 
-                const messageElement = document.createElement('p');
-                messageElement.textContent = message;
+            popupContent.style.display = 'flex';
+            popupContent.style.flexDirection = 'column';
+            popupContent.style.alignItems = 'center';
 
-                popupContent.appendChild(messageElement);
-
-                if (showForm) {
-                    const form = document.createElement('form');
-                    form.classList.add('popup-form');
-
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.placeholder = 'Enter details...';
-                    form.appendChild(input);
-
-                    const submitButton = document.createElement('button');
-                    submitButton.type = 'submit';
-                    submitButton.textContent = 'Submit';
-                    form.appendChild(submitButton);
-
-                    popupContent.appendChild(form);
-                }
-
-                popup.appendChild(popupContent);
-                document.body.appendChild(popup);
-
-                popup.style.position = 'fixed';
-                popup.style.top = '50%';
-                popup.style.left = '50%';
-                popup.style.transform = 'translate(-50%, -50%)';
-                popup.style.backgroundColor = showForm ? 'lightgreen' : 'white';
-                popup.style.color = 'black';
-                popup.style.padding = '20px';
-                popup.style.border = '1px solid black';
-                popup.style.zIndex = '1000';
-                popup.style.maxWidth = '90%';
-                popup.style.boxSizing = 'border-box';
-
-                popupContent.style.display = 'flex';
-                popupContent.style.flexDirection = 'column';
-                popupContent.style.alignItems = 'center';
-
-                if (removeAfter > 0) {
-                    setTimeout(() => {
-                        popup.remove();
-                    }, removeAfter);
-                }
+            if (removeAfter > 0) {
+                setTimeout(() => {
+                    popup.remove();
+                }, removeAfter);
             }
+        }
 
-        </script> --}} -->
+        async function checkUserDeposits(userId) {
+            try {
+                const response = await fetch('/check-deposit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId: userId }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const electronicCents = Math.round(data.electronic * 100);
+                    localStorage.setItem('electronic', electronicCents);
+                    displayElectronicValue();
+                } else {
+                    alert(data.error || 'An error occurred while checking your deposit status.');
+                }
+            } catch (error) {
+                alert('An error occurred while checking your deposit status. Please try again later.');
+            }
+        }
+
+        function displayElectronicValue() {
+            const electronic = parseInt(localStorage.getItem('electronic')) || 0;
+            let electronicDollars = Math.floor(electronic / 100);
+            let electronicCents = electronic % 100;
+            document.getElementById('electronic').textContent = `electronic: ${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
+        }
+    </script>
+   
 
 </body>
 

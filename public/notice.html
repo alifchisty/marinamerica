@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Document</title>
+</head>
+<style>
+  * {
+        margin: 0;
+        padding: 0;
+    }
+    body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background-image: url('mirror/new-bg-abstarct.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+
+    /* Pseudo-element to create the repeat effect after 100vh */
+    position: relative;
+}
+
+/* body::after {
+    content: "";
+    position: absolute;
+    top: 100vh;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('mirror/new-bg-abstarct.jpg');
+    background-repeat: repeat;
+    background-size: contain;
+} */
+
+    .navclass {
+    display: flex;
+    align-items: center;
+    background-size: auto;
+    height: 10vh;
+    box-shadow: 4px 0 10px rgb(0, 0, 0);
+position: sticky;
+top: 0;
+  backdrop-filter: blur(2px);
+z-index:1001;
+  }
+
+    nav .comapny {
+        opacity: 100%;
+        color: rgb(255, 255, 255);
+        /* text-shadow: 3px 4px black; */
+        padding: 7vh 0;
+    }
+
+.title{
+color:blue;
+}
+i{
+font-size: 3rem;
+}
+
+
+
+
+        /* Container fixed at the bottom */
+        .container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            /* Full width */
+            margin-top: 71vh;
+            padding: 0;
+            box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.3);
+            /* Shadow for subtle effect */
+            background-color: #fff;
+            /* Background color */
+            z-index: 1000;
+            /* Ensure it is above other content */
+            line-height: 99%;
+        }
+
+        /* Layer within the container for alignment */
+        .container-layer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 7px 0;
+            background-color: #fff;
+            /* Ensure background color matches container */
+        }
+
+        /* Styling for clickable items */
+        .clk {
+            color: black;
+            text-decoration: none;
+            padding: 3px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        i {
+            font-size: 2rem;
+            margin: 0 auto;
+        }
+
+        .clicked-icon {
+            color: rgb(0, 255, 234);
+            /* Ensure the icon remains readable */
+        }
+
+
+        .mine-btn>.arow>i {
+            font-size: 1rem;
+            margin: 0 auto;
+        }
+</style>
+<body>
+ <nav class="navclass">
+        <div class="logo"><i class='bx bxs-bookmark-star' style='color:#ffdb00'></i></div>
+        <h1 class="comapny" style="color: #fff;">Sub Marine</h1>
+    </nav>
+    <h1 class="title">Notice <i class='bx bxs-color' style='color:#0a0909'  ></i></h1>
+
+   <footer class="container">
+        <nav class="container-layer">
+            <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
+            <a href="/Connection" class="clk"> <i class='bx bx-sitemap' class="clkk"></i> <br> Network</a>
+            <a href="/vip" class="clk vip-link"><i class='bx bxl-sketch' style='color:#0c0c0c'></i><br>Invest</a>
+            <a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br>Owner</a>
+            <a href="/about" class="clk"><i class='bx bx-shield'></i><br>About</a>
+        </nav>
+    </footer>
+ <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('.container-layer .clk');
+            const userId = localStorage.getItem('userId');
+
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    // Reset the color of all <i> tags
+                    document.querySelectorAll('.container-layer .clk i').forEach(icon => {
+                        icon.style.color = ''; // Reset to default
+                    });
+                    // Change the color of the <i> tag within the clicked <a>
+                    link.querySelector('i').style.color = 'gold';
+                });
+            });
+
+            // VIP link click event
+            document.querySelector('.vip-link').addEventListener('click', (event) => {
+                event.preventDefault();
+                const vipuserId = localStorage.getItem('userId');
+                if (vipuserId) {
+                    window.location.href = `/vip?vipuserId=${vipuserId}`;
+                } else {
+                    alert('Invalid user ID');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

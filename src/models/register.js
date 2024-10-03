@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -8,22 +7,38 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     userId: { type: String, unique: true },
     score: { type: Number, default: 0 },
-    dailyLimit: [
+ electronic: { type: Number, default: 0 },
+    deposit: [{
+        package: String,
+        details: String,
+        electronic: Number,
+        requestTime: Date
+    }],
+ withdrawals: {
+        totalAmount: { type: Number, default: 0 },
+        lastWithdrawalDate: { type: Date },
+        history: [
+            {
+                amount: { type: Number, required: true },
+                date: { type: Date, required: true }
+            }
+        ]
+    },
+    principalAmount: { type: Number, default: 0 },
+    
+    // Updated openPackages with new fields
+    openPackages: [
         {
             packageCost: { type: Number, required: true },
-            date: { type: String, required: true },
-            count: { type: Number, default: 0 }
+            lastOpened: { type: Date, required: true },
+            referredUserId: { type: String, required: false },
+            isTodayRiched: { type: Boolean, default: false }, // Add the isTodayRiched field
+            daysLeftFor90: { type: Number, default: 90 }, // নতুন ফিল্ড যোগ করা হয়েছে
+            openedDate: { type: Date, required: true }, // Track when the package was opened
         }
-    ],
-    withdrawals: {
-        totalAmount: { type: Number, default: 0 },
-        lastWithdrawalDate: { type: Date }
-    },
-    referredUserId: { type: String }, // New field for referral
-    principalAmount: { type: Number, default: 0 } // New field for commission
+    ]
 });
 
 const idgen = mongoose.model('idgen', userSchema);
 
 module.exports = idgen;
-  
