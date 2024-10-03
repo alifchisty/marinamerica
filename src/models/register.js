@@ -36,9 +36,7 @@ const userSchema = new mongoose.Schema({
             daysLeftFor90: { type: Number, default: 90 }, // নতুন ফিল্ড যোগ করা হয়েছে
             openedDate: { type: Date, required: true }, // Track when the package was opened
         }
-<<<<<<< HEAD
-    ]
-=======
+
     ],
     withdrawals: {
         totalAmount: { type: Number, default: 0 },
@@ -52,7 +50,6 @@ const userSchema = new mongoose.Schema({
     }, 
     referredUserId: { type: String },
     principalAmount: { type: Number, default: 0 }
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
 });
 
 const idgen = mongoose.model('idgen', userSchema);
