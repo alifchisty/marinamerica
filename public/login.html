@@ -17,16 +17,6 @@
         background-position: center;
         background-size: contain;
     }
-<<<<<<< HEAD
-    .login-container {
-        margin: 20vh auto;
-        width: 45vw;
-        padding: 3vh;
-        box-shadow: 0px 1px 7px rgb(4, 255, 208);
-        border-radius: 5px;
-        backdrop-filter: blur(0.9px);
-
-=======
 
     .login-container {
         margin: 20vh auto;
@@ -36,7 +26,6 @@
         border-radius: 5px;
         backdrop-filter: blur(0.9px);
 
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
     }
 
     .login-container h3 {
@@ -81,13 +70,8 @@
             <button class="login-btn" type="submit">Log in</button>
         </form>
     </div>
-<<<<<<< HEAD
 <script>
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
-=======
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
     e.preventDefault();
 
     const email = document.getElementById('email').value;
@@ -107,7 +91,6 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         if (data.success) {
             localStorage.setItem('username', data.username);
             localStorage.setItem('userId', data.userId);
-<<<<<<< HEAD
             localStorage.setItem('score', data.score);
             localStorage.setItem('electronic', data.electronic);
 localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
@@ -115,11 +98,6 @@ localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
             // Store opened packages in localStorage
             localStorage.setItem('openPackages', JSON.stringify(data.openPackages));
 
-=======
-            localStorage.setItem('score', data.score); // Store the score in localStorage
-            
-            // Redirect to the VIP page with userId
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
             window.location.href = `vip?vipuserId=${data.userId}`;
         } else {
             alert('Invalid email or password');
@@ -129,42 +107,9 @@ localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
     }
 });
 
-<<<<<<< HEAD
 
 </script>
    
-=======
-    </script>
-
-    <!-- <script>
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('userId', data.userId);
-        localStorage.setItem('score', data.score); // Ensure this is correct
-        window.location.href = 'vip';
-    } else {
-        alert('Invalid email or password');
-    }
-});
-</script> -->
-
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
 
 </body>
 

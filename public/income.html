@@ -177,8 +177,7 @@ top: 0;
 
 
 
-<<<<<<< HEAD
-     </nav></footer>
+        </nav></footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -310,131 +309,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, packageCost, isTodayRiched: true })
-=======
-        </nav>
-    </footer>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const vipuserId = urlParams.get('vipuserId');
-        const packageCost = parseInt(urlParams.get('packageCost'));
-
-        function updateScoreDisplay(score) {
-            if (isNaN(score)) {
-                console.error('Invalid score value:', score);
-                return;
-            }
-
-            let dollars = Math.floor(score / 100);
-            let cents = score % 100;
-            document.getElementById('score').textContent = `USDT-cent: ${dollars}.${cents < 10 ? '0' + cents : cents}`;
-        }
-
-           async function fetchUserScore(userId) {
-                try {
-                    const response = await fetch(`/user/score?userId=${userId}`);
-                    const data = await response.json();
-                    if (data.error) {
-                        console.error('Error fetching score:', data.error);
-                        return;
-                    }
-                    localStorage.setItem('score', data.score);
-                    updateScoreDisplay(data.score);
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                }
-            }
-
-
-        if (vipuserId) {
-            fetchUserScore(vipuserId);
-        } else {
-            let score = parseInt(localStorage.getItem('score')) || 0;
-            updateScoreDisplay(score);
-        }
-
-        function getIncome(cost) {
-            switch (cost) {
-                case 9000: return 1;
-                case 18000: return 2;
-                case 30000: return 5;
-                case 60000: return 10;
-                case 120000: return 10;
-                default:
-                    console.error(`No income defined for packageCost: ${cost}`);
-                    return 0;
-            }
-        }
-
-        function getDailyLimit(cost) {
-            switch (cost) {
-                case 9000:
-                case 18000:
-                case 30000:
-                case 60000:
-                case 120000:
-                    return 300;
-                default:
-                    return 300;
-            }
-        }
-
-        document.getElementById('rabbit-pic').addEventListener('click', () => {
-            if (vipuserId && packageCost) {
-                console.log(`Clicked with packageCost: ${packageCost}`);
-                const clickCountKey = `click_count_${vipuserId}_${packageCost}`;
-                const dailyLimitKey = `daily_limit_${vipuserId}_${packageCost}`;
-
-                let clickCount = parseInt(localStorage.getItem(clickCountKey)) || 0;
-                let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
-
-                const currentDailyLimit = getDailyLimit(packageCost);
-                if (dailyLimit >= currentDailyLimit) {
-                    alert('Daily limit reached');
-                    return;
-                }
-
-                clickCount++;
-                localStorage.setItem(clickCountKey, clickCount);
-                dailyLimit++;
-                localStorage.setItem(dailyLimitKey, dailyLimit);
-
-                const income = getIncome(packageCost);
-                console.log(`Income to be added: ${income}`);
-
-                if (income <= 0) {
-                    console.error('No income defined for packageCost:', packageCost);
-                    return;
-                }
-
-                let score = parseInt(localStorage.getItem('score')) || 0;
-                score += income;
-                localStorage.setItem('score', score);
-                updateScoreDisplay(score);
-                showPopup(income);
-          fetch('/income', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userId: vipuserId, packageCost, income })
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            console.log('Server response:', data);
-                        })
-                        .catch(error => {
-                            console.error('Fetch error:', error);
-                        });
-                } else {
-                    alert('Invalid user ID or package cost');
-                }
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
             });
         } catch (error) {
             console.error('Error updating today limit:', error);
         }
     }
 
-<<<<<<< HEAD
     // Increment the user's score locally
     function incrementScore(income) {
         let score = parseInt(localStorage.getItem('score')) || 0;
@@ -497,40 +377,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-=======
-        function showPopup(income) {
-            const popup = document.createElement('div');
-            popup.className = 'popup';
-            popup.textContent = `+$${(income / 100).toFixed(2)}`;
-            popup.style.backgroundColor = 'gold';
-            popup.style.color = 'blue';
-            popup.style.borderRadius = '5px';
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.padding = '6px 15px';
-
-            document.body.appendChild(popup);
-
-            setTimeout(() => {
-                popup.remove();
-            }, 400);
-        }
-
-        document.querySelector('.vip-link').addEventListener('click', (event) => {
-            event.preventDefault();
-
-            const vipuserId = localStorage.getItem('userId');
-            if (vipuserId) {
-                window.location.href = `/vip?vipuserId=${vipuserId}`;
-            } else {
-                alert('Invalid user ID');
-            }
-        });
-    });
-</script>
- 
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
 
 </body>
 
