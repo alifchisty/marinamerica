@@ -188,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let incomeToBeSaved = 0;
     let isSavingScore = false;
     let clickQueue = [];
-    let scoreUpdateTimeout = null;
     let saveTimeout = null;
 
     // Check if daily limit is reached
@@ -257,11 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handle click on the rabbit picture
-    document.getElementById('rabbit-pic').addEventListener('click', () => {
+    document.getElementById('rabbit-pic').addEventListener('click', async () => {
         if (isSavingScore) return;
 
-        // Instant score update for each click
         const income = getIncome(packageCost);
+        const limitReached = await checkDailyLimit(vipuserId, packageCost);
+
+        if (limitReached) {
+            alert('Daily limit reached.');
+            return;
+        }
+
         if (income > 0) {
             incrementScore(income);
             clickQueue.push(income); // Queue click for processing
@@ -269,30 +274,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Process queue if not already processing
         if (!isSavingScore) {
-            processClickQueue();
+            debounceSaveToDatabase();
         }
     });
 
-    // Process the queued clicks
-    async function processClickQueue() {
-        if (clickQueue.length === 0 || isSavingScore) return;
+    // Increment the user's score locally
+    function incrementScore(income) {
+        let score = parseInt(localStorage.getItem('score')) || 0;
+        score += income;
+        incomeToBeSaved += income;
+        localStorage.setItem('score', score);
+        updateScoreDisplay(score);
+        showPopup(income);
+    }
 
-        const limitReached = await checkLimitReached(vipuserId, packageCost);
-        if (limitReached) {
-            clickQueue = [];
+    // Debounced function to save the score to the database in batches
+    function debounceSaveToDatabase() {
+        clearTimeout(saveTimeout); // Clear the previous timeout
+
+        saveTimeout = setTimeout(() => {
+            if (clickQueue.length > 0) {
+                saveScoreToDatabase(); // Save to DB after debounce period
+            }
+        }, 1000); // Set a debounce period of 1 second
+    }
+
+    // Save the score to the database in batches
+    async function saveScoreToDatabase() {
+        if (incomeToBeSaved === 0 || isSavingScore) {
             return;
         }
 
-        if (saveTimeout === null) {
-            saveTimeout = setTimeout(() => saveScoreToDatabase(), 1000); // Delay the save by 1 second
+        isSavingScore = true;
+        try {
+            await fetch('/income', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: vipuserId,
+                    packageCost,
+                    income: incomeToBeSaved
+                })
+            });
+            incomeToBeSaved = 0; // Reset after saving
+            clickQueue = []; // Clear the queue after saving
+        } catch (error) {
+            console.error('Error saving score:', error);
+        } finally {
+            isSavingScore = false;
         }
     }
 
-    // Check if the user's daily limit is reached or the package has expired
-    async function checkLimitReached(userId, packageCost) {
+    // Show a popup for the earned income
+    function showPopup(income) {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.textContent = `+ $${(income / 100).toFixed(2)}`;
+        popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px;';
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 400);
+    }
+
+    // Check if the daily limit is reached
+    async function checkDailyLimit(userId, packageCost) {
         try {
             const response = await fetch(`/check-package-status?userId=${userId}&packageCost=${packageCost}`);
             const data = await response.json();
+
             if (data.isTodayRiched || data.daysLeftFor90 <= 0) {
                 alert('Daily limit reached or package has expired.');
                 return true;
@@ -317,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Update the today's limit on the server
+    // Update today's limit on the server
     async function updateTodayLimit(userId, packageCost) {
         try {
             await fetch('/update-today-limit', {
@@ -330,53 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Increment the user's score locally
-    function incrementScore(income) {
-        let score = parseInt(localStorage.getItem('score')) || 0;
-        score += income;
-        incomeToBeSaved += income;
-        localStorage.setItem('score', score);
-        updateScoreDisplay(score);
-        showPopup(income);
-    }
-
-    // Save the score to the database in batches
-    async function saveScoreToDatabase() {
-        if (incomeToBeSaved === 0 || isSavingScore) {
-            return;
-        }
-
-        isSavingScore = true;
-        try {
-            await fetch('/income', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: vipuserId,
-                    packageCost,
-                    income: incomeToBeSaved
-                })
-            });
-            incomeToBeSaved = 0;
-            clickQueue = []; // Clear the queue after saving
-            clearTimeout(saveTimeout); // Clear the timeout
-            saveTimeout = null; // Reset save timeout
-        } catch (error) {
-            console.error('Error saving score:', error);
-        } finally {
-            isSavingScore = false;
-        }
-    }
-
-    // Show a popup for the earned income
-    function showPopup(income) {
-        const popup = document.createElement('div');
-        popup.className = 'popup';
-        popup.textContent = `+ $${(income / 100).toFixed(2)}`;
-        popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px;';
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 400);
-    }
 
     // Handle VIP link click
     document.querySelector('.vip-link').addEventListener('click', (event) => {
