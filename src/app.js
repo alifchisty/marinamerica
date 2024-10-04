@@ -221,7 +221,7 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error logging in' });
     }
 });
-cron.schedule('45 3 * * *', async () => {
+cron.schedule('5 18 * * *', async () => {
     try {
         await idgen.updateMany(
             { "openPackages.isTodayRiched": true },
