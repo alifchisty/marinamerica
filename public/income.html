@@ -177,9 +177,7 @@ top: 0;
 
 
 
-        </nav>
-    </footer>
-
+        </nav></footer>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -246,15 +244,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get the daily click limit based on package cost
     function getDailyLimit(cost) {
-        switch (cost) {
-            case 9000:
-            case 18000: return 300;
-            case 30000:
-            case 60000: return 200;
-            case 120000: return 400;
-            default: return 300;
-        }
+    switch (cost) {
+        case 9000: return 300;
+        case 18000: return 300;
+        case 30000: return 200;
+        case 60000: return 200;
+        case 120000: return 400;
+        default: return 300;
     }
+}
 
     // Handle click on the rabbit picture
     document.getElementById('rabbit-pic').addEventListener('click', async () => {
@@ -385,7 +383,200 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+<!-- <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const vipuserId = urlParams.get('vipuserId');
+    const packageCost = parseInt(urlParams.get('packageCost'));
+    const isTodayRiched = urlParams.get('isTodayRiched') === 'true';
+    let incomeToBeSaved = 0;
+    let isSavingScore = false;
+    let clickTimeout;
 
+    // Check if daily limit is reached
+    if (isTodayRiched) {
+        alert('Daily limit reached for today. Please come back tomorrow.');
+        return;
+    }
+
+    // Fetch user's score and update display
+    if (vipuserId) {
+        fetchUserScore(vipuserId);
+    } else {
+        const score = parseInt(localStorage.getItem('score')) || 0;
+        updateScoreDisplay(score);
+    }
+
+    // Fetch user score from the server
+    async function fetchUserScore(userId) {
+        try {
+            const response = await fetch(`/user/score?userId=${userId}`);
+            const data = await response.json();
+            if (data.error) {
+                console.error('Error fetching score:', data.error);
+                return;
+            }
+            localStorage.setItem('score', data.score);
+            updateScoreDisplay(data.score);
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    }
+
+    // Update the score display
+    function updateScoreDisplay(score) {
+        if (isNaN(score)) {
+            console.error('Invalid score value:', score);
+            return;
+        }
+        document.getElementById('score').textContent = `USDT-cent: ${(score / 100).toFixed(2)}`;
+    }
+
+    // Calculate income based on package cost
+    function getIncome(cost) {
+        switch (cost) {
+            case 9000: return 1;
+            case 18000: return 2;
+            case 30000: return 5;
+            case 60000: return 10;
+            case 120000: return 10;
+            default: 
+                console.error(`No income defined for packageCost: ${cost}`);
+                return 0;
+        }
+    }
+
+    // Get the daily click limit based on package cost
+    function getDailyLimit(cost) {
+        switch (cost) {
+            case 9000:
+            case 18000: return 300;
+            case 30000:
+            case 60000: return 200;
+            case 120000: return 400;
+            default: return 300;
+        }
+    }
+
+    // Handle click on the rabbit picture
+    document.getElementById('rabbit-pic').addEventListener('click', async () => {
+        if (isSavingScore) return;
+
+        clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(() => saveScoreToDatabase(), 500);
+
+        if (vipuserId && packageCost) {
+            const limitReached = await checkLimitReached(vipuserId, packageCost);
+            if (limitReached) return;
+
+            const income = getIncome(packageCost);
+            incrementScore(income);
+        } else {
+            alert('Invalid user ID or package cost');
+        }
+    });
+
+    // Check if the user's daily limit is reached or the package has expired
+    async function checkLimitReached(userId, packageCost) {
+        try {
+            const response = await fetch(`/check-package-status?userId=${userId}&packageCost=${packageCost}`);
+            const data = await response.json();
+            if (data.isTodayRiched || data.daysLeftFor90 <= 0) {
+                alert('Daily limit reached or package has expired.');
+                return true;
+            }
+
+            const clickCountKey = `click_count_${userId}_${packageCost}`;
+            const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
+            let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
+            const currentDailyLimit = getDailyLimit(packageCost);
+
+            if (dailyLimit >= currentDailyLimit) {
+                alert('Daily limit reached');
+                await updateTodayLimit(userId, packageCost);
+                return true;
+            }
+
+            dailyLimit++;
+            localStorage.setItem(dailyLimitKey, dailyLimit);
+            return false;
+        } catch (error) {
+            console.error('Error checking package status:', error);
+            return true;
+        }
+    }
+
+    // Update the today's limit on the server
+    async function updateTodayLimit(userId, packageCost) {
+        try {
+            await fetch('/update-today-limit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, packageCost, isTodayRiched: true })
+            });
+        } catch (error) {
+            console.error('Error updating today limit:', error);
+        }
+    }
+
+    // Increment the user's score locally
+    function incrementScore(income) {
+        let score = parseInt(localStorage.getItem('score')) || 0;
+        score += income;
+        incomeToBeSaved += income;
+        localStorage.setItem('score', score);
+        updateScoreDisplay(score);
+        showPopup(income);
+    }
+
+    // Save the score to the database
+    async function saveScoreToDatabase() {
+        if (incomeToBeSaved === 0) {
+            console.log('No new income to save.');
+            return;
+        }
+
+        isSavingScore = true;
+        try {
+            await fetch('/income', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: vipuserId,
+                    packageCost,
+                    income: incomeToBeSaved
+                })
+            });
+            incomeToBeSaved = 0;
+        } catch (error) {
+            console.error('Error saving score:', error);
+        } finally {
+            isSavingScore = false;
+        }
+    }
+
+    // Show a popup for the earned income
+    function showPopup(income) {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.textContent = `+$${(income / 100).toFixed(2)}`;
+        popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px;';
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 400);
+    }
+
+    // Handle VIP link click
+    document.querySelector('.vip-link').addEventListener('click', (event) => {
+        event.preventDefault();
+        const vipuserId = localStorage.getItem('userId');
+        if (vipuserId) {
+            window.location.href = `/vip?vipuserId=${vipuserId}`;
+        } else {
+            alert('Invalid user ID');
+        }
+    });
+});
+</script>  -->
 
 
 
