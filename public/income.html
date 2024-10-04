@@ -184,9 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const vipuserId = urlParams.get('vipuserId');
     const packageCost = parseInt(urlParams.get('packageCost'));
     const isTodayRiched = urlParams.get('isTodayRiched') === 'true';
+    
     let incomeToBeSaved = 0;
     let isSavingScore = false;
     let clickQueue = [];
+    let scoreUpdateTimeout = null;
     let saveTimeout = null;
 
     // Check if daily limit is reached
@@ -244,28 +246,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get the daily click limit based on package cost
     function getDailyLimit(cost) {
-    switch (cost) {
-        case 9000: return 300;
-        case 18000: return 300;
-        case 30000: return 200;
-        case 60000: return 200;
-        case 120000: return 400;
-        default: return 300;
+        switch (cost) {
+            case 9000: return 300;
+            case 18000: return 300;
+            case 30000: return 200;
+            case 60000: return 200;
+            case 120000: return 400;
+            default: return 300;
+        }
     }
-}
 
     // Handle click on the rabbit picture
-    document.getElementById('rabbit-pic').addEventListener('click', async () => {
+    document.getElementById('rabbit-pic').addEventListener('click', () => {
         if (isSavingScore) return;
 
-        // Queue the click for processing
-        clickQueue.push(1);
-        processClickQueue();
+        // Instant score update for each click
+        const income = getIncome(packageCost);
+        if (income > 0) {
+            incrementScore(income);
+            clickQueue.push(income); // Queue click for processing
+        }
+
+        // Process queue if not already processing
+        if (!isSavingScore) {
+            processClickQueue();
+        }
     });
 
     // Process the queued clicks
     async function processClickQueue() {
-        if (isSavingScore || clickQueue.length === 0) return;
+        if (clickQueue.length === 0 || isSavingScore) return;
 
         const limitReached = await checkLimitReached(vipuserId, packageCost);
         if (limitReached) {
@@ -273,15 +283,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Process clicks
-        while (clickQueue.length > 0) {
-            const income = getIncome(packageCost);
-            incrementScore(income);
-            clickQueue.shift(); // Remove the processed click
+        if (saveTimeout === null) {
+            saveTimeout = setTimeout(() => saveScoreToDatabase(), 1000); // Delay the save by 1 second
         }
-
-        // Save score after processing the queue
-        saveScoreToDatabase();
     }
 
     // Check if the user's daily limit is reached or the package has expired
@@ -336,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showPopup(income);
     }
 
-    // Save the score to the database
+    // Save the score to the database in batches
     async function saveScoreToDatabase() {
         if (incomeToBeSaved === 0 || isSavingScore) {
             return;
@@ -354,6 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
             incomeToBeSaved = 0;
+            clickQueue = []; // Clear the queue after saving
+            clearTimeout(saveTimeout); // Clear the timeout
+            saveTimeout = null; // Reset save timeout
         } catch (error) {
             console.error('Error saving score:', error);
         } finally {
@@ -383,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
 <!-- <script>
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
