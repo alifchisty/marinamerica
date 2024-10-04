@@ -177,7 +177,8 @@ top: 0;
 
 
 
-        </nav></footer>
+        </nav>
+    </footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -187,7 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const isTodayRiched = urlParams.get('isTodayRiched') === 'true';
     let incomeToBeSaved = 0;
     let isSavingScore = false;
-    let clickTimeout;
+    let clickQueue = [];
+    let saveTimeout = null;
 
     // Check if daily limit is reached
     if (isTodayRiched) {
@@ -258,19 +260,31 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('rabbit-pic').addEventListener('click', async () => {
         if (isSavingScore) return;
 
-        clearTimeout(clickTimeout);
-        clickTimeout = setTimeout(() => saveScoreToDatabase(), 500);
+        // Queue the click for processing
+        clickQueue.push(1);
+        processClickQueue();
+    });
 
-        if (vipuserId && packageCost) {
-            const limitReached = await checkLimitReached(vipuserId, packageCost);
-            if (limitReached) return;
+    // Process the queued clicks
+    async function processClickQueue() {
+        if (isSavingScore || clickQueue.length === 0) return;
 
+        const limitReached = await checkLimitReached(vipuserId, packageCost);
+        if (limitReached) {
+            clickQueue = [];
+            return;
+        }
+
+        // Process clicks
+        while (clickQueue.length > 0) {
             const income = getIncome(packageCost);
             incrementScore(income);
-        } else {
-            alert('Invalid user ID or package cost');
+            clickQueue.shift(); // Remove the processed click
         }
-    });
+
+        // Save score after processing the queue
+        saveScoreToDatabase();
+    }
 
     // Check if the user's daily limit is reached or the package has expired
     async function checkLimitReached(userId, packageCost) {
@@ -282,7 +296,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return true;
             }
 
-            const clickCountKey = `click_count_${userId}_${packageCost}`;
             const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
             let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
             const currentDailyLimit = getDailyLimit(packageCost);
@@ -327,8 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save the score to the database
     async function saveScoreToDatabase() {
-        if (incomeToBeSaved === 0) {
-            console.log('No new income to save.');
+        if (incomeToBeSaved === 0 || isSavingScore) {
             return;
         }
 
@@ -355,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showPopup(income) {
         const popup = document.createElement('div');
         popup.className = 'popup';
-        popup.textContent = `+$${(income / 100).toFixed(2)}`;
+        popup.textContent = `+ $${(income / 100).toFixed(2)}`;
         popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px;';
         document.body.appendChild(popup);
         setTimeout(() => popup.remove(), 400);
@@ -372,7 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-</script> 
+</script>
+
 
 
 
