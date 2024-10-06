@@ -103,531 +103,48 @@
             <a href="/about" class="clk"><i class='bx bx-shield' style='color:#0c0b0b'></i><br>About</a>
         </nav>
     </footer>
-    <!-- <script>
-//reopen
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const vipuserId = urlParams.get('vipuserId');
-    const packageCost = parseInt(urlParams.get('packageCost'));
-    let electronic = parseInt(localStorage.getItem('electronic')) || 0;
-    let score = parseInt(localStorage.getItem('score')) || 0;
-    updateMoneyDisplay(score, electronic);
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vipuserId = urlParams.get('vipuserId');
+            const packageCost = parseInt(urlParams.get('packageCost'));
+            let electronic = parseInt(localStorage.getItem('electronic')) || 0;
+            let score = parseInt(localStorage.getItem('score')) || 0;
+            updateMoneyDisplay(score, electronic);
 
-    // Get opened packages from localStorage
-    const openPackages = JSON.parse(localStorage.getItem('openPackages')) || [];
-
-    if (vipuserId) {
-        document.querySelectorAll('.click').forEach(box => {
-            const cost = parseInt(box.closest('.box').getAttribute('data-cost'));
+            // Get opened packages from localStorage
+            const openPackages = JSON.parse(localStorage.getItem('openPackages')) || [];
+            if (vipuserId) {
+                document.querySelectorAll('.click').forEach(box => {
+                      const cost = parseInt(box.closest('.box').getAttribute('data-cost'));
             const packageOpened = openPackages.find(pkg => pkg.packageCost === cost);
 
-            if (packageOpened) {
-                fetchPackageStatus(vipuserId, cost, box, packageOpened);
-            } else {
-                box.innerHTML = `<a href="#">${cost} USDT Open now</a>`;
-            }
-
-            box.addEventListener('click', async (event) => {
-                event.preventDefault();
-
-<<<<<<< HEAD
-                if (packageOpened) {
-                    try {
-                        const response = await fetch(`/check-package-status?userId=${vipuserId}&packageCost=${cost}`);
-                        const data = await response.json();
-
-                        if (data.error) {
-                            alert('Error: ' + data.error);
-                            return;
-                        }
-
-                        if (data.daysLeftFor90 === 0) {
-                            // Reopen package logic
-                            handlePackageReopen(vipuserId, cost, box, packageOpened);
-                        } else {
-                            window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}&isTodayRiched=${data.isTodayRiched ? 'true' : 'false'}`;
-                        }
-                    } catch (error) {
-                        console.error('Error fetching package status:', error);
-                    }
-=======
-                if (localStorage.getItem(packageKey)) {
-                    // If already opened, redirect to income page
-                    window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}`;
-                    return;
-                }
-
-                if (electronic >= cost || score >= cost) {
-                    // Show referral prompt
-                    showReferralPrompt(vipuserId, cost, (success) => {
-                        if (success) {
-                            // Deduct cost from electronic after successful referral submission
-                            if (electronic >= cost) {
-                                electronic -= cost;
-                                localStorage.setItem('electronic', electronic);
-                                updateMoneyDisplay(score, electronic);
-                            } else {
-                                score -= cost;
-                                localStorage.setItem('score', score);
-                                updateMoneyDisplay(score, electronic);
-                            }
-
-                            localStorage.setItem(packageKey, 'true');
-                            const lastOpenedKey = `${packageKey}_time`;
-                            localStorage.setItem(lastOpenedKey, Date.now());
-                            box.innerHTML = '<p>Opened for you</p>';
-                        } else {
-                            alert('Package could not be opened. Please submit a valid user ID.');
-                        }
-                    });
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
-                } else {
-                    openNewPackage(vipuserId, cost, electronic, score, openPackages);
-                }
-            });
-        });
-    }
-
-    async function fetchPackageStatus(vipuserId, cost, box, packageOpened) {
-        try {
-            const response = await fetch(`/check-package-status?userId=${vipuserId}&packageCost=${cost}`);
-            const data = await response.json();
-
-            if (data.error) {
-                alert('Error: ' + data.error);
-                return;
-            }
-
-            const daysLeftFor90 = data.daysLeftFor90;
-
-            if (daysLeftFor90 > 0) {
-                box.innerHTML = `<p>Opened for you (${daysLeftFor90} days left)</p>`;
-            } else {
-                // Show "Reopen now" if the 90-day period has passed
-                box.innerHTML = `<a href="#">${cost} USDT Reopen now</a>`;
-            }
-        } catch (error) {
-            console.error('Error fetching package status:', error);
-        }
-    }
-
-    function updateMoneyDisplay(score, electronic) {
-        let scoreDollars = Math.floor(score / 100);
-        let scoreCents = score % 100;
-        document.getElementById('money').textContent = `${scoreDollars}.${scoreCents < 10 ? '0' + scoreCents : scoreCents}`;
-
-        let electronicDollars = Math.floor(electronic / 100);
-        let electronicCents = electronic % 100;
-        document.getElementById('electronic').textContent = `${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
-    }
-
-    function showReferralPrompt(vipuserId, cost, callback) {
-<<<<<<< HEAD
-=======
-        const referralPrompt = document.createElement('div');
-        referralPrompt.innerHTML = `
-            <div style="background-color: green; color: black; padding: 10px; border-radius: 5px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
-                <span id="backIcon" style="cursor: pointer; color: white; font-weight: bold; float: right;">&#10006;</span>
-                <p style="color: gold;">Referred User ID</p>
-                <input type="text" style="color: black;" id="referredUserId" placeholder="Enter user ID">
-                <button id="submitReferral" style="background: linear-gradient(to right, #ff7e5f, #feb47b); color: white;">Submit</button>
-            </div>
-        `;
-        document.body.appendChild(referralPrompt);
-
-        // Back icon functionality
-        document.getElementById('backIcon').addEventListener('click', () => {
-            referralPrompt.remove(); // Remove the prompt from the DOM
-        });
-
-        document.getElementById('submitReferral').addEventListener('click', () => {
-            const referredUserId = document.getElementById('referredUserId').value;
-            if (referredUserId) {
-                fetch(`/api/checkUserId?userId=${referredUserId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.exists) {
-                            fetch('/api/setReferral', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ userId: vipuserId, referredUserId })
-                            }).then(res => res.json())
-                              .then(data => {
-                                  if (data.success) {
-                                      referralPrompt.innerHTML = '<p style="background-color: green; color: black;">Successfully opened for you</p>';
-                                      setTimeout(() => {
-                                          referralPrompt.remove();
-                                          callback(true); // Call the callback with success
-                                          window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}`;
-                                      }, 800);
-                                  } else {
-                                      alert('Error setting referral.');
-                                      callback(false); // Call the callback with failure
-                                  }
-                              });
-                        } else {
-                            alert('User ID does not exist.');
-                            callback(false); // Call the callback with failure
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        alert('An error occurred while checking the user ID.');
-                        callback(false); // Call the callback with failure
-                    });
-            } else {
-                alert('Please enter a User ID.');
-                callback(false); // Call the callback with failure
-            }
-        });
-    }
-
-    document.querySelector('.vip-link').addEventListener('click', (event) => {
-        event.preventDefault();
-
-        const vipuserId = localStorage.getItem('userId');
-        if (vipuserId) {
-            window.location.href = `/vip?vipuserId=${vipuserId}`;
-        } else {
-            alert('Invalid user ID');
-        }
-    });
-});
-
-</script>
-<!-- <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const vipuserId = urlParams.get('vipuserId');
-    const packageCost = parseInt(urlParams.get('packageCost'));
-
-    let electronic = parseInt(localStorage.getItem('electronic')) || 0;
-    let score = parseInt(localStorage.getItem('score')) || 0;
-
-    updateMoneyDisplay(score, electronic);
-
-    if (vipuserId) {
-        document.querySelectorAll('.click').forEach(box => {
-            const cost = parseInt(box.closest('.box').getAttribute('data-cost'));
-            const packageKey = `opened_${vipuserId}_${cost}`;
-            const lastOpenedKey = `${packageKey}_time`;
-
-            if (localStorage.getItem(packageKey)) {
-                const lastOpenedTime = parseInt(localStorage.getItem(lastOpenedKey)) || 0;
-                if (Date.now() - lastOpenedTime > 7776000000) { // 90 days in milliseconds
-                    localStorage.removeItem(packageKey);
-                    localStorage.removeItem(lastOpenedKey);
-                    box.innerHTML = `<a href="#">${cost} USDT Open now</a>`;
-                } else {
-                    box.innerHTML = '<p>Opened for you</p>';
-                }
-            }
-
-            box.addEventListener('click', (event) => {
-                event.preventDefault();
-
-                if (localStorage.getItem(packageKey)) {
-                    // If already opened, redirect to income page
-                    window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}`;
-                    return;
-                }
-
-                if (electronic >= cost || score >= cost) {
-                    let openedSuccessfully = false; // Flag to check if package opened successfully
-
-                    if (electronic >= cost) {
-                        electronic -= cost;
-                        localStorage.setItem('electronic', electronic);
+                    if (packageOpened) {
+                        fetchPackageStatus(vipuserId, cost, box, packageOpened);
                     } else {
-                        score -= cost;
-                        localStorage.setItem('score', score);
+                        box.innerHTML = `<a href="#">${cost} USDT Open now</a>`;
                     }
+box.addEventListener('click', async (event) => {
+    event.preventDefault();
 
-                    // Show referral prompt
-                    showReferralPrompt(vipuserId, cost, (success) => {
-                        if (success) {
-                            openedSuccessfully = true; // Package opened successfully
-                            localStorage.setItem(packageKey, 'true');
-                            localStorage.setItem(lastOpenedKey, Date.now());
-                            updateMoneyDisplay(score, electronic);
-                            box.innerHTML = '<p>Opened for you</p>';
-                        } else {
-                            // Handle case where referral submission failed
-                            alert('Package could not be opened. Please submit a valid user ID.');
-                        }
-                    });
+    if (packageOpened) {
+        const response = await fetch(`/check-package-status?userId=${vipuserId}&packageCost=${cost}`);
+        const data = await response.json();
 
-                } else {
-                    alert('Insufficient funds to open this package.');
-                }
-            });
-        });
+        if (data.error) {
+            alert('Error: ' + data.error);
+            return;
+        }
+
+        // If the package has expired (90 days passed), show an alert and prevent redirect
+        if (data.daysLeftFor90 <= 0) {
+            alert('This package has expired.');
+            return;
+        }
+
+        window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}&isTodayRiched=${data.isTodayRiched ? 'true' : 'false'}`;
     } else {
-        alert('Invalid user ID');
-    }
-
-    function updateMoneyDisplay(score, electronic) {
-        let scoreDollars = Math.floor(score / 100);
-        let scoreCents = score % 100;
-        document.getElementById('money').textContent = `${scoreDollars}.${scoreCents < 10 ? '0' + scoreCents : scoreCents}`;
-
-        let electronicDollars = Math.floor(electronic / 100);
-        let electronicCents = electronic % 100;
-        document.getElementById('electronic').textContent = `${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
-    }
-
-    function showReferralPrompt(vipuserId, cost, callback) {
-    const referralPrompt = document.createElement('div');
-    referralPrompt.innerHTML = `
-        <div style="background-color: green; color: black; padding: 10px; border-radius: 5px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
-            <span id="backIcon" style="cursor: pointer; color: white; font-weight: bold; float: right;">&#10006;</span>
-            <p style="color: gold;">Referred User ID</p>
-            <input type="text" style="color: black;" id="referredUserId" placeholder="Enter user ID">
-            <button id="submitReferral" style="background: linear-gradient(to right, #ff7e5f, #feb47b); color: white;">Submit</button>
-        </div>
-    `;
-    document.body.appendChild(referralPrompt);
-
-    // Back icon functionality
-    document.getElementById('backIcon').addEventListener('click', () => {
-        referralPrompt.remove(); // Remove the prompt from the DOM
-    });
-
-    document.getElementById('submitReferral').addEventListener('click', () => {
-        const referredUserId = document.getElementById('referredUserId').value;
-        if (referredUserId) {
-            fetch(`/api/checkUserId?userId=${referredUserId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.exists) {
-                        fetch('/api/setReferral', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ userId: vipuserId, referredUserId })
-                        }).then(res => res.json())
-                          .then(data => {
-                              if (data.success) {
-                                  referralPrompt.innerHTML = '<p style="background-color: green; color: black;">Successfully opened for you</p>';
-                                  setTimeout(() => {
-                                      referralPrompt.remove();
-                                      callback(true); // Call the callback with success
-                                      window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}`;
-                                  }, 800);
-                              } else {
-                                  alert('Error setting referral.');
-                                  callback(false); // Call the callback with failure
-                              }
-                          });
-                    } else {
-                        alert('User ID does not exist.');
-                        callback(false); // Call the callback with failure
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    alert('An error occurred while checking the user ID.');
-                    callback(false); // Call the callback with failure
-                });
-        } else {
-            alert('Please enter a User ID.');
-            callback(false); // Call the callback with failure
-        }
-    });
-}
-
-
-    document.querySelector('.vip-link').addEventListener('click', (event) => {
-        event.preventDefault();
-
-        const vipuserId = localStorage.getItem('userId');
-        if (vipuserId) {
-            window.location.href = `/vip?vipuserId=${vipuserId}`;
-        } else {
-            alert('Invalid user ID');
-        }
-    });
-});
-</script> -->
-
-
-<!-- <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const vipuserId = urlParams.get('vipuserId');
-    const packageCost = parseInt(urlParams.get('packageCost'));
-
-    let electronic = parseInt(localStorage.getItem('electronic')) || 0;
-    let score = parseInt(localStorage.getItem('score')) || 0;
-
-    updateMoneyDisplay(score, electronic);
-
-    if (vipuserId) {
-        document.querySelectorAll('.click').forEach(box => {
-            const cost = parseInt(box.closest('.box').getAttribute('data-cost'));
-            const packageKey = `opened_${vipuserId}_${cost}`;
-            const lastOpenedKey = `${packageKey}_time`;
-
-            if (localStorage.getItem(packageKey)) {
-                const lastOpenedTime = parseInt(localStorage.getItem(lastOpenedKey)) || 0;
-                if (Date.now() - lastOpenedTime > 7776000000) { // 90 days in milliseconds
-                    localStorage.removeItem(packageKey);
-                    localStorage.removeItem(lastOpenedKey);
-                    box.innerHTML = `<a href="#">${cost} USDT Open now</a>`;
-                } else {
-                    box.innerHTML = '<p>Opened for you</p>';
-                }
-            }
-
-            box.addEventListener('click', (event) => {
-                event.preventDefault();
-
-                if (localStorage.getItem(packageKey)) {
-                    // If already opened, redirect to income page
-                    window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}`;
-                    return;
-                }
-
-                if (electronic >= cost || score >= cost) {
-                    let openedSuccessfully = false; // Flag to check if package opened successfully
-
-                    if (electronic >= cost) {
-                        electronic -= cost;
-                        localStorage.setItem('electronic', electronic);
-                    } else {
-                        score -= cost;
-                        localStorage.setItem('score', score);
-                    }
-
-                    // Show referral prompt
-                    showReferralPrompt(vipuserId, cost, (success) => {
-                        if (success) {
-                            openedSuccessfully = true; // Package opened successfully
-                            localStorage.setItem(packageKey, 'true');
-                            localStorage.setItem(lastOpenedKey, Date.now());
-                            updateMoneyDisplay(score, electronic);
-                            box.innerHTML = '<p>Opened for you</p>';
-                        } else {
-                            // Handle case where referral submission failed
-                            alert('Package could not be opened. Please submit a valid user ID.');
-                        }
-                    });
-
-                } else {
-                    alert('Insufficient funds to open this package.');
-                }
-            });
-        });
-    } else {
-        alert('Invalid user ID');
-    }
-
-    function updateMoneyDisplay(score, electronic) {
-        let scoreDollars = Math.floor(score / 100);
-        let scoreCents = score % 100;
-        document.getElementById('money').textContent = `${scoreDollars}.${scoreCents < 10 ? '0' + scoreCents : scoreCents}`;
-
-        let electronicDollars = Math.floor(electronic / 100);
-        let electronicCents = electronic % 100;
-        document.getElementById('electronic').textContent = `${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
-    }
-
-    function showReferralPrompt(vipuserId, cost, callback) {
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
-        const referralPrompt = document.createElement('div');
-        referralPrompt.innerHTML = `
-            <div style="background-color: green; color: black; padding: 10px; border-radius: 5px; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
-                <span id="backIcon" style="cursor: pointer; color: white; font-weight: bold; float: right;">&#10006;</span>
-                <p style="color: gold;">Referred User ID</p>
-                <input type="text" style="color: black;" id="referredUserId" placeholder="Enter user ID">
-                <button id="submitReferral" style="background: linear-gradient(to right, #ff7e5f, #feb47b); color: white;">Submit</button>
-            </div>
-        `;
-
-        document.body.appendChild(referralPrompt);
-
-        document.getElementById('backIcon').addEventListener('click', () => {
-            referralPrompt.remove();
-        });
-
-        document.getElementById('submitReferral').addEventListener('click', async () => {
-            const referredUserId = document.getElementById('referredUserId').value;
-
-            if (referredUserId) {
-<<<<<<< HEAD
-                if (referredUserId === vipuserId) {
-                    alert('Owner user ID not able to get commission.');
-                    return;
-                }
-
-                try {
-                    const response = await fetch('/check-user-exists', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ referredUserId })
-                    });
-
-                    const data = await response.json();
-
-                    if (!data.exists) {
-                        alert('This user not found.');
-                        return;
-                    }
-
-                    referralPrompt.innerHTML = '<p style="background-color: green; color: black;">Processing...</p>';
-
-                    setTimeout(() => {
-                        referralPrompt.remove();
-                        callback(true, referredUserId);
-                    }, 500);
-                } catch (error) {
-                    console.error('Error checking referred user:', error);
-                }
-            } else {
-                alert('Please enter a User ID.');
-                callback(false);
-=======
-                fetch(`/api/checkUserId?userId=${referredUserId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.exists) {
-                            fetch('/api/setReferral', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ userId: vipuserId, referredUserId })
-                            }).then(res => res.json())
-                              .then(data => {
-                                  if (data.success) {
-                                      referralPrompt.innerHTML = '<p style="background-color: green; color: black;">Successfully opened for you</p>';
-                                      setTimeout(() => {
-                                          referralPrompt.remove();
-                                          callback(true); // Call the callback with success
-                                          window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}`;
-                                      }, 800);
-                                  } else {
-                                      alert('Error setting referral.');
-                                      callback(false); // Call the callback with failure
-                                  }
-                              });
-                        } else {
-                            alert('User ID does not exist.');
-                            callback(false); // Call the callback with failure
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        alert('An error occurred while checking the user ID.');
-                        callback(false); // Call the callback with failure
-                    });
-            } else {
-                alert('Please enter a User ID.');
-                callback(false); // Call the callback with failure
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
-            }
-        });
-    }
-
-<<<<<<< HEAD
-    function openNewPackage(vipuserId, cost, electronic, score, openPackages) {
+        // Rest of the code to handle package opening
         if (electronic >= cost || score >= cost) {
             showReferralPrompt(vipuserId, cost, async (success, referredUserId) => {
                 if (success) {
@@ -664,67 +181,115 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Insufficient funds to open this package.');
         }
     }
+});
+                });
+            }
 
-    function handlePackageReopen(vipuserId, cost, box, packageOpened) {
-        if (electronic >= cost || score >= cost) {
-            showReferralPrompt(vipuserId, cost, async (success, referredUserId) => {
-                if (success) {
-                    if (electronic >= cost) {
-                        electronic -= cost;
-                        localStorage.setItem('electronic', electronic);
+            // Fetch package status and display daysLeftFor90 accordingly
+            async function fetchPackageStatus(vipuserId, cost, box, packageOpened) {
+    try {
+        const response = await fetch(`/check-package-status?userId=${vipuserId}&packageCost=${cost}`);
+        const data = await response.json();
+
+        if (data.error) {
+            alert('Error: ' + data.error);
+            return;
+        }
+
+        const daysLeftFor90 = data.daysLeftFor90;
+
+        if (daysLeftFor90 > 0) {
+            box.innerHTML = `<p>Opened for you (${daysLeftFor90} days left)</p>`;
+        } else {
+            // If the 90 days have passed, modify the button to prevent access to the income page
+            box.innerHTML = `<a href="#">${cost} USDT Open now</a>`;
+        }
+    } catch (error) {
+        console.error('Error fetching package status:', error);
+    }
+}
+
+
+            function updateMoneyDisplay(score, electronic) {
+                let scoreDollars = Math.floor(score / 100);
+                let scoreCents = score % 100;
+                document.getElementById('money').textContent = `${scoreDollars}.${scoreCents < 10 ? '0' + scoreCents : scoreCents}`;
+
+                let electronicDollars = Math.floor(electronic / 100);
+                let electronicCents = electronic % 100;
+                document.getElementById('electronic').textContent = `${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
+            }
+
+            function showReferralPrompt(vipuserId, cost, callback) {
+                const referralPrompt = document.createElement('div');
+                referralPrompt.innerHTML = `
+            <div style="background-color: green; color: black; padding: 10px; border-radius: 5px; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+                <span id="backIcon" style="cursor: pointer; color: white; font-weight: bold; float: right;">&#10006;</span>
+                <p style="color: gold;">Referred User ID</p>
+                <input type="text" style="color: black;" id="referredUserId" placeholder="Enter user ID">
+                <button id="submitReferral" style="background: linear-gradient(to right, #ff7e5f, #feb47b); color: white;">Submit</button>
+            </div>
+        `;
+
+                document.body.appendChild(referralPrompt);
+
+                document.getElementById('backIcon').addEventListener('click', () => {
+                    referralPrompt.remove();
+                });
+
+                document.getElementById('submitReferral').addEventListener('click', async () => {
+                    const referredUserId = document.getElementById('referredUserId').value;
+
+                    if (referredUserId) {
+                        if (referredUserId === vipuserId) {
+                            alert('Owner user ID not able to get commission.');
+                            return;
+                        }
+
+                        try {
+                            const response = await fetch('/check-user-exists', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ referredUserId })
+                            });
+
+                            const data = await response.json();
+
+                            if (!data.exists) {
+                                alert('This user not found.');
+                                return;
+                            }
+
+                            referralPrompt.innerHTML = '<p style="background-color: green; color: black;">Processing...</p>';
+
+                            setTimeout(() => {
+                                referralPrompt.remove();
+                                callback(true, referredUserId);
+                            }, 500);
+                        } catch (error) {
+                            console.error('Error checking referred user:', error);
+                        }
                     } else {
-                        score -= cost;
-                        localStorage.setItem('score', score);
+                        alert('Please enter a User ID.');
+                        callback(false);
                     }
+                });
+            }
 
-                    updateMoneyDisplay(score, electronic);
+            // Link to VIP user page
+            document.querySelector('.vip-link').addEventListener('click', (event) => {
+                event.preventDefault();
+                const vipuserId = localStorage.getItem('userId');
 
-                    // Update package in local storage with a new open time
-                    packageOpened.lastOpened = Date.now();
-                    packageOpened.referredUserId = referredUserId;
-                    localStorage.setItem('openPackages', JSON.stringify(openPackages));
-
-                    // Send the reopened package data to the server
-                    await fetch('/save-reopened-package', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            userId: vipuserId,
-                            packageCost: cost,
-                            referredUserId,
-                            updatedElectronic: electronic,
-                        })
-                    });
-
-                    window.location.href = `/income?vipuserId=${vipuserId}&packageCost=${cost}&isTodayRiched=false`;
+                if (vipuserId) {
+                    window.location.href = `/vip?vipuserId=${vipuserId}`;
+                } else {
+                    alert('Invalid user ID');
                 }
             });
-        } else {
-            alert('Insufficient funds to reopen this package.');
-        }
-    }
-    // Link to VIP user page
-    document.querySelector('.vip-link').addEventListener('click', (event) => {
-        event.preventDefault();
-        const vipuserId = localStorage.getItem('userId');
-
-=======
-    document.querySelector('.vip-link').addEventListener('click', (event) => {
-        event.preventDefault();
-
-        const vipuserId = localStorage.getItem('userId');
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
-        if (vipuserId) {
-            window.location.href = `/vip?vipuserId=${vipuserId}`;
-        } else {
-            alert('Invalid user ID');
-        }
-    });
-});
-<<<<<<< HEAD
-</script>  -->
-
-    <script>
+        }); 
+    </script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const vipuserId = urlParams.get('vipuserId');
@@ -905,13 +470,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }); 
-    </script>
+    </script> -->
 
 
-=======
 </script>
- -->
->>>>>>> b897f7b0398a7135f64831763921bc61f2da2e81
 </body>
 
 </html>
