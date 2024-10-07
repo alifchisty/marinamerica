@@ -186,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isTodayRiched = urlParams.get('isTodayRiched') === 'true';
     let incomeToBeSaved = 0;
     let isSavingScore = false;
+    let isClickBlocked = false; // Prevent rapid clicks
     let clickTimeout;
 
     // রিসেট ডেইলি লিমিট ফাংশন
@@ -199,8 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Daily limit reached for today. Please come back tomorrow.');
         return; // If limit is reached, stop further actions
     } else {
-        // If isTodayRiched is false, reset daily limit
-        resetDailyLimit(vipuserId, packageCost);  // Reset the daily limit for a new day
+        // Reset daily limit for a new day
+        resetDailyLimit(vipuserId, packageCost);
     }
 
     // Fetch user's score and update display
@@ -210,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const score = parseInt(localStorage.getItem('score')) || 0;
         updateScoreDisplay(score);
     }
+
     // Fetch user score from the server
     async function fetchUserScore(userId) {
         try {
@@ -243,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case 30000: return 5;
             case 60000: return 10;
             case 120000: return 10;
-            default: 
+            default:
                 console.error(`No income defined for packageCost: ${cost}`);
                 return 0;
         }
@@ -263,14 +265,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle click on the rabbit picture
     document.getElementById('rabbit-pic').addEventListener('click', async () => {
-        if (isSavingScore) return;
+        if (isSavingScore || isClickBlocked) return;  // Block clicks if saving or blocked
 
         clearTimeout(clickTimeout);  // Clear any previous save timeout
         clickTimeout = setTimeout(() => saveScoreToDatabase(), 500);  // Wait 500ms of no clicks to save to DB
 
         if (vipuserId && packageCost) {
             const limitReached = await checkLimitReached(vipuserId, packageCost);
-            if (limitReached) return;
+            if (limitReached) return;  // Stop further actions if limit reached
+
+            // Block further clicks for a short time to prevent rapid clicking
+            isClickBlocked = true;
+            setTimeout(() => {
+                isClickBlocked = false;  // Allow clicks again after 300ms
+            }, 300);
 
             // Get income and increment score if not reached daily limit
             const income = getIncome(packageCost);
@@ -290,17 +298,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return true;
             }
 
-            const clickCountKey = `click_count_${userId}_${packageCost}`;
             const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
             let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
             const currentDailyLimit = getDailyLimit(packageCost);
 
             if (dailyLimit >= currentDailyLimit) {
                 alert('Daily limit reached');
-                await updateTodayLimit(userId, packageCost);
+                await updateTodayLimit(userId, packageCost);  // Mark as reached in DB
                 return true;
             }
 
+            // Increment local daily limit and store it
             dailyLimit++;
             localStorage.setItem(dailyLimitKey, dailyLimit);
             return false;
@@ -323,8 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-   
-  // Increment the user's score locally
+    // Increment the user's score locally
     function incrementScore(income) {
         let score = parseInt(localStorage.getItem('score')) || 0;
         score += income;
@@ -364,11 +371,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function showPopup(income) {
         const popup = document.createElement('div');
         popup.className = 'popup';
-        popup.textContent = `+$${(income / 100).toFixed(2)}`;
+        popup.textContent = `+${(income / 100).toFixed(2)}`;
         popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px;';
         document.body.appendChild(popup);
         setTimeout(() => popup.remove(), 400);  // Remove popup after 400ms
     }
+
     // Handle VIP link click
     document.querySelector('.vip-link').addEventListener('click', (event) => {
         event.preventDefault();
@@ -381,6 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
+
 <!-- <script>
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);

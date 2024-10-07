@@ -459,37 +459,41 @@
                 }, removeAfter);
             }
         }
-z
-        async function checkUserDeposits(userId) {
-            try {
-                const response = await fetch('/check-deposit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userId: userId }),
-                });
 
-                const data = await response.json();
+     // async function to check user's deposit and update electronic value
+async function checkUserDeposits(userId) {
+    try {
+        const response = await fetch('/check-deposit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId }),
+        });
 
-                if (response.ok) {
-                    const electronicCents = Math.round(data.electronic * 100);
-                    localStorage.setItem('electronic', electronicCents);
-                    displayElectronicValue();
-                } else {
-                    alert(data.error || 'An error occurred while checking your deposit status.');
-                }
-            } catch (error) {
-                alert('An error occurred while checking your deposit status. Please try again later.');
-            }
+        const data = await response.json();
+
+        if (response.ok) {
+            const electronicCents = Math.round(data.electronic * 100); // Convert electronic value to cents
+            localStorage.setItem('electronic', electronicCents); // Store the value in localStorage
+            displayElectronicValue(); // Call function to display the updated value
+        } else {
+            alert(data.error || 'An error occurred while checking your deposit status.');
         }
+    } catch (error) {
+        alert('An error occurred while checking your deposit status. Please try again later.');
+    }
+}
 
-        function displayElectronicValue() {
-            const electronic = parseInt(localStorage.getItem('electronic')) || 0;
-            let electronicDollars = Math.floor(electronic / 100);
-            let electronicCents = electronic % 100;
-            document.getElementById('electronic').textContent = `electronic: ${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
-        }
+// Function to display the electronic value in dollars and cents
+function displayElectronicValue() {
+    const electronic = parseInt(localStorage.getItem('electronic')) || 0; // Get electronic value from localStorage
+    let electronicDollars = Math.floor(electronic / 100); // Extract dollars part
+    let electronicCents = electronic % 100; // Extract cents part
+    // Display value in format electronic: dollars.cents (e.g., electronic: 50.05)
+    document.getElementById('electronic').textContent = `electronic: ${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
+}
+
     </script>
    
 

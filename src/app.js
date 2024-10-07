@@ -222,7 +222,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-cron.schedule('35 19 * * *', async () => {
+cron.schedule('48 2 * * *', async () => {
     try {
         await idgen.updateMany(
             { "openPackages.isTodayRiched": true },
@@ -239,9 +239,8 @@ cron.schedule('35 19 * * *', async () => {
         console.error('Error resetting isTodayRiched and dailyIncomeCount:', error);
     }
 });
-
 app.post('/save-opened-package', async (req, res) => {
-    const { userId, packageCost, referredUserId } = req.body;
+    const { userId, packageCost, referredUserId, updatedElectronic } = req.body;
 
     try {
         const user = await idgen.findOne({ userId });
@@ -249,16 +248,22 @@ app.post('/save-opened-package', async (req, res) => {
             const packageOpened = user.openPackages.find(pkg => pkg.packageCost === packageCost);
 
             if (!packageOpened) {
+                // Add new package opening record
                 user.openPackages.push({ 
                     packageCost, 
                     lastOpened: new Date(), 
                     referredUserId: referredUserId || 'N/A', 
                     isTodayRiched: false,
-                    openedDate: new Date() // Set the opened date here
+                    openedDate: new Date() 
                 });
+
+                // Update the electronic value
+                user.electronic = updatedElectronic; // Save the updated value in the user record
+
+                // Save user record with updated packages and electronic value
                 await user.save(); 
 
-                res.json({ success: true, message: 'Package opened and saved successfully' });
+                res.json({ success: true, message: 'Package opened and saved successfully, electronic value updated' });
             } else {
                 res.status(400).json({ success: false, message: 'Package already opened' });
             }
@@ -270,6 +275,38 @@ app.post('/save-opened-package', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error saving opened package', error: error.message });
     }
 });
+
+
+// app.post('/save-opened-package', async (req, res) => {
+//     const { userId, packageCost, referredUserId } = req.body;
+
+//     try {
+//         const user = await idgen.findOne({ userId });
+//         if (user) {
+//             const packageOpened = user.openPackages.find(pkg => pkg.packageCost === packageCost);
+
+//             if (!packageOpened) {
+//                 user.openPackages.push({ 
+//                     packageCost, 
+//                     lastOpened: new Date(), 
+//                     referredUserId: referredUserId || 'N/A', 
+//                     isTodayRiched: false,
+//                     openedDate: new Date() // Set the opened date here
+//                 });
+//                 await user.save(); 
+
+//                 res.json({ success: true, message: 'Package opened and saved successfully' });
+//             } else {
+//                 res.status(400).json({ success: false, message: 'Package already opened' });
+//             }
+//         } else {
+//             res.status(404).json({ success: false, message: 'User not found' });
+//         }
+//     } catch (error) {
+//         console.error('Error details:', error); 
+//         res.status(500).json({ success: false, message: 'Error saving opened package', error: error.message });
+//     }
+// });
 app.post('/update-today-limit', async (req, res) => {
     const { userId, packageCost, isTodayRiched } = req.body;
 
