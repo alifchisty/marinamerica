@@ -262,24 +262,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handle click on the rabbit picture
-    document.getElementById('rabbit-pic').addEventListener('click', async () => {
-        if (isSavingScore) return;
+document.getElementById('rabbit-pic').addEventListener('click', async () => {
+    if (isSavingScore) return; // Don't allow new clicks until saving is done
 
-        clearTimeout(clickTimeout);  // Clear any previous save timeout
-        clickTimeout = setTimeout(() => saveScoreToDatabase(), 500);  // Wait 500ms of no clicks to save to DB
+    clearTimeout(clickTimeout);
+    clickTimeout = setTimeout(() => saveScoreToDatabase(), 500);
 
-        if (vipuserId && packageCost) {
-            const limitReached = await checkLimitReached(vipuserId, packageCost);
-            if (limitReached) return;
+    if (vipuserId && packageCost) {
+        const limitReached = await checkLimitReached(vipuserId, packageCost);
+        if (limitReached) return;
 
-            // Get income and increment score if not reached daily limit
-            const income = getIncome(packageCost);
-            incrementScore(income);
-        } else {
-            alert('Invalid user ID or package cost');
-        }
-    });
-
+        const income = getIncome(packageCost);
+        incrementScore(income);
+    } else {
+        alert('Invalid user ID or package cost');
+    }
+});
     // Check if the user's daily limit is reached or the package has expired
     async function checkLimitReached(userId, packageCost) {
         try {
@@ -335,30 +333,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Save the score to the database (when user pauses clicking)
-    async function saveScoreToDatabase() {
-        if (incomeToBeSaved === 0) {
-            console.log('No new income to save.');
-            return;
-        }
-
-        isSavingScore = true;
-        try {
-            await fetch('/income', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: vipuserId,
-                    packageCost,
-                    income: incomeToBeSaved
-                })
-            });
-            incomeToBeSaved = 0;  // Reset the income to be saved after successful DB update
-        } catch (error) {
-            console.error('Error saving score:', error);
-        } finally {
-            isSavingScore = false;
-        }
+   async function saveScoreToDatabase() {
+    if (incomeToBeSaved === 0) {
+        console.log('No new income to save.');
+        return;
     }
+
+    isSavingScore = true;
+    try {
+        const response = await fetch('/income', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: vipuserId,
+                packageCost,
+                income: incomeToBeSaved
+            })
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update the score in localStorage and display it from the server response
+            localStorage.setItem('score', data.score);
+            updateScoreDisplay(data.score); // Ensure the front-end score matches the DB score
+        } else {
+            console.error('Error updating score:', data.error);
+        }
+        incomeToBeSaved = 0; // Reset income to be saved after DB update
+    } catch (error) {
+        console.error('Error saving score:', error);
+    } finally {
+        isSavingScore = false;
+    }
+}
+
 
     // Show a popup for the earned income
     function showPopup(income) {
