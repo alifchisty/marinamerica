@@ -1,165 +1,267 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dray Source</title>
-  <link rel="stylesheet" href="css/style.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 </head>
 <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-image: linear-gradient(113.99deg, #2b4da5 6.12%, #1e3a8a 83.22%);
+        color: #fff;
+    }
 
 
+    @media screen and (min-width:700px) {
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(113.99deg, #2b4da5 6.12%, #1e3a8a 83.22%);
+            color: #fff;
+        }
+    }
+
+    main {
+        max-width: 87vw;
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 15px auto;
+    }
+
+    .bottom {
+        margin-bottom: 10vh;
+    }
+
+    p {
+        line-height: 1.6;
+        margin-bottom: 10px;
+        color: black;
+    }
+
+    .items {
+        background-image: linear-gradient(140.99deg, #01d9c8 6.12%, #cd61ff 90.22%);
+        margin: 5px 0;
+        text-align: center;
+        margin: 8px 4px;
+        border-radius: 0.2rem;
+        box-shadow: 0px 0px 2px black;
+        padding: 8px;
+
+    }
+
+    .items:hover {
+        background-image: linear-gradient(140.99deg, #29a4e1 6.12%, #735ab8 90.22%);
+
+    }
+.copy-message {
+            display: none;
+            background-color: green;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            position: absolute;
+            top: 50px; /* Adjust as needed */
+            left: 50%; 
+            transform: translateX(-50%);
+        }
+    a {
+
+        text-decoration: none;
+    }
+
+    .about-flex {
+        display: flex;
+    }
 
 
-body {
-    font-family: 'Arial', sans-serif;
-height: 100vh;
-display: flex; 
-flex-direction:column;
-background-image:linear-gradient(113.99deg, #2b4da5 6.12%, #1e3a8a 83.22%); 
-color: #fff;
-}
-
-
-@media screen and (min-width:700px) {
-    body{
-height: 100vh;
-display: flex; 
-flex-direction:column;
-background-image:linear-gradient(113.99deg, #2b4da5 6.12%, #1e3a8a 83.22%); 
-color: #fff;
-}
-}
-main {
-    max-width: 87vw;
-    margin: auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-margin: 25px auto;
-}
-
-.bottom{
-margin-bottom: 6vh;
-}
-
-p {
-    line-height: 1.6;
-    margin-bottom: 10px;
-color: black;
-}
-.items{
-background-image:linear-gradient(140.99deg, #01d9c8 6.12%, #cd61ff 90.22%);
-margin: 5px 0;
-text-align: center;
-   margin: 8px 4px;
-    border-radius: 0.2rem;
-box-shadow: 0px 0px 2px black;
-padding: 8px;
-
-}
-.items:hover{
-background-image:linear-gradient(140.99deg, #29a4e1 6.12%, #735ab8 90.22%);
-
-}
-a{
-
-text-decoration: none;
-}
-
-.about-flex{
-display: flex;
-}
-
-
-
-.container{
-margin-top: auto;
-align-items: center;
-
-}
-.container-layer{
-display: flex;
-justify-content: space-around;
-align-items: center;
-background-color: #fff;
+   /* Container fixed at the bottom */
+.container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Full width */
     margin: 0;
-    box-shadow: 3px 0 7px black;
-padding: 7px 0px;
-
-}
-.clk{
-color: black;
-text-decoration: none;
-padding: 3px;
-align-items: center;
-margin: 0 auto;
-}
-i{
- font-size: 2rem;
-margin: 0 auto;
+    padding: 0;
+    box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.3); /* Shadow for subtle effect */
+    background-color: #fff; /* Background color */
+    z-index: 1000; /* Ensure it is above other content */
 }
 
+/* Layer within the container for alignment */
+.container-layer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 7px 0;
+    background-color: #fff; /* Ensure background color matches container */
+}
+
+/* Styling for clickable items */
+.clk {
+    color: black;
+    text-decoration: none;
+    padding: 3px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+    i {
+        font-size: 2rem;
+        margin: 0 auto;
+    }
 </style>
+
 <body>
 
     <main>
-<div class="bottom">
-<p style="cursor: pointer;">
-Investing in a company isn't just about putting money into a venture; it's about investing in a vision, a future, and the potential to transform lives. Dray Fax, certified by the USA government, stands at the forefront of empowering individuals to achieve financial strength and prosperity. Founded with a commitment to integrity and innovation, Dray Fax aims to revolutionize financial opportunities for everyone willing to take the leap into the investment world.
+        <div class="bottom">
+            <h1 style="color: black;">User Account </h1>
+            <p>1.Download the app to register and start investing with Babylon! </p>
+            <p>  <mark style="color: black ;">share apk link</mark>:-</p>
+            <input type="text" style="color: black; padding: 5px 40px; " value="ebujbcsdbhgcisdb2376ifffffffffffdhjyd"
+                name="" id="download-link">
+<!-- Message to display when text is copied -->
+    <div class="copy-message" id="copy-message">Copied!</div>
 
-At Dray Fax, we understand that making money is not just a desire but a necessity for many. Our platform is designed to be accessible and inclusive, ensuring that all investors, regardless of background or experience, can participate and thrive. Through meticulous planning and strategic investments, Dray Fax leverages cutting-edge technology and expert insights to maximize returns and minimize risks.
+            <p>2.To deposit Babylon currency, first send USDT through the deposit page link. Once done, provide your transaction ID. Please make sure the  <mark style="color: black ;">transaction ID is accurate</mark>, as submitting incorrect details multiple times may result in your account being frozen or blocked for security reasons. Ensure you enter the correct transaction ID to avoid any issues. </p>
+            <div class="img-container"><img src="" alt=""><img src="" alt="" srcset="">
+            </div>
 
-Investing in Dray Fax means investing in a community of like-minded individuals who are passionate about financial growth and stability. Our track record of success speaks for itself, with numerous success stories of investors who have seen their wealth multiply through our carefully curated investment strategies.
+            <p>3. After a user get deposits electronic currency within  <mark style="color: black ;">3-4 hours</mark>, they can unlock a package that lasts for 90 days. </p>
+            <div class="img-container"><img src="" alt=""><img src="" alt="" srcset="">
+            </div>
 
-The core mission of Dray Fax is to empower individuals to take control of their financial futures. Whether you're new to investing or a seasoned veteran, our platform offers unparalleled opportunities to diversify your portfolio and secure your financial independence. We provide comprehensive resources and guidance every step of the way, ensuring that you have the knowledge and tools needed to make informed investment decisions.
+            <p>4. If you use the same account on two different devices, your account may soon be <mark style="color: black ;">blocked or frozen</mark> . </p>
+            <div class="img-container"><img src="mirror/inst4.jpg" alt="" width="90%"><img src="" alt="" srcset="">
+            </div>
 
-Transparency and trust are the cornerstones of our operations at Dray Fax. We prioritize open communication and accountability, ensuring that our investors are always well-informed and confident in their investment choices. Our commitment to regulatory compliance and ethical practices further underscores our dedication to maintaining the highest standards of integrity.
+            <p>5. After opening a package, the user must refer two new members within a month using their own user ID. If they refer more than two members—like five or ten—they will receive a VIP <mark style="color: black ;">investment bonus</mark>. Additionally, the user will earn a 10% commission on the package cost for each referred member.</p>
+            <div class="img-container"><img src="mirror/inst5,1.jpg" alt="" width="90%">
+            </div>
 
-Investing with Dray Fax is not just about making money; it's about building a legacy for yourself and your loved ones. Our innovative investment solutions are designed to generate sustainable wealth over the long term, offering financial security and peace of mind.
+            <p>6. Users can withdraw Babylon currency at any time, and the equivalent USDT will be sent to their Binance account within <mark style="color: black ;">48 hours</mark>  of the withdrawal request.</p>
+            <div class="img-container"><img src="" alt=""><img src="" alt="" srcset="">
+            </div>
 
-We believe in the power of education and empowerment. Through our educational resources and personalized guidance, we equip our investors with the knowledge and skills to navigate the complexities of the financial markets successfully. Whether you're interested in stocks, bonds, real estate, or alternative investments, Dray Fax provides opportunities that align with your financial goals.
+            <p>7. Each year, for two weeks, we launch an exclusive opportunity for all Babylon users. This opportunity gives every user a fresh chance to achieve financial freedom. Through this initiative, users can partner with us to create their own marketplace. Additionally, we provide extra USDT to help users take advantage of this offer. So, don’t miss out—become a Babylon member and seize the chance to transform your financial future!. </p>
+            <div class="img-container"><img src="mirror/inst7.jpg" width="90%" alt=""><img src="" alt="" srcset="">
+            </div>
+            <p>8.Babylon is unlike any other platform. It is a reliable and scalable investment opportunity that stands the test of time. As we look towards <mark style="color: black ;"> 2036 and beyond</mark>, Babylon is committed to being a key player in the global market, offering our users unparalleled security and growth potential. Investing in Babylon means joining a community that prioritizes your financial future, ensuring that your investments are not only protected but poised to thrive. With our innovative strategies and dedication to excellence, you can trust that your journey with Babylon will be fruitful and rewarding. Embrace this opportunity to invest in a platform that has your back for years to come. </p>
+            <p style="cursor: pointer;">
+                Investing in a company isn't just about putting money into a venture; it's about investing in a
+                vision, a future, and the potential to transform lives. Babylon, certified by the USA government,
+                stands at the forefront of empowering individuals to achieve financial strength and prosperity.
+                Founded with a commitment to integrity and innovation, Babylon aims to revolutionize financial
+                opportunities for everyone willing to take the leap into the investment world.
 
-Joining Dray Fax means joining a community that celebrates diversity and inclusivity. We welcome investors from all walks of life and empower them to achieve their full potential. Your success is our success, and we are committed to fostering an environment where everyone can thrive and prosper.
+                At Babylon, we understand that making money is not just a desire but a necessity for many. Our
+                platform is designed to be accessible and inclusive, ensuring that all investors, regardless of
+                background or experience, can participate and thrive. Through meticulous planning and strategic
+                investments, Babylon leverages cutting-edge technology and expert insights to maximize returns and
+                minimize risks.
 
-The future of finance is here, and it's accessible through Dray Fax. By harnessing the latest technologies and innovations, we offer unprecedented opportunities for growth and prosperity. Our forward-thinking approach ensures that we stay ahead of market trends and capitalize on emerging opportunities for our investors.
+                Investing in Babylon means investing in a community of like-minded individuals who are passionate
+                about financial growth and stability. Our track record of success speaks for itself, with numerous
+                success stories of investors who have seen their wealth multiply through our carefully curated
+                investment strategies. The core mission of Babylon is to empower individuals to take control of
+                their financial futures. Whether you're new to investing or a seasoned veteran, our platform offers
+                unparalleled opportunities to diversify your portfolio and secure your financial independence.
 
-Investing in Dray Fax is a decision to embrace opportunity and chart a course toward financial freedom. We invite you to explore our platform, engage with our knowledgeable team, and embark on a journey towards a brighter financial future. Your dreams are within reach, and Dray Fax is here to help you turn them into reality.
+                We provide comprehensive resources and guidance every step of the way, ensuring that you have the
+                knowledge and tools needed to make informed investment decisions. Transparency and trust are the
+                cornerstones of our operations at Babylon. We prioritize open communication and accountability,
+                ensuring that our investors are always well-informed and confident in their investment choices. Our
+                commitment to regulatory compliance and ethical practices further underscores our dedication to
+                maintaining the highest standards of integrity.
 
-Take the first step towards a more prosperous tomorrow. Invest in Dray Fax today and discover the possibilities that await you. Together, we can build a future where financial success knows no limits, and everyone has the opportunity to thrive.
-<h4 style="color: black; ">
-"Dray Fax," a legally certified financial entity in the USA, empowers individuals to achieve financial strength and secure their futures. Our commitment to transparency and compliance with government regulations ensures trust and reliability. By investing in "Dray Fax," you join a community dedicated to creating wealth and transforming lives. Whether you're looking to grow your savings or build a robust investment portfolio, our innovative strategies and proven track record offer opportunities for substantial returns. Take charge of your financial journey today with "Dray Fax" and unlock the potential to make meaningful income that can change your life for the better.
-</h4>
-<div class="about-flex"><p> If you wnat to ensure, click...</p>
- </p>
-<a class="items" href="/Mine"> USA certification </a></div>
-</div>
+                Investing with Babylon is not just about making money; it's about building a legacy for yourself and
+                your loved ones. Our innovative investment solutions are designed to generate sustainable wealth
+                over the long term, offering financial security and peace of mind. We believe in the power of
+                education and empowerment. Through our educational resources and personalized guidance, we equip our
+                investors with the knowledge and skills to navigate the complexities of the financial markets
+                successfully.
+
+                Whether you're interested in stocks, bonds, real estate, or alternative investments, Babylon
+                provides opportunities that align with your financial goals. Joining Babylon means joining a
+                community that celebrates diversity and inclusivity. We welcome investors from all walks of life and
+                empower them to achieve their full potential. Your success is our success, and we are committed to
+                fostering an environment where everyone can thrive and prosper.
+
+                The future of finance is here, and it's accessible through Babylon. By harnessing the latest
+                technologies and innovations, we offer unprecedented opportunities for growth and prosperity. Our
+                forward-thinking approach ensures that we stay ahead of market trends and capitalize on emerging
+                opportunities for our investors.
+
+                Investing in Babylon is a decision to embrace opportunity and chart a course toward financial
+                freedom. We invite you to explore our platform, engage with our knowledgeable team, and embark on a
+                journey towards a brighter financial future. Your dreams are within reach, and Babylon is here to
+                help you turn them into reality. Take the first step towards a more prosperous tomorrow. Invest in
+                Babylon today and discover the possibilities that await you.
+
+                Together, we can build a future where financial success knows no limits, and everyone has the
+                opportunity to thrive.
+
+
+
+        </div>
     </main>
-<footer class="container">
+   <footer class="container">
         <nav class="container-layer">
-            <a href="/home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
-            <a href="/Connection" class="clk"><i class='bx bx-shape-polygon' style='color:#07a625'></i><br>connection</a>
-<a href="/vip" class="clk vip-link"><i class='bx bxl-meta' style='color:#f59d08'></i> <br> Pakage</a>
-<a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br> mine</a>
-<a href="/About" class="clk"><i class='bx bxs-certification' style='color:#1ebf1e'></i><br>About</a>
+            <a href="/home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i> <br> Home</a>
+                  <a href="/Connection" class="clk"><i class='bx bx-sitemap'></i><br>Network</a>
+
+<a href="/vip" class="clk vip-link"><i class='bx bxl-sketch' style='color:#0c0c0c'  ></i><br> Invest</a>
+<a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br> Owner</a>
+<a href="/About" class="clk"><i class='bx bx-shield' style='color:#0c0b0b'  ></i><br>About</a>
 </nav>
     </footer>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('.vip-link').addEventListener('click', (event) => {
-            event.preventDefault();
+        document.getElementById('download-link').addEventListener('click', function() {
+            // Select the text field
+            let input = this;
+            input.select();
+            input.setSelectionRange(0, 99999); // For mobile devices
 
-            const vipuserId = localStorage.getItem('userId');
-            if (vipuserId) {
-                window.location.href = `/vip?vipuserId=${vipuserId}`;
-            } else {
-                alert('Invalid user ID');
-            }
+            // Copy the text inside the input field
+            document.execCommand('copy');
+
+            // Show the "Copied!" message
+            let copyMessage = document.getElementById('copy-message');
+            copyMessage.style.display = 'block';
+
+            // Hide the message after 0.5 seconds
+            setTimeout(function() {
+                copyMessage.style.display = 'none';
+            }, 500);
         });
-    });
-</script>
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.vip-link').addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const vipuserId = localStorage.getItem('userId');
+                if (vipuserId) {
+                    window.location.href = `/vip?vipuserId=${vipuserId}`;
+                } else {
+                    alert('Invalid user ID');
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

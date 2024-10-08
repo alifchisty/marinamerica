@@ -45,29 +45,17 @@ app.get('/vip', (req, res) => {
   }
   res.sendFile(path.join(static_path, 'vip.html')); // Serve the static VIP page
 });
-
-
-
-
 app.get('/Home', (req, res) => {
   res.sendFile(path.join(static_path, 'home.html'))
 })
-
 app.get('/index', (req, res) => {
   res.send('index');
 });
-
 app.get('/Mine', (req, res) => {
   res.sendFile(path.join(static_path, 'mine.html'))
 })
-app.get('/expe', (req, res) => {
-  res.sendFile(path.join(static_path, 'expe.html'))
-});
 app.get('/Income', (req, res) => {
   res.sendFile(path.join(static_path, 'income.html'))
-});
-app.get('/new', (req, res) => {
-  res.sendFile(path.join(static_path, 'new.html'))
 });
 app.get('/Connection', (req, res) => {
   res.sendFile(path.join(static_path, 'connection.html'))

@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isSavingScore = false;
     let clickTimeout;
 
-    // রিসেট ডেইলি লিমিট ফাংশন
+    // Reset daily limit function
     function resetDailyLimit(userId, packageCost) {
         const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
         localStorage.setItem(dailyLimitKey, '0');  // Reset the click count to 0
@@ -199,7 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Daily limit reached for today. Please come back tomorrow.');
         return; // If limit is reached, stop further actions
     } else {
-        // If isTodayRiched is false, reset daily limit
         resetDailyLimit(vipuserId, packageCost);  // Reset the daily limit for a new day
     }
 
@@ -210,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const score = parseInt(localStorage.getItem('score')) || 0;
         updateScoreDisplay(score);
     }
+
     // Fetch user score from the server
     async function fetchUserScore(userId) {
         try {
@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle click on the rabbit picture
     document.getElementById('rabbit-pic').addEventListener('click', async () => {
+        // Prevent multiple rapid clicks
         if (isSavingScore) return;
 
         clearTimeout(clickTimeout);  // Clear any previous save timeout
@@ -310,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Update the today's limit on the server
+    // Update today's limit on the server
     async function updateTodayLimit(userId, packageCost) {
         try {
             await fetch('/update-today-limit', { 
@@ -323,8 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-   
-  // Increment the user's score locally
+    // Increment the user's score locally
     function incrementScore(income) {
         let score = parseInt(localStorage.getItem('score')) || 0;
         score += income;
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error saving score:', error);
         } finally {
-            isSavingScore = false;
+            isSavingScore = false;  // Reset saving flag
         }
     }
 
@@ -365,10 +365,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const popup = document.createElement('div');
         popup.className = 'popup';
         popup.textContent = `+$${(income / 100).toFixed(2)}`;
-        popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px;';
+        popup.style.cssText = 'background-color: gold; color: blue; position: fixed; top: 50%; left: 50%; padding: 6px 15px; border-radius: 5px; transform: translate(-50%, -50%);';
         document.body.appendChild(popup);
         setTimeout(() => popup.remove(), 400);  // Remove popup after 400ms
     }
+
     // Handle VIP link click
     document.querySelector('.vip-link').addEventListener('click', (event) => {
         event.preventDefault();
@@ -381,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
 <!-- <script>
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
