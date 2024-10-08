@@ -421,11 +421,11 @@ app.post('/api/verify-password', async(req, res) => {
     }
 });
 
-    // Updated getDailyLimit function
+// Updated getDailyLimit function
 function getDailyLimit(cost) {
     switch (cost) {
         case 9000: return 300;
-        case 18000: return 300;
+        case 18000: return 300;  // Updated for 18000 package
         case 30000: return 200;
         case 60000: return 200;
         case 120000: return 400;
@@ -433,6 +433,21 @@ function getDailyLimit(cost) {
     }
 }
 
+// Updated getIncome function
+function getIncome(cost) {
+    switch (cost) {
+        case 9000: return 1;
+        case 18000: return 2;
+        case 30000: return 5;
+        case 60000: return 10;
+        case 120000: return 10;
+        default:
+            console.error(`No income defined for packageCost: ${cost}`);
+            return 0;
+    }
+}
+
+// Update the /income endpoint to save the score once the daily limit is reached
 app.post('/income', async (req, res) => {
     try {
         const { userId, packageCost, income } = req.body;
@@ -461,14 +476,19 @@ app.post('/income', async (req, res) => {
         // Get the daily limit for the specific package
         const dailyLimit = getDailyLimit(packageCost);
 
-        // Check if the package has reached the daily limit
+        // Calculate income to save based on package and daily limit
+        let totalIncomeToSave = 0;
+
         if (packageOpened.isTodayRiched || packageOpened.dailyIncomeCount >= dailyLimit) {
-            return res.status(400).json({ error: 'Daily limit reached' });
+            totalIncomeToSave = dailyLimit;  // Save the full daily limit score (e.g., 300 for 9000, 600 for 18000)
+            packageOpened.isTodayRiched = true;  // Mark the package as having reached the daily limit
+        } else {
+            totalIncomeToSave = income;
         }
 
         // Update user's score and handle the daily limit
-        user.score += income;
-        packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + 1;
+        user.score += totalIncomeToSave;
+        packageOpened.dailyIncomeCount += income; // Increment daily income count
 
         // Mark the package as having reached the daily limit if count exceeds or matches the limit
         if (packageOpened.dailyIncomeCount >= dailyLimit) {
