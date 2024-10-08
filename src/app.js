@@ -447,7 +447,6 @@ function getIncome(cost) {
     }
 }
 
-// Update the /income endpoint to save the score once the daily limit is reached
 app.post('/income', async (req, res) => {
     try {
         const { userId, packageCost, income } = req.body;
@@ -476,21 +475,17 @@ app.post('/income', async (req, res) => {
         // Get the daily limit for the specific package
         const dailyLimit = getDailyLimit(packageCost);
 
-        // Calculate income to save based on package and daily limit
-        let totalIncomeToSave = 0;
-
-        if (packageOpened.isTodayRiched || packageOpened.dailyIncomeCount >= dailyLimit) {
-            totalIncomeToSave = dailyLimit;  // Save the full daily limit score (e.g., 300 for 9000, 600 for 18000)
-            packageOpened.isTodayRiched = true;  // Mark the package as having reached the daily limit
-        } else {
-            totalIncomeToSave = income;
-        }
+        // Calculate the remaining daily limit
+        const remainingDailyLimit = dailyLimit - (packageOpened.dailyIncomeCount || 0);
+        
+        // Calculate income to save, ensuring we don't exceed the daily limit
+        const incomeToSave = Math.min(income, remainingDailyLimit);
 
         // Update user's score and handle the daily limit
-        user.score += totalIncomeToSave;
-        packageOpened.dailyIncomeCount += income; // Increment daily income count
+        user.score += incomeToSave;
+        packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + incomeToSave;
 
-        // Mark the package as having reached the daily limit if count exceeds or matches the limit
+        // Mark the package as having reached the daily limit if count matches the limit
         if (packageOpened.dailyIncomeCount >= dailyLimit) {
             packageOpened.isTodayRiched = true;
         }

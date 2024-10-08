@@ -261,79 +261,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Handle click on the rabbit picture
+// Handle click on the rabbit picture
 document.getElementById('rabbit-pic').addEventListener('click', async () => {
-    if (isSavingScore) return; // Don't allow new clicks until saving is done
+    if (isSavingScore) return;
 
-    clearTimeout(clickTimeout);
-    clickTimeout = setTimeout(() => saveScoreToDatabase(), 500);
+    clearTimeout(clickTimeout); // Clear any previous save timeout
+    clickTimeout = setTimeout(() => saveScoreToDatabase(), 500); // Wait 500ms of no clicks to save to DB
 
     if (vipuserId && packageCost) {
         const limitReached = await checkLimitReached(vipuserId, packageCost);
         if (limitReached) return;
 
+        // Get income and increment score if not reached daily limit
         const income = getIncome(packageCost);
         incrementScore(income);
     } else {
         alert('Invalid user ID or package cost');
     }
 });
-    // Check if the user's daily limit is reached or the package has expired
-    async function checkLimitReached(userId, packageCost) {
-        try {
-            const response = await fetch(`/check-package-status?userId=${userId}&packageCost=${packageCost}`);
-            const data = await response.json();
-            if (data.isTodayRiched || data.daysLeftFor90 <= 0) {
-                alert('Daily limit reached or package has expired.');
-                return true;
-            }
 
-            const clickCountKey = `click_count_${userId}_${packageCost}`;
-            const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
-            let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
-            const currentDailyLimit = getDailyLimit(packageCost);
-
-            if (dailyLimit >= currentDailyLimit) {
-                alert('Daily limit reached');
-                await updateTodayLimit(userId, packageCost);
-                return true;
-            }
-
-            dailyLimit++;
-            localStorage.setItem(dailyLimitKey, dailyLimit);
-            return false;
-        } catch (error) {
-            console.error('Error checking package status:', error);
-            return true;
-        }
-    }
-
-    // Update the today's limit on the server
-    async function updateTodayLimit(userId, packageCost) {
-        try {
-            await fetch('/update-today-limit', { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, packageCost, isTodayRiched: true })
-            });
-        } catch (error) {
-            console.error('Error updating today limit:', error);
-        }
-    }
-
-   
-  // Increment the user's score locally
-    function incrementScore(income) {
-        let score = parseInt(localStorage.getItem('score')) || 0;
-        score += income;
-        incomeToBeSaved += income;
-        localStorage.setItem('score', score);  // Save updated score to local storage
-        updateScoreDisplay(score);
-        showPopup(income);  // Show income popup on each click
-    }
-
-    // Save the score to the database (when user pauses clicking)
-   async function saveScoreToDatabase() {
+// Save the score to the database (when user pauses clicking)
+async function saveScoreToDatabase() {
     if (incomeToBeSaved === 0) {
         console.log('No new income to save.');
         return;
@@ -351,15 +299,14 @@ document.getElementById('rabbit-pic').addEventListener('click', async () => {
             })
         });
         const data = await response.json();
-        
+
         if (data.success) {
-            // Update the score in localStorage and display it from the server response
-            localStorage.setItem('score', data.score);
-            updateScoreDisplay(data.score); // Ensure the front-end score matches the DB score
+            // Update the frontend score display to match the server's updated score
+            updateScoreDisplay(data.score);
         } else {
-            console.error('Error updating score:', data.error);
+            console.error('Error saving income:', data.error);
         }
-        incomeToBeSaved = 0; // Reset income to be saved after DB update
+        incomeToBeSaved = 0; // Reset the income to be saved after successful DB update
     } catch (error) {
         console.error('Error saving score:', error);
     } finally {
