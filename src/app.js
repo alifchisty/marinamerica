@@ -421,13 +421,14 @@ app.post('/api/verify-password', async(req, res) => {
     }
 });
 
-   
+    // Updated getDailyLimit function
 function getDailyLimit(cost) {
     switch (cost) {
         case 9000: return 300;
         case 18000: return 300;
-        case 30000: return 300;
-        case 60000: return 300;
+        case 30000: return 200;
+        case 60000: return 200;
+        case 120000: return 400;
         default: return 300;
     }
 }
@@ -436,57 +437,50 @@ app.post('/income', async (req, res) => {
     try {
         const { userId, packageCost, income } = req.body;
 
+        // Validate input data
         if (!userId || isNaN(packageCost) || isNaN(income)) {
             return res.status(400).json({ error: 'Invalid input data' });
         }
 
+        // Find the user by userId
         let user = await idgen.findOne({ userId });
 
+        // If user not found
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Initialize dailyLimit if it is not already
-        if (!user.dailyLimit) {
-            user.dailyLimit = [];
+        // Find the opened package with the specified packageCost
+        const packageOpened = user.openPackages.find(pkg => pkg.packageCost === parseInt(packageCost));
+
+        // If the package doesn't exist or has expired
+        if (!packageOpened || packageOpened.daysLeftFor90 <= 0) {
+            return res.status(400).json({ error: 'Package expired or not found' });
         }
 
-        const today = new Date().toISOString().slice(0, 10);
-        let dailyLimitEntry = user.dailyLimit.find(entry => entry.packageCost === packageCost);
-
-        if (!dailyLimitEntry) {
-            dailyLimitEntry = { packageCost, date: today, count: 0 };
-            user.dailyLimit.push(dailyLimitEntry);
-        }
-
-        if (dailyLimitEntry.date !== today) {
-            dailyLimitEntry.date = today;
-            dailyLimitEntry.count = 0;
-        }
-
+        // Get the daily limit for the specific package
         const dailyLimit = getDailyLimit(packageCost);
-        if (dailyLimitEntry.count >= dailyLimit) {
+
+        // Check if the package has reached the daily limit
+        if (packageOpened.isTodayRiched || packageOpened.dailyIncomeCount >= dailyLimit) {
             return res.status(400).json({ error: 'Daily limit reached' });
         }
 
-        // Update the user's score
+        // Update user's score and handle the daily limit
         user.score += income;
-        dailyLimitEntry.count += 1;
+        packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + 1;
 
-        // Handle commission for referred user
-        if (user.referredUserId) {
-            let referredUser = await idgen.findOne({ userId: user.referredUserId });
-            if (referredUser) {
-                let commission = income * 0.1; // 10% commission
-                referredUser.score += commission;
-                referredUser.principalAmount += commission;
-                await referredUser.save();
-            }
+        // Mark the package as having reached the daily limit if count exceeds or matches the limit
+        if (packageOpened.dailyIncomeCount >= dailyLimit) {
+            packageOpened.isTodayRiched = true;
         }
 
-        // Save the updated user data
+        // Save updated user data
         await user.save();
-        res.json({ userId, score: user.score });
+
+        // Respond with success and updated score
+        res.json({ success: true, score: user.score });
+
     } catch (error) {
         console.error('Error occurred:', error.message);
         res.status(500).json({ error: 'Something went wrong' });
