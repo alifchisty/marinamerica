@@ -291,7 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return true;
             }
 
-            const clickCountKey = `click_count_${userId}_${packageCost}`;
             const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
             let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
             const currentDailyLimit = getDailyLimit(packageCost);
@@ -341,9 +340,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        isSavingScore = true;
+        isSavingScore = true;  // Lock further clicks during save
         try {
-            await fetch('/income', {
+            const response = await fetch('/income', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -352,6 +351,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     income: incomeToBeSaved
                 })
             });
+
+            const data = await response.json();
+            if (data.error) {
+                console.error('Error saving score:', data.error);
+                return;
+            }
+
+            console.log('Server response:', data);
             incomeToBeSaved = 0;  // Reset the income to be saved after successful DB update
         } catch (error) {
             console.error('Error saving score:', error);
@@ -382,6 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
 
 <!-- <script>
 document.addEventListener('DOMContentLoaded', () => {
