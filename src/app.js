@@ -421,29 +421,15 @@ app.post('/api/verify-password', async(req, res) => {
     }
 });
 
-// Updated getDailyLimit function
+    // Updated getDailyLimit function
 function getDailyLimit(cost) {
     switch (cost) {
         case 9000: return 300;
-        case 18000: return 300;  // Updated for 18000 package
+        case 18000: return 300;
         case 30000: return 200;
         case 60000: return 200;
         case 120000: return 400;
         default: return 300;
-    }
-}
-
-// Updated getIncome function
-function getIncome(cost) {
-    switch (cost) {
-        case 9000: return 1;
-        case 18000: return 2;
-        case 30000: return 5;
-        case 60000: return 10;
-        case 120000: return 10;
-        default:
-            console.error(`No income defined for packageCost: ${cost}`);
-            return 0;
     }
 }
 
@@ -475,17 +461,16 @@ app.post('/income', async (req, res) => {
         // Get the daily limit for the specific package
         const dailyLimit = getDailyLimit(packageCost);
 
-        // Calculate the remaining daily limit
-        const remainingDailyLimit = dailyLimit - (packageOpened.dailyIncomeCount || 0);
-        
-        // Calculate income to save, ensuring we don't exceed the daily limit
-        const incomeToSave = Math.min(income, remainingDailyLimit);
+        // Check if the package has reached the daily limit
+        if (packageOpened.isTodayRiched || packageOpened.dailyIncomeCount >= dailyLimit) {
+            return res.status(400).json({ error: 'Daily limit reached' });
+        }
 
         // Update user's score and handle the daily limit
-        user.score += incomeToSave;
-        packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + incomeToSave;
+        user.score += income;
+        packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + 1;
 
-        // Mark the package as having reached the daily limit if count matches the limit
+        // Mark the package as having reached the daily limit if count exceeds or matches the limit
         if (packageOpened.dailyIncomeCount >= dailyLimit) {
             packageOpened.isTodayRiched = true;
         }
