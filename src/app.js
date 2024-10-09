@@ -432,7 +432,6 @@ function getDailyLimit(cost) {
         default: return 300;
     }
 }
-
 app.post('/income', async (req, res) => {
     try {
         const { userId, packageCost, income } = req.body;
@@ -466,8 +465,10 @@ app.post('/income', async (req, res) => {
             return res.status(400).json({ error: 'Daily limit reached' });
         }
 
-        // Update user's score and handle the daily limit
-        user.score += income;
+        // Update the user's score with the score sent from the frontend (local score)
+        user.score = income;  // Directly set the score to the local score shown on frontend
+
+        // Increment the daily income count
         packageOpened.dailyIncomeCount = (packageOpened.dailyIncomeCount || 0) + 1;
 
         // Mark the package as having reached the daily limit if count exceeds or matches the limit
@@ -486,6 +487,8 @@ app.post('/income', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
+
+
 app.post('/api/setReferral', async (req, res) => {
     try {
         const { userId, referredUserId } = req.body;

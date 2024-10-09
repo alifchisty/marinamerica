@@ -281,34 +281,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Check if the user's daily limit is reached or the package has expired
-    async function checkLimitReached(userId, packageCost) {
-        try {
-            const response = await fetch(`/check-package-status?userId=${userId}&packageCost=${packageCost}`);
-            const data = await response.json();
-            if (data.isTodayRiched || data.daysLeftFor90 <= 0) {
-                alert('Daily limit reached or package has expired.');
-                return true;
-            }
+  async function checkLimitReached(userId, packageCost) {
+    try {
+        const response = await fetch(`/check-package-status?userId=${userId}&packageCost=${packageCost}`);
+        const data = await response.json();
+        
+        // If daily limit is reached or package is expired
+        if (data.isTodayRiched || data.daysLeftFor90 <= 0) {
+            alert('Daily limit reached or package has expired.');
 
-            const clickCountKey = `click_count_${userId}_${packageCost}`;
-            const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
-            let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
-            const currentDailyLimit = getDailyLimit(packageCost);
+            // Fetch the current score from localStorage
+            const currentScore = parseInt(localStorage.getItem('score')) || 0;
 
-            if (dailyLimit >= currentDailyLimit) {
-                alert('Daily limit reached');
-                await updateTodayLimit(userId, packageCost);
-                return true;
-            }
+            // Call the saveScoreToDatabase function with the current score
+            await saveScoreToDatabase(currentScore); // Save the score when limit is reached
 
-            dailyLimit++;
-            localStorage.setItem(dailyLimitKey, dailyLimit);
-            return false;
-        } catch (error) {
-            console.error('Error checking package status:', error);
             return true;
         }
+
+        const dailyLimitKey = `daily_limit_${userId}_${packageCost}`;
+        let dailyLimit = parseInt(localStorage.getItem(dailyLimitKey)) || 0;
+        const currentDailyLimit = getDailyLimit(packageCost);
+
+        if (dailyLimit >= currentDailyLimit) {
+            alert('Daily limit reached');
+            
+            // Fetch the current score from localStorage
+            const currentScore = parseInt(localStorage.getItem('score')) || 0;
+
+            // Save the current score to the database
+            await saveScoreToDatabase(currentScore);
+
+            await updateTodayLimit(userId, packageCost);
+            return true;
+        }
+
+        dailyLimit++;
+        localStorage.setItem(dailyLimitKey, dailyLimit);
+        return false;
+    } catch (error) {
+        console.error('Error checking package status:', error);
+        return true;
     }
+}
+
 
     // Update the today's limit on the server
     async function updateTodayLimit(userId, packageCost) {
@@ -335,30 +351,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Save the score to the database (when user pauses clicking)
-    async function saveScoreToDatabase() {
-        if (incomeToBeSaved === 0) {
-            console.log('No new income to save.');
-            return;
-        }
-
-        isSavingScore = true;
-        try {
-            await fetch('/income', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: vipuserId,
-                    packageCost,
-                    income: incomeToBeSaved
-                })
-            });
-            incomeToBeSaved = 0;  // Reset the income to be saved after successful DB update
-        } catch (error) {
-            console.error('Error saving score:', error);
-        } finally {
-            isSavingScore = false;
-        }
+   // Save the local score to the database (when daily limit is reached)
+async function saveScoreToDatabase(localScore) {
+    if (localScore === 0) {
+        console.log('No score to save.');
+        return;
     }
+
+    isSavingScore = true;
+    try {
+        await fetch('/income', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: vipuserId,
+                packageCost,
+                income: localScore  // Send the local score from frontend
+            })
+        });
+        console.log('Local score saved to DB');
+    } catch (error) {
+        console.error('Error saving local score:', error);
+    } finally {
+        isSavingScore = false;
+    }
+}
 
     // Show a popup for the earned income
     function showPopup(income) {
