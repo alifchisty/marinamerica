@@ -10,12 +10,10 @@
 <style>
     body {
         height: 70vh;
-        background-image: url(mirror/map.jpeg);
-        background-image: no-repeat;
-        /* object-fit: contain; */
-        /* background-attachment:; */
-        background-position: center;
-        background-size: contain;
+       background-image: url(mirror/log-reg.png);
+
+            background-position: center;
+background-size:cover ;
     }
 
     .login-container {
@@ -29,14 +27,21 @@
     }
 
     .login-container h3 {
-        color: rgb(72, 255, 0);
+            color: #163bdf;
         text-align: center;
+text-decoration: underline;
     }
 
     .signin {
         display: flex;
         flex-direction: column;
+            color: #163bdf;
+
     }
+.signin label{
+            color: #163bdf;
+
+}
 
     .form-control {
         margin: 0.5vh;
@@ -59,7 +64,7 @@
 
 <body>
     <div class="login-container">
-        <h3>Sub Marine</h3>
+        <h3>Babylon</h3>
         <form id="loginForm" class="signin">
             <label for="email">Email:</label>
             <input type="email" class="form-control" id="email" placeholder="Enter your email" required name="email">

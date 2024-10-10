@@ -139,7 +139,9 @@
     .request-for-deposit>button:hover {
         background-color: blue;
     }
-
+.chakeDeposit{
+display: none;
+}
     .container {
         margin-top: auto;
         align-items: center;
@@ -221,7 +223,7 @@
             <input type="text" placeholder="Enter user_id" id="displayUserId">
             <button type="button" onclick="requestDeposit()">Deposit</button>
         </div>
-        <button type="button" id="check-deposit">
+        <button type="button" class="chakeDeposit" id="check-deposit">
             <p id="Chake-depositt">Check Deposit</p>
         </button>
 
@@ -364,7 +366,7 @@
                 // Update the displayed electronic value
                 const updatedElectronic = data.deposit[data.deposit.length - 1].electronic; // Get updated electronic value from the latest deposit entry
                 localStorage.setItem('electronic', updatedElectronic); // Store it in local storage
-                document.getElementById('electronic').textContent = `electronic: ${updatedElectronic}`; // Update UI
+                document.getElementById('electronic').textContent = `Electronic: ${updatedElectronic}`; // Update UI
             } else {
                 alert(data.error || 'An error occurred');
             }
@@ -491,7 +493,7 @@ function displayElectronicValue() {
     let electronicDollars = Math.floor(electronic / 100); // Extract dollars part
     let electronicCents = electronic % 100; // Extract cents part
     // Display value in format electronic: dollars.cents (e.g., electronic: 50.05)
-    document.getElementById('electronic').textContent = `electronic: ${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
+    document.getElementById('electronic').textContent = `Electronic: ${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
 }
 
     </script>

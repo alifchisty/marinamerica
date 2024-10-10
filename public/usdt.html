@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <title>Dray Source</title>
+    <title>Babylon</title>
 </head>
 <style>
     * {
@@ -42,14 +42,14 @@ padding: 1.5vh;
 
     }
 
-    img {
+   .responsive-img {
+    width: 100%; /* Make the image take the full width */
+    height: auto; /* Keep the aspect ratio */
+    max-height: 200px; /* Set the desired max height (you can adjust this) */
+    object-fit: contain; /* Ensures the entire image is visible within the height */
+    filter: drop-shadow(1px 1px 20px gold); /* Your drop-shadow effect */
+}
 
-        border-radius: 100px;
-        border: 1px solid #fff;
-
-
-
-    }
 
     .box {
         margin-top: 2vh;
@@ -156,11 +156,7 @@ padding: 1.5vh;
 </style>
 
 <body>
-
-
-    <!-- {{!-- --- <iframe src="" frameborder="0"></iframe> --}} -->
-
-    <img src="mirror/conne.jpg" alt="" height="160vh" srcset="">
+<img src="mirror/Tra-fee.png" alt="" class="responsive-img">
 
     <h2 class="usdt-info">Funds Transfer Fee</h2>
     <div class="usdt-container">
@@ -247,9 +243,6 @@ padding: 1.5vh;
 
             <a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br> Owner</a>
             <a href="/About" class="clk"><i class='bx bx-shield' style='color:#0c0b0b'></i><br>About</a>
-
-
-
         </nav>
     </footer>
     <script>

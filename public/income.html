@@ -162,7 +162,7 @@ top: 0;
 <!-- {{!-- babylon-coin --}} -->
     <div class="income-container">
         <img id="rabbit-pic" src="mirror/coin2.png" alt="Rabbit">
-        <p id="score" class="score">USDT-Cent: 0</p>
+        <p id="score" class="score">Babylon-coin: 0</p>
     </div>
 
 
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Invalid score value:', score);
             return;
         }
-        document.getElementById('score').textContent = `USDT-cent: ${(score / 100).toFixed(2)}`;
+        document.getElementById('score').textContent = `Babylon-coin: ${(score / 100).toFixed(2)}`;
     }
 
     // Calculate income based on package cost
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const income = getIncome(packageCost);
             incrementScore(income);
         } else {
-            alert('Invalid user ID or package cost');
+            alert('Try from open packages');//Invalid user ID or package cost
         }
     });
 
