@@ -68,7 +68,7 @@ border-radius: 3px;
 
 <body>
     <!-- {{!-- <p id="withdraw-all">Withdrawn: 0 USDT-cent</p> --}} -->
-    <h1>Your Current USDT</h1>
+    <h1>Your Currency</h1>
  <div class="currency" style="display: flex;"><p id="money">Babylon-coin 0</p>
        <p id="withdraw-all">Withdrawn: 0 </p></div>
 
@@ -76,7 +76,7 @@ border-radius: 3px;
         <div>
             <input type="checkbox" name="" id="account" checked>
             <span class="location">send-location</span>
-            <input type="text" name="" value="amirican-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298" id="send-location">
+            <input type="text" name="" value="Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298" id="send-location">
         </div>
         <input type="number" id="withdraw-amount" step="0.01" placeholder="Enter amount to withdraw">
         <button id="withdraw-btn">Send USDT</button>
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordMessage = document.getElementById('password-message');
 
     checkbox.checked = true;
-    textValue.value = "amirican-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
+    textValue.value = "Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
 
     let score = parseInt(localStorage.getItem('score')) || 0;
     let dollars = Math.floor(score / 100);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('withdraw-all').textContent = `Withdrawn: ${(totalWithdrawn / 100).toFixed(2)} USDT-cent`;
 
     document.getElementById('withdraw-btn').addEventListener('click', () => {
-        const expectedText = "amirican-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
+        const expectedText = "Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
 
         if (!checkbox.checked || textValue.value !== expectedText) {
             document.getElementById('message').textContent = "Something is wrong.";

@@ -78,6 +78,9 @@ app.get('/team', (req, res) => {
 app.get('/Event', (req, res) => {
   res.sendFile(path.join(static_path, 'event.html'))
 });
+app.get('/Record', (req, res) => {
+  res.sendFile(path.join(static_path, 'record.html'))
+});
 app.get('/usdt', (req, res) => {
   res.sendFile(path.join(static_path, 'usdt.html'))
 });
