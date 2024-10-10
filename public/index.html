@@ -95,6 +95,16 @@
             </form>
         </div>
     </div>
+<script> document.addEventListener('DOMContentLoaded', function () {
+        // Check if the token exists in localStorage
+        const token = localStorage.getItem('Token');
+        const userId = localStorage.getItem('userId');
+
+        if (token && userId) {
+            // If token exists, redirect the user directly to the VIP page
+            window.location.href = `vip?vipuserId=${userId}`;
+        }
+    });</script>
 </body>
 
 </html>

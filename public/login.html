@@ -76,45 +76,67 @@
             <button class="login-btn" type="submit">Log in</button>
         </form>
     </div>
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check if the token exists in localStorage
+        const token = localStorage.getItem('Token');
+        const userId = localStorage.getItem('userId');
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        if (token && userId) {
+            // If token exists, redirect the user directly to the VIP page
+            window.location.href = `vip?vipuserId=${userId}`;
+        }
+    });
 
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-                const data = await response.json();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-                if (data.success) {
-                    localStorage.setItem('username', data.username);
-                    localStorage.setItem('userId', data.userId);
-                    localStorage.setItem('score', data.score);
-                    localStorage.setItem('electronic', data.electronic);
-                    localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-                    // Store opened packages in localStorage
-                    localStorage.setItem('openPackages', JSON.stringify(data.openPackages));
+            const data = await response.json();
 
-                    window.location.href = `vip?vipuserId=${data.userId}`;
-                } else {
-                    alert('Invalid email or password');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
+            if (data.success) {
+                // Generate a random 12-digit number for the token
+                const randomToken = Math.floor(100000000000 + Math.random() * 900000000000);
+
+                // Combine userId with the generated random token
+                const token = data.userId + randomToken;
+
+                // Store necessary data in localStorage
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('userId', data.userId);
+                localStorage.setItem('score', data.score);
+                localStorage.setItem('electronic', data.electronic);
+                localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+
+                // Store opened packages in localStorage
+                localStorage.setItem('openPackages', JSON.stringify(data.openPackages));
+
+                // Store the generated token in localStorage
+                localStorage.setItem('Token', token);
+
+                // Redirect to the VIP page with the userId parameter
+                window.location.href = `vip?vipuserId=${data.userId}`;
+            } else {
+                alert('Invalid email or password');
             }
-        });
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    });
+</script>
 
 
-    </script>
 
 
 </body>

@@ -272,11 +272,11 @@ username: <span id="displayUsername">{{username}}</span>
         <a href="/Record" class="mine-btn">
             <div class="opt">Record</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
-        </button>
-        <!-- <a href="" class="mine-btn">
-            <div class="opt"></div>
+        </a>
+         <a href="/Logout" id="recordLink" class="mine-btn">
+            <div class="opt">Logout</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
-        </a> -->
+        </a>
         <a href="/About" class="mine-btn" style="margin-bottom: 10vh;">
             <div class="opt">Help</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
@@ -292,6 +292,25 @@ username: <span id="displayUsername">{{username}}</span>
             <a href="/about" class="clk"><i class='bx bx-shield'></i><br>About</a>
         </nav>
     </footer>
+<script>
+    // Get the link element by its id
+    document.getElementById('recordLink').addEventListener('click', function () {
+        // Remove all relevant data from localStorage
+        localStorage.removeItem('Token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        localStorage.removeItem('score');
+        localStorage.removeItem('electronic');
+        localStorage.removeItem('totalWithdrawn');
+        localStorage.removeItem('openPackages');
+
+        console.log('Token and user data removed from localStorage');
+        
+        // Optionally redirect to the login page
+        window.location.href = '/login';
+    });
+</script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const links = document.querySelectorAll('.container-layer .clk');

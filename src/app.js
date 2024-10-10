@@ -81,6 +81,9 @@ app.get('/Event', (req, res) => {
 app.get('/Record', (req, res) => {
   res.sendFile(path.join(static_path, 'record.html'))
 });
+app.get('/Logout', (req, res) => {
+  res.sendFile(path.join(static_path, 'index.html'))
+});
 app.get('/usdt', (req, res) => {
   res.sendFile(path.join(static_path, 'usdt.html'))
 });
