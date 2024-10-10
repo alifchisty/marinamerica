@@ -12,6 +12,8 @@
             background-position: center;
             background-repeat: repeat;
             background-size: cover;
+        display: none;
+
         }
 
         .container h3 {
@@ -95,7 +97,10 @@
             </form>
         </div>
     </div>
-<script> document.addEventListener('DOMContentLoaded', function () {
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
         // Check if the token exists in localStorage
         const token = localStorage.getItem('Token');
         const userId = localStorage.getItem('userId');
@@ -103,8 +108,13 @@
         if (token && userId) {
             // If token exists, redirect the user directly to the VIP page
             window.location.href = `vip?vipuserId=${userId}`;
+        } else {
+            // If no token, show the page content
+            document.body.style.display = 'block';
         }
-    });</script>
+    });
+</script>
+
 </body>
 
 </html>
