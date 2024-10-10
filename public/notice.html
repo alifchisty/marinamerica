@@ -120,14 +120,15 @@
 <body>
 
     <h1 class="title" style="text-decoration: underline;">Notice</h1>
-    <main>
-     <div class="notice one" style="position: relative; padding: 20px;">
+    <main style="margin:5px 10px;">
+       <div class="notice one" style="position: relative; padding: 20px;">
     <span class="close-btn" style="position: absolute; color:black; top: 10px; right: 10px; font-size: 20px; cursor: pointer;">&times;</span>
-    <p style="color: blue;"><i class='bx bxs-color' style='color:blue'></i> Mr <span id="displayUsername"></span>, Welcome to a new freedom of financial life. If you opened a package in the Babylon platform, then from the open time to the next 30 days, you need to use your userId: <span id="displayUserId"></span> as a referral ID for two new members. Otherwise, your account will be blocked soon.</p>
+    <p style="color: blue;"><i class='bx bxs-color' style='color:blue'></i> Mr <span class="displayUsername"></span>, Welcome to a new freedom of financial life. If you opened a package in the Babylon platform, then from the open time to the next 30 days, you need to use your userId: <span class="displayUserId"></span> as a referral ID for two new members. Otherwise, your account will be blocked soon.</p>
 </div>
-     <!-- <div class="notice">
-<p></p>
-</div> -->
+<div class="notice two" style="position: relative; padding: 20px;">
+    <span class="close-btn" style="position: absolute; color:black; top: 10px; right: 10px; font-size: 20px; cursor: pointer;">&times;</span>
+    <p style="color: blue;"><i class='bx bxs-color' style='color:blue'></i> Mr <span class="displayUsername"></span>, By November 29th, if any user refers 5 new members without needing the basic two, they'll receive a free 90 USDT package as a reward from the Babylon platform (Börse Frankfurt).</p>
+</div>
     </main>
     <footer class="container">
         <nav class="container-layer">
@@ -138,47 +139,56 @@
             <a href="/about" class="clk"><i class='bx bx-shield'></i><br>About</a>
         </nav>
     </footer>
-<script>
-    document.querySelector('.close-btn').addEventListener('click', function() {
-        document.querySelector('.notice').style.display = 'none';
-    });
-</script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const links = document.querySelectorAll('.container-layer .clk');
-            const userId = localStorage.getItem('userId');
-            const username = localStorage.getItem('username');
-
-
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    // Reset the color of all <i> tags
-                    document.querySelectorAll('.container-layer .clk i').forEach(icon => {
-                        icon.style.color = ''; // Reset to default
-                    });
-                    // Change the color of the <i> tag within the clicked <a>
-                    link.querySelector('i').style.color = 'gold';
-                });
+        document.querySelectorAll('.close-btn').forEach(function (btn, index) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.notice')[index].style.display = 'none';
             });
-
-            // VIP link click event
-            document.querySelector('.vip-link').addEventListener('click', (event) => {
-                event.preventDefault();
-                const vipuserId = localStorage.getItem('userId');
-                if (vipuserId) {
-                    window.location.href = `/vip?vipuserId=${vipuserId}`;
-                } else {
-                    alert('Invalid user ID');
-                }
-            });
-            if (username && userId) {
-                document.getElementById('displayUsername').textContent = username;
-                document.getElementById('displayUserId').textContent = userId;
-            } else {
-                alert('User information not found. Please log in again.');
-                window.location.href = '/login';
-            }
         });
+
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('.container-layer .clk');
+    const userId = localStorage.getItem('userId');
+    const username = localStorage.getItem('username');
+
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            // Reset the color of all <i> tags
+            document.querySelectorAll('.container-layer .clk i').forEach(icon => {
+                icon.style.color = ''; // Reset to default
+            });
+            // Change the color of the <i> tag within the clicked <a>
+            link.querySelector('i').style.color = 'gold';
+        });
+    });
+
+    // VIP link click event
+    document.querySelector('.vip-link').addEventListener('click', (event) => {
+        event.preventDefault();
+        const vipuserId = localStorage.getItem('userId');
+        if (vipuserId) {
+            window.location.href = `/vip?vipuserId=${vipuserId}`;
+        } else {
+            alert('Invalid user ID');
+        }
+    });
+
+    // Update all occurrences of displayUsername and displayUserId
+    if (username && userId) {
+        document.querySelectorAll('.displayUsername').forEach(element => {
+            element.textContent = username;
+        });
+        document.querySelectorAll('.displayUserId').forEach(element => {
+            element.textContent = userId;
+        });
+    } else {
+        alert('User information not found. Please log in again.');
+        window.location.href = '/login';
+    }
+});
+
     </script>
 </body>
 
