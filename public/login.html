@@ -10,10 +10,9 @@
 <style>
     body {
         height: 70vh;
-       background-image: url(mirror/log-reg.png);
-
-            background-position: center;
-background-size:cover ;
+        background-image: url(mirror/home-bak.jpg);
+        background-position: center;
+        background-size: cover;
     }
 
     .login-container {
@@ -27,21 +26,22 @@ background-size:cover ;
     }
 
     .login-container h3 {
-            color: #163bdf;
+        color: #163bdf;
         text-align: center;
-text-decoration: underline;
+        text-decoration: underline;
     }
 
     .signin {
         display: flex;
         flex-direction: column;
-            color: #163bdf;
+        color: #163bdf;
 
     }
-.signin label{
-            color: #163bdf;
 
-}
+    .signin label {
+        color: #163bdf;
+
+    }
 
     .form-control {
         margin: 0.5vh;
@@ -75,46 +75,46 @@ text-decoration: underline;
             <button class="login-btn" type="submit">Log in</button>
         </form>
     </div>
-<script>
-document.getElementById('loginForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('username', data.username);
+                    localStorage.setItem('userId', data.userId);
+                    localStorage.setItem('score', data.score);
+                    localStorage.setItem('electronic', data.electronic);
+                    localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+
+                    // Store opened packages in localStorage
+                    localStorage.setItem('openPackages', JSON.stringify(data.openPackages));
+
+                    window.location.href = `vip?vipuserId=${data.userId}`;
+                } else {
+                    alert('Invalid email or password');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+            }
         });
 
-        const data = await response.json();
 
-        if (data.success) {
-            localStorage.setItem('username', data.username);
-            localStorage.setItem('userId', data.userId);
-            localStorage.setItem('score', data.score);
-            localStorage.setItem('electronic', data.electronic);
-localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+    </script>
 
-            // Store opened packages in localStorage
-            localStorage.setItem('openPackages', JSON.stringify(data.openPackages));
-
-            window.location.href = `vip?vipuserId=${data.userId}`;
-        } else {
-            alert('Invalid email or password');
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-    }
-});
-
-
-</script>
-   
 
 </body>
 
