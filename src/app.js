@@ -7,8 +7,6 @@ const path = require(`path`);
 const bodyParser = require('body-parser');
 require("../src/db/conn");
 const idgen = require("../src/models/register");
-
-const DepositRequest = require('../src/models/user');
 const { v4: uuidv4 } = require('uuid');
 
 //public static path

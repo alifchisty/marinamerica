@@ -32,21 +32,27 @@
 
 
 
-    .navclass {
-        display: flex;
-        align-items: center;
-        background: url(https://img.freepik.com/premium-photo/gold-coin-stack-hd-wallpaper-photographic-image_993236-8537.jpg?w=900) no-repeat center;
-        background-size: auto;
-        height: 10vh;
-        box-shadow: 4px 0 10px rgb(0 0 0);
-    }
+   .logo-img {
+          height: 7vh;
+    margin-right: -45px;
+    margin-left: -51px;
+    margin-top: -2vh;
+}
 
-    nav .comapny {
-        opacity: 100%;
-        color: rgb(255, 255, 255);
-        text-shadow: 3px 4px black;
-        padding: 7vh 0;
-    }
+ 
+  .navclass {
+    display: flex;
+    background-size: auto;
+text-align: center;
+    height: 6vh;
+    box-shadow: 4px 0 10px rgb(0, 0, 0);
+position: sticky;
+top: 0;
+  backdrop-filter: blur(2px);
+z-index:1001;
+    padding-top: 3vh;
+  }
+
 
     .chake-info {
         color: rgb(146, 146, 202);
@@ -173,9 +179,9 @@ display: none;
 
 <body>
     <nav class="navclass">
-        <div class="logo"><i class='bx bxs-bookmark-star' style='color:#ffdb00'></i></div>
-        <h1 class="comapny" style="color: #fff;">Dray Source</h1>
-    </nav>
+                <img class="logo-img" src="mirror/logo2.png" alt="" srcset="">
+    
+  </nav>
     <div class="deposit-container">
 
         <!-- {{!--

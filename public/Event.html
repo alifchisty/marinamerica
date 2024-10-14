@@ -53,13 +53,15 @@ a {
   
 
 
-<body>
-    <div>
-        <!-- Placeholder where the token will be displayed -->
-        <h3>Your Token: <span id="Token"></span></h3>
-    </div>
-
-    <script>
+<div class="error-message">
+<h1>404</h1>
+  <p>This page is currently unavailable in your country. <br>
+<strong> You’ll be able to access it soon after our update.</strong></p>
+<a href="/Mine">Go back to Home</a>
+</div>
+</body>
+</html>
+    <!-- <script>
         // Retrieve the token from localStorage
         const token = localStorage.getItem('Token');
 
@@ -69,8 +71,4 @@ a {
         } else {
             document.getElementById('Token').textContent = 'Token not found';
         }
-    </script>
-</body>
-
-</body>
-</html>
+    </script> -->

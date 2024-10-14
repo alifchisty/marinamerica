@@ -69,7 +69,7 @@ border-radius: 3px;
 <body>
     <!-- {{!-- <p id="withdraw-all">Withdrawn: 0 USDT-cent</p> --}} -->
     <h1>Your Currency</h1>
- <div class="currency" style="display: flex;"><p id="money">Babylon-coin 0</p>
+ <div class="currency" style="display: flex;"><p id="money">Babylon-Currency 0</p> <br>
        <p id="withdraw-all">Withdrawn: 0 </p></div>
 
     <div class="container">
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = parseInt(localStorage.getItem('score')) || 0;
     let dollars = Math.floor(score / 100);
     let cents = score % 100;
-    document.getElementById('money').textContent = `Babylon-coin: ${dollars}.${cents < 10 ? '0' + cents : cents}`;
+    document.getElementById('money').textContent = `Babylon-Currency: ${dollars}.${cents < 10 ? '0' + cents : cents}`;
 
     let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
     document.getElementById('withdraw-all').textContent = `Withdrawn: ${(totalWithdrawn / 100).toFixed(2)} USDT-cent`;
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('score', score);
                     dollars = Math.floor(score / 100);
                     cents = score % 100;
-                    document.getElementById('money').textContent = `Babylon-coin: ${dollars}.${cents < 10 ? '0' + cents : cents}`;
+                    document.getElementById('money').textContent = `Babylon-Currency: ${dollars}.${cents < 10 ? '0' + cents : cents}`;
                     document.getElementById('message').textContent = `Withdrawal successful: ${withdrawAmount.toFixed(2)} USDT-cent.`;
 
                     totalWithdrawn += withdrawCents;
