@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
         electronic: Number,
         requestTime: Date
     }],
+Binance: { type: String }, // New field to store Binance info
  withdrawals: {
         totalAmount: { type: Number, default: 0 },
         lastWithdrawalDate: { type: Date },
@@ -24,7 +25,6 @@ const userSchema = new mongoose.Schema({
             }
         ]
     },
-    principalAmount: { type: Number, default: 0 },
     
     // Updated openPackages with new fields
     openPackages: [
@@ -38,18 +38,6 @@ const userSchema = new mongoose.Schema({
         }
 
     ],
-    withdrawals: {
-        totalAmount: { type: Number, default: 0 },
-        lastWithdrawalDate: { type: Date },
-        history: [
-            {
-                amount: { type: Number, required: true },
-                date: { type: Date, required: true }
-            }
-        ]
-    }, 
-    referredUserId: { type: String },
-    principalAmount: { type: Number, default: 0 }
 });
 
 const idgen = mongoose.model('idgen', userSchema);

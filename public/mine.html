@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dray Source</title>
+    <title>Babylon</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         * {
@@ -13,19 +13,19 @@
             padding: 0;
         }
 
-      body {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    background-image: url('mirror/new-bg-abstarct.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: top;
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            background-image: url('mirror/new-bg-abstarct.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top;
 
-    /* Pseudo-element to create the repeat effect after 100vh */
-    position: relative;
-}
+            /* Pseudo-element to create the repeat effect after 100vh */
+            position: relative;
+        }
 
 
 
@@ -43,12 +43,12 @@ background-size:contain ;
             }
         } */
 
-.logo-img{
- height: 6vh;
-          margin-left: -30px;
+        .logo-img {
+            height: 6vh;
+            margin-left: -30px;
 
-margin-right: 5px;
-}
+            margin-right: 5px;
+        }
 
         .navclass {
             display: flex;
@@ -66,38 +66,40 @@ margin-right: 5px;
         }
 
         .username {
-color:#6a631d;
+            color: #6a631d;
             align-items: center;
-margin-left: -40px;
-margin-top: 1vh;
+            margin-left: -40px;
+            margin-top: 1vh;
         }
-#displayUsername{
-color:#6a631d;
-}
-#displayUserId{
-color:#6a631d;
 
-}
+        #displayUsername {
+            color: #6a631d;
+        }
+
+        #displayUserId {
+            color: #6a631d;
+
+        }
 
         .userid {
             font-size: 0.6rem;
-color:#6a631d;
+            color: #6a631d;
             align-items: center;
         }
 
         .header-container {
-                display: flex;
-    justify-content: space-between;
-    text-align: center;
-    background-image: linear-gradient(140.99deg, #01d9c8 6.12%, #cd61ff 90.22%);
-    color: black;
-    margin: 11px 15px 0px 15px;
-    font-size: 1.5rem;
-    border-radius: 7px;
-    box-shadow: 2px 0 10px black;
-    color: rgb(252, 252, 252);
-    line-height: 70%;
-    padding: 6vh 5vw;
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            background-image: linear-gradient(140.99deg, #01d9c8 6.12%, #cd61ff 90.22%);
+            color: black;
+            margin: 11px 15px 0px 15px;
+            font-size: 1.5rem;
+            border-radius: 7px;
+            box-shadow: 2px 0 10px black;
+            color: rgb(252, 252, 252);
+            line-height: 70%;
+            padding: 6vh 5vw;
 
 
         }
@@ -134,7 +136,7 @@ color:#6a631d;
         .after-section {
             display: flex;
             flex-direction: column;
-      margin: auto 0.8vh;
+            margin: auto 0.8vh;
         }
 
         .mine-btn {
@@ -156,7 +158,60 @@ color:#6a631d;
 
         a {
             text-decoration: none;
+
+
+
         }
+
+        /* Modal background */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            width: 300px;
+
+        }
+.confirm-btn{
+ background-color: white;
+    color: black;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+        /* Close button (cross icon) */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+    
+
+      
+
+
+
 
 
         /* Container fixed at the bottom */
@@ -221,8 +276,9 @@ color:#6a631d;
                 <img class="logo-img" src="mirror/logo2.png" alt="" srcset="">
             </div>
 
-            <div class="username">     <h1 class="comapny" style="color: #fff;">Babylon</h1>
-username: <span id="displayUsername">{{username}}</span>
+            <div class="username">
+                <h1 class="comapny" style="color: #fff;">Babylon</h1>
+                username: <span id="displayUsername">{{username}}</span>
                 <div class="userid">
                     userid: <span id="displayUserId">{{userId}}</span>
                 </div>
@@ -236,14 +292,11 @@ username: <span id="displayUsername">{{username}}</span>
             </div>
             <div class="item"><span id="electronic" class="money-color">0</span><br><span
                     class="details">Electronic</span></div>
-            <div class="item"><span id="money" class="money-color">0</span><br><span class="details">Currency</span></div>
+            <div class="item"><span id="money" class="money-color">0</span><br><span class="details">Currency</span>
+            </div>
         </div>
     </section>
-    <!-- {{!-- <article class="articale-add">
-        <p class="wellcome">You're welcome here in the USA.</p>
-        <img src="https://media.licdn.com/dms/image/C561BAQETHpCh0ayeRw/company-background_10000/0/1584347165423/casino_arizona_cover?e=2147483647&v=beta&t=QkXHi-1ROOFKd7rvj9SrMxlvJKIAzw3c3LIF2i4Vnb4"
-            alt="" srcset="">
-    </article> --}} -->
+
     <div class="after-section">
         <a href="/withdraw" class="mine-btn">
             <div class="opt">Withdraw</div>
@@ -253,7 +306,7 @@ username: <span id="displayUsername">{{username}}</span>
             <div class="opt">Deposit</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
-       <a href="/exchange" class="mine-btn">
+        <a href="/exchange" class="mine-btn">
             <div class="opt">Exchange</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
@@ -261,7 +314,7 @@ username: <span id="displayUsername">{{username}}</span>
             <div class="opt">Notice</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
- <a href="/team" class="mine-btn">
+        <a href="/team" class="mine-btn">
             <div class="opt">Team</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
@@ -269,16 +322,25 @@ username: <span id="displayUsername">{{username}}</span>
             <div class="opt">Event</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
-     
-         <a href="/Logout" id="recordLink" class="mine-btn">
-            <div class="opt">Logout</div>
-            <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
-        </a>
-        <a href="/About" class="mine-btn" style="margin-bottom: 10vh;">
+        <a href="/About" class="mine-btn">
             <div class="opt">Help</div>
             <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
         </a>
+        <a href="javascript:void(0);" id="recordLink" class="mine-btn" style="margin-bottom: 10vh;">
+            <div class="opt">Logout</div>
+            <div class="arow"><i class='bx bx-chevrons-right' style='color:#ffffff'></i></div>
+        </a>
+
     </div>
+    </div>
+<!-- Logout confirmation modal -->
+<div id="logoutModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <p>Are you sure you want to logout?</p>
+        <button id="confirmLogout" class="confirm-btn">Yes</button>
+    </div>
+</div>
     <footer class="container">
         <nav class="container-layer">
             <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
@@ -288,7 +350,33 @@ username: <span id="displayUsername">{{username}}</span>
             <a href="/about" class="clk"><i class='bx bx-shield'></i><br>About</a>
         </nav>
     </footer>
-<script>
+    <script>document.getElementById('recordLink').addEventListener('click', function () {
+            // Show the confirmation modal
+            document.getElementById('logoutModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeModal').addEventListener('click', function () {
+            // Hide the confirmation modal when the close button (X) is clicked
+            document.getElementById('logoutModal').style.display = 'none';
+        });
+
+        document.getElementById('confirmLogout').addEventListener('click', function () {
+            // Remove all relevant data from localStorage when user confirms
+            localStorage.removeItem('Token');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('username');
+            localStorage.removeItem('score');
+            localStorage.removeItem('electronic');
+            localStorage.removeItem('totalWithdrawn');
+            localStorage.removeItem('openPackages');
+
+            console.log('Token and user data removed from localStorage');
+
+            // Redirect to the login page
+            window.location.href = '/login';
+        });
+    </script>
+    <!-- this is working just add promt for logout <script>
     // Get the link element by its id
     document.getElementById('recordLink').addEventListener('click', function () {
         // Remove all relevant data from localStorage
@@ -305,7 +393,7 @@ username: <span id="displayUsername">{{username}}</span>
         // Optionally redirect to the login page
         window.location.href = '/login';
     });
-</script>
+</script> -->
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -324,90 +412,90 @@ username: <span id="displayUsername">{{username}}</span>
         });
     </script>
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Fetch the latest user data from the server
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-        alert('User information not found. Please log in again.');
-        window.location.href = '/login';
-    } else {
-        // Fetch user details including score from the backend API
-        fetch(`/user-data?userId=${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update localStorage with the latest user data
-                    localStorage.setItem('score', data.score);
-                    // localStorage.setItem('electronic', data.electronic);
-                    localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch the latest user data from the server
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                alert('User information not found. Please log in again.');
+                window.location.href = '/login';
+            } else {
+                // Fetch user details including score from the backend API
+                fetch(`/user-data?userId=${userId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update localStorage with the latest user data
+                            localStorage.setItem('score', data.score);
+                            // localStorage.setItem('electronic', data.electronic);
+                            localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
 
-                    // Update frontend display with the latest data
-                    displayUserData();
-                } else {
-                    alert('Error fetching user data.');
+                            // Update frontend display with the latest data
+                            displayUserData();
+                        } else {
+                            alert('Error fetching user data.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
+            }
+
+            // Function to display the user data on the frontend
+            function displayUserData() {
+                // Display username and userId
+                const username = localStorage.getItem('username');
+                const userId = localStorage.getItem('userId');
+                if (username && userId) {
+                    document.getElementById('displayUsername').textContent = username;
+                    document.getElementById('displayUserId').textContent = userId;
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching user data:', error);
+
+                // Score and money display
+                let score = parseInt(localStorage.getItem('score')) || 0;
+                let dollars = Math.floor(score / 100);
+                let cents = score % 100;
+                document.getElementById('money').textContent = `${dollars}.${cents < 10 ? '0' + cents : cents}`;
+
+                let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
+                document.getElementById('moneys').textContent = `${(totalWithdrawn / 100).toFixed(2)} `;
+
+                // Display electronic value
+                let electronic = parseInt(localStorage.getItem('electronic')) || 0;
+                let electronicDollars = Math.floor(electronic / 100);
+                let electronicCents = electronic % 100;
+                document.getElementById('electronic').textContent = `${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
+            }
+
+            // VIP link click event
+            document.querySelector('.vip-link').addEventListener('click', (event) => {
+                event.preventDefault();
+                const vipuserId = localStorage.getItem('userId');
+                if (vipuserId) {
+                    window.location.href = `/vip?vipuserId=${vipuserId}`;
+                } else {
+                    alert('Invalid user ID');
+                }
             });
-    }
 
-    // Function to display the user data on the frontend
-    function displayUserData() {
-        // Display username and userId
-        const username = localStorage.getItem('username');
-        const userId = localStorage.getItem('userId');
-        if (username && userId) {
-            document.getElementById('displayUsername').textContent = username;
-            document.getElementById('displayUserId').textContent = userId;
-        }
+            // Mine button click event
+            const mineBtn = document.getElementById('mine-btn');
+            mineBtn.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent the default link click behavior
+                const userId = localStorage.getItem('userId');
+                if (userId) {
+                    // Append the deposituserId query parameter to the href attribute
+                    mineBtn.href = `/deposit?deposituserId=${userId}`;
+                    // Navigate to the modified URL
+                    window.location.href = mineBtn.href;
+                } else {
+                    alert('User information not found. Please log in again.');
+                    window.location.href = '/login';
+                }
+            });
 
-        // Score and money display
-        let score = parseInt(localStorage.getItem('score')) || 0;
-        let dollars = Math.floor(score / 100);
-        let cents = score % 100;
-        document.getElementById('money').textContent = `${dollars}.${cents < 10 ? '0' + cents : cents}`;
-
-        let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
-        document.getElementById('moneys').textContent = `${(totalWithdrawn / 100).toFixed(2)} `;
-
-        // Display electronic value
-        let electronic = parseInt(localStorage.getItem('electronic')) || 0;
-        let electronicDollars = Math.floor(electronic / 100);
-        let electronicCents = electronic % 100;
-        document.getElementById('electronic').textContent = `${electronicDollars}.${electronicCents < 10 ? '0' + electronicCents : electronicCents}`;
-    }
-
-    // VIP link click event
-    document.querySelector('.vip-link').addEventListener('click', (event) => {
-        event.preventDefault();
-        const vipuserId = localStorage.getItem('userId');
-        if (vipuserId) {
-            window.location.href = `/vip?vipuserId=${vipuserId}`;
-        } else {
-            alert('Invalid user ID');
-        }
-    });
-
-    // Mine button click event
-    const mineBtn = document.getElementById('mine-btn');
-    mineBtn.addEventListener('click', function (event) {
-        event.preventDefault(); // Prevent the default link click behavior
-        const userId = localStorage.getItem('userId');
-        if (userId) {
-            // Append the deposituserId query parameter to the href attribute
-            mineBtn.href = `/deposit?deposituserId=${userId}`;
-            // Navigate to the modified URL
-            window.location.href = mineBtn.href;
-        } else {
-            alert('User information not found. Please log in again.');
-            window.location.href = '/login';
-        }
-    });
-
-    // Initially display the user data from localStorage
-    displayUserData();
-});
+            // Initially display the user data from localStorage
+            displayUserData();
+        });
     </script>
 
     <!-- {{!-- this theree code are working

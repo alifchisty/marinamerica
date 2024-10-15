@@ -240,7 +240,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-cron.schedule('46 14 * * *', async () => {
+cron.schedule('33 20 * * *', async () => {
     try {
         await idgen.updateMany(
             { "openPackages.isTodayRiched": true },
@@ -435,7 +435,32 @@ app.post('/check-deposit', async (req, res) => {
         res.status(500).json({ error: 'error chake deposit.' });
     }
 });
+// API to store Binance info
+app.post('/api/store-binance', async (req, res) => {
+    try {
+        const { userId, binanceInfo } = req.body;
 
+        if (!userId || !binanceInfo) {
+            return res.status(400).json({ success: false, message: 'User ID and Binance info are required' });
+        }
+
+        // Find the user in the database by userId
+        const user = await idgen.findOne({ userId: userId });
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Update the user document with the Binance info
+        user.Binance = binanceInfo;
+        await user.save();
+
+        // Return success response
+        return res.json({ success: true, message: 'Binance info saved successfully' });
+    } catch (error) {
+        console.error('Error saving Binance info:', error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
 app.post('/api/verify-password', async(req, res) => {
     const { username, password } = req.body;
     try {
