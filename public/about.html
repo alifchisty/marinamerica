@@ -129,11 +129,10 @@
         <div class="bottom">
             <h1 style="color: black;">User Account </h1>
             <p>1.Download the app to register and start investing with Babylon! </p>
-            <p>  <mark style="color: black ;">share app link</mark>:-</p>
-            <input type="text" style="color: black; padding: 5px 40px; " value="https://warehouse.appilix.com/uploads/app-apk-670d12727e661-1728909938.apk"
-                name="" id="download-link">
-<!-- Message to display when text is copied -->
-    <div class="copy-message" id="copy-message">Copied!</div> 
+            <p>  <mark style="color: black ;"> click & share app link</mark>:-</p>
+
+        <input type="text" id="download-link" value="babylon-belarus.app-download-with-owner" style="color: black; padding: 5px 40px;">
+<p id="copy-message" style="display:none; color: green;">Copied!</p>
 
             <p>2.To deposit Babylon currency, first send USDT through the deposit page link. Once done, provide your transaction ID. Please make sure the  <mark style="color: black ;">transaction ID is accurate</mark>, as submitting incorrect details multiple times may result in your account being frozen or blocked for security reasons. Ensure you enter the correct transaction ID to avoid any issues. </p>
             <div class="img-container"><img src="" alt=""><img src="" alt="" srcset="">
@@ -224,25 +223,28 @@
 </nav>
     </footer>
 <script>
-        document.getElementById('download-link').addEventListener('click', function() {
-            // Select the text field
-            let input = this;
-            input.select();
-            input.setSelectionRange(0, 99999); // For mobile devices
+    document.getElementById('download-link').addEventListener('click', function() {
+        // The actual URL to be copied
+        let downloadUrl = "https://warehouse.appilix.com/uploads/app-apk-670d12727e661-1728909938.apk";
+        
+        // Copy the downloadUrl to the clipboard
+        navigator.clipboard.writeText(downloadUrl)
+            .then(() => {
+                // Show the "Copied!" message
+                let copyMessage = document.getElementById('copy-message');
+                copyMessage.style.display = 'block';
 
-            // Copy the text inside the input field
-            document.execCommand('copy');
+                // Hide the message after 0.5 seconds
+                setTimeout(function() {
+                    copyMessage.style.display = 'none';
+                }, 500);
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    });
+</script>
 
-            // Show the "Copied!" message
-            let copyMessage = document.getElementById('copy-message');
-            copyMessage.style.display = 'block';
-
-            // Hide the message after 0.5 seconds
-            setTimeout(function() {
-                copyMessage.style.display = 'none';
-            }, 500);
-        });
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.vip-link').addEventListener('click', (event) => {
