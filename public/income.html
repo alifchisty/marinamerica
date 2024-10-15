@@ -173,6 +173,32 @@ document.addEventListener('DOMContentLoaded', () => {
     let incomeToBeSaved = 0;
     let isSavingScore = false;
     let clickTimeout;
+// Fetch the latest user data from the server
+       const userId = localStorage.getItem('userId');
+    if (!userId) {
+        alert('User information not found. Please log in again.');
+        window.location.href = '/login';
+    } else {
+        // Fetch user details including score from the backend API
+        fetch(`/user-data?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update localStorage with the latest user data
+                    localStorage.setItem('score', data.score);
+                    // localStorage.setItem('electronic', data.electronic);
+                    localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+
+                    // Immediately display the latest score and other data
+                    updateDisplayData();
+                } else {
+                    alert('Error fetching user data.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    }
 
     // রিসেট ডেইলি লিমিট ফাংশন
     function resetDailyLimit(userId, packageCost) {

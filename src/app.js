@@ -99,6 +99,29 @@ app.get('/api/checkUserId', async (req, res) => {
     const user = await idgen.findOne({ userId });
     res.json({ exists: !!user });
 });
+app.get('/user-data', async (req, res) => {
+    const { userId } = req.query;
+
+    try {
+        // Find the user by userId
+        const user = await idgen.findOne({ userId });
+
+        if (user) {
+            // Send the latest score, electronic value, and total withdrawn
+            res.json({ 
+                success: true, 
+                score: user.score || 0, 
+                electronic: user.electronic || 0, 
+                totalWithdrawn: user.withdrawals.totalAmount || 0
+            });
+        } else {
+            res.status(400).json({ success: false, message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error fetching user data' });
+    }
+});
+
 app.get('/check-package-status', async (req, res) => {
     const { userId, packageCost } = req.query;
 
@@ -217,7 +240,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-cron.schedule('47 3 * * *', async () => {
+cron.schedule('46 14 * * *', async () => {
     try {
         await idgen.updateMany(
             { "openPackages.isTodayRiched": true },

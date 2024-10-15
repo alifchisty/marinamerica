@@ -102,6 +102,171 @@ document.addEventListener('DOMContentLoaded', () => {
     checkbox.checked = true;
     textValue.value = "Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
 
+    // Fetch the latest user data from the server and display it immediately
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        alert('User information not found. Please log in again.');
+        window.location.href = '/login';
+    } else {
+        // Fetch user details including score from the backend API
+        fetch(`/user-data?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update localStorage with the latest user data
+                    localStorage.setItem('score', data.score);
+                    // localStorage.setItem('electronic', data.electronic);
+                    localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+
+                    // Immediately display the latest score and other data
+                    updateDisplayData();
+                } else {
+                    alert('Error fetching user data.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    }
+
+    function updateDisplayData() {
+        let score = parseInt(localStorage.getItem('score')) || 0;
+        let dollars = Math.floor(score / 100);
+        let cents = score % 100;
+        document.getElementById('money').textContent = `Babylon-Currency: ${dollars}.${cents < 10 ? '0' + cents : cents}`;
+
+        let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
+        document.getElementById('withdraw-all').textContent = `Withdrawn: ${(totalWithdrawn / 100).toFixed(2)} USDT-cent`;
+    }
+
+    // Call this function when the page is loaded to display data from localStorage
+    updateDisplayData();
+
+    document.getElementById('withdraw-btn').addEventListener('click', () => {
+        const expectedText = "Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
+
+        if (!checkbox.checked || textValue.value !== expectedText) {
+            document.getElementById('message').textContent = "Something is wrong.";
+            return;
+        }
+
+        let withdrawAmount = parseFloat(document.getElementById('withdraw-amount').value);
+        let withdrawCents = Math.round(withdrawAmount * 100);
+        let totalAmount = parseInt(localStorage.getItem('score')) || 0;
+
+        if (isNaN(withdrawCents) || withdrawCents <= 0) {
+            document.getElementById('message').textContent = "Please enter a valid amount.";
+            return;
+        }
+
+        if (withdrawCents > totalAmount) {
+            document.getElementById('message').textContent = "Withdrawal denied: Insufficient funds.";
+            return;
+        }
+
+        // Show password modal
+        passwordModal.style.display = 'block';
+
+        passwordSubmit.addEventListener('click', async () => {
+            const enteredPassword = passwordInput.value;
+
+            if (enteredPassword === '') {
+                passwordMessage.textContent = "Please enter your password.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/verify-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: localStorage.getItem('username'), // Assuming username is stored in local storage after login
+                        password: enteredPassword
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    totalAmount -= withdrawCents;
+                    localStorage.setItem('score', totalAmount);
+
+                    // Update display after withdrawal
+                    updateDisplayData();
+
+                    document.getElementById('message').textContent = `Withdrawal successful: ${withdrawAmount.toFixed(2)} USDT-cent.`;
+
+                    let totalWithdrawn = parseInt(localStorage.getItem('totalWithdrawn')) || 0;
+                    totalWithdrawn += withdrawCents;
+                    localStorage.setItem('totalWithdrawn', totalWithdrawn);
+                    document.getElementById('withdraw-all').textContent = `Withdrawn: ${(totalWithdrawn / 100).toFixed(2)} USDT-cent`;
+
+                    // Clear and hide the password input field
+                    passwordInput.value = '';
+                    passwordModal.style.display = 'none';
+
+                    // Send withdrawal amount to backend
+                    await fetch('/api/withdraw', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: localStorage.getItem('userId'), // Assuming userId is stored in local storage after login
+                            amount: withdrawCents
+                        }),
+                    });
+                } else {
+                    passwordMessage.textContent = "Invalid password. Please try again.";
+                }
+            } catch (error) {
+                console.error('Error verifying password:', error);
+                passwordMessage.textContent = "An error occurred. Please try again.";
+            }
+        });
+    });
+});
+</script>
+
+<!-- this is full working code just need refersh for latest score <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const checkbox = document.getElementById('account');
+    const textValue = document.getElementById('send-location');
+    const passwordModal = document.getElementById('password-modal');
+    const passwordInput = document.getElementById('password-input');
+    const passwordSubmit = document.getElementById('password-submit');
+    const passwordMessage = document.getElementById('password-message');
+
+    checkbox.checked = true;
+    textValue.value = "Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298";
+// Fetch the latest user data from the server
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        alert('User information not found. Please log in again.');
+        window.location.href = '/login';
+    } else {
+        // Fetch user details including score from the backend API
+        fetch(`/user-data?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update localStorage with the latest user data
+                    localStorage.setItem('score', data.score);
+                    localStorage.setItem('electronic', data.electronic);
+                    localStorage.setItem('totalWithdrawn', data.totalWithdrawn);
+
+                    // Update frontend display with the latest data
+                    displayUserData();
+                } else {
+                    alert('Error fetching user data.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    }
     let score = parseInt(localStorage.getItem('score')) || 0;
     let dollars = Math.floor(score / 100);
     let cents = score % 100;
@@ -195,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-</script>
+</script> -->
 </body>
 </html>
 
