@@ -9,12 +9,14 @@
 </head>
 <style>
     body {
-        height: 70vh;
-        background-image: url(mirror/home-bak.jpg);
-        background-position: center;
-            background-repeat: repeat;
-        background-size: cover;
-    }
+    height: 100vh; /* Ensures the background covers the full height */
+    background-image: url(mirror/home-bak.jpg);
+    background-position: center;
+    background-repeat: no-repeat; /* Prevents repetition of the image */
+    background-size: cover; /* Scales the image to cover the entire viewport */
+    display: block; /* Ensures the body is displayed */
+}
+
 
     .login-container {
         margin: 20vh auto;
