@@ -148,59 +148,33 @@ z-index:1001;
 .chakeDeposit{
 display: none;
 }
-   
-        /* Container fixed at the bottom */
-        .container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            /* Full width */
-            margin-top: 71vh;
-            padding: 0;
-            box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.3);
-            /* Shadow for subtle effect */
-            background-color: #fff;
-            /* Background color */
-            z-index: 1000;
-            /* Ensure it is above other content */
-            line-height: 99%;
-        }
+    .container {
+        margin-top: auto;
+        align-items: center;
+    }
 
-        /* Layer within the container for alignment */
-        .container-layer {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 7px 0;
-            background-color: #fff;
-            /* Ensure background color matches container */
-        }
+    .container-layer {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #fff;
+        margin: 0;
+        box-shadow: 3px 0 7px black;
+        padding: 7px 0px;
+    }
 
-        /* Styling for clickable items */
-        .clk {
-            color: black;
-            text-decoration: none;
-            padding: 3px;
-            margin: 0 auto;
-            text-align: center;
-        }
+    .clk {
+        color: black;
+        text-decoration: none;
+        padding: 3px;
+        align-items: center;
+        margin: 0 auto;
+    }
 
-        i {
-            font-size: 2rem;
-            margin: 0 auto;
-        }
-
-        .clicked-icon {
-            color: rgb(0, 255, 234);
-            /* Ensure the icon remains readable */
-        }
-
-
-        .mine-btn>.arow>i {
-            font-size: 1rem;
-            margin: 0 auto;
-        }
+    i {
+        font-size: 2rem;
+        margin: 0 auto;
+    }
 </style>
 
 <body>
@@ -228,7 +202,7 @@ display: none;
 <input type="text"
                     value="TXX8go3jK6xVsm8DTAwQVT4W5cYx356tWC" id="unique-deposit-input" readonly
                     onclick="copyDepositId()">
-                <div class="unique-popup" id="unique-popup" style="z-index: 2000;">Copied!</div>
+                <div class="unique-popup" id="unique-popup" style="z-index:2000 ;">Copied!</div>
                 <p id="unique-error-message" class="unique-error-message"></p>
             </div>
         </div>
@@ -261,15 +235,17 @@ display: none;
     </div>
 
     <p id="electronic" style="font-size: 1.2rem;color: blue;"></p>
- <footer class="container">
-        <nav class="container-layer">
-            <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
-            <a href="/Connection" class="clk"> <i class='bx bx-sitemap' class="clkk"></i> <br> Network</a>
-            <a href="/vip" class="clk vip-link"><i class='bx bxl-sketch' style='color:#0c0c0c'></i><br>Invest</a>
-            <a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br>Owner</a>
-            <a href="/about" class="clk"><i class='bx bx-shield'></i><br>About</a>
-        </nav>
-    </footer>
+  
+  <footer class="container">
+    <nav class="container-layer">
+      <a href="/Home" class="clk"> <i class='bx bxs-home' style='color:#0c0400'></i><br>Home</a>
+      <a href="/Connection" class="clk"><i class='bx bx-sitemap' style='color:#0e0c0c'  ></i><br>Network</a>
+      <a href="/vip" class="clk vip-link "><i class='bx bxl-sketch' style='color:#0c0c0c'  ></i> <br> Invest</a>
+      <a href="/Mine" class="clk"><i class='bx bxs-user' style='color:#000400'></i><br> Owner</a>
+      <a href="/about" class="clk"><i class='bx bx-shield'></i><br>About</a>
+
+    </nav>
+  </footer>
     <script>
         const depositInput = document.getElementById('unique-deposit-input');
         const popup = document.getElementById('unique-popup');
