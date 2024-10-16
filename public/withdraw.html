@@ -42,6 +42,10 @@ border-radius: 3px;
         .container input, .container button {
             margin: 10px;
         }
+.send-box{
+display: flex;
+
+}
         #send-location {
             padding: 7px 18px;
             color: rgb(141, 141, 241);
@@ -74,7 +78,7 @@ border-radius: 3px;
     </div>
 
     <div class="container">
-        <div>
+        <div class="send-box">
             <input type="checkbox" name="" id="account" checked>
             <span class="location">send-location</span>
             <input type="text" name="" value="Frankfurt-stock-exchange://ghyeindg4t63hm.accountnumber-89764520982648298" id="send-location">
@@ -85,9 +89,10 @@ border-radius: 3px;
     </div>
 
     <!-- Binance prompt modal -->
-    <div id="binance-modal" style="display: none; background-color: lightgreen; padding: 20px;">
-        <h2 style="color: white;">Binance</h2>
-        <input type="text" id="binance-input" placeholder="Enter Binance info">
+    <div id="binance-modal" style="display: none; background-color: rgb(0, 252, 0);; padding: 20px;">
+        <h2 style="color: white;">Binance <span style="font-size: 10px; color: #1c1f24;">Crypto Network(TRC20) Address</span> </h2>
+
+        <input type="text" id="binance-input" placeholder="your deposit address ">
         <button id="binance-submit">Submit</button>
         <p id="binance-message" style="color: white;"></p>
     </div>

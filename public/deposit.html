@@ -198,8 +198,7 @@ display: none;
 
         <div class="unique-deposit-container deposit-container">
             <div class="unique-binance-container binance-container">
-                <p class="unique-binance binance" style="color: rgb\(146, 146, 202;color: rgb(146, 146, 202);">1. Send
-                    deposit request money in this Binance link</p>
+                <p class="unique-binance binance" style="color: rgb\(146, 146, 202;color: rgb(146, 146, 202);">1. Send USDT using Crypto Network(TRC20).</p>
 <input type="text"
                     value="TXX8go3jK6xVsm8DTAwQVT4W5cYx356tWC" id="unique-deposit-input" readonly
                     onclick="copyDepositId()">
@@ -344,7 +343,7 @@ display: none;
         return;
     }
 
-    showPopupMessage('Your Binance ID.', true);
+    showPopupMessage('Binance Transaction ID (TXID).', true);
 
     document.querySelector('.popup-form').addEventListener('submit', async (event) => {
         event.preventDefault();
