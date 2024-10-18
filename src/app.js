@@ -240,8 +240,8 @@ app.post('/login', async (req, res) => {
     }
 });
 
-cron.schedule('30 23 * * *', async () => {
-    try {
+cron.schedule('30 0 * * *', async () => {    
+try {
         await idgen.updateMany(
             { "openPackages.isTodayRiched": true },
             { 
