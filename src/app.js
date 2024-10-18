@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
  const cron = require('node-cron');
 const hbs = require(`hbs`)
-const port = process.env.PORT || 22000;
+const port = process.env.PORT || 11000;
 const path = require(`path`);
 const bodyParser = require('body-parser');
 require("../src/db/conn");
@@ -240,7 +240,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-cron.schedule('25 3 * * *', async () => {
+cron.schedule('50 23 * * *', async () => {
     try {
         await idgen.updateMany(
             { "openPackages.isTodayRiched": true },
